@@ -1,0 +1,24 @@
+Una polysoup può essere pensata come un'estensione della classe "triangulation" di MATLAB
+al caso di poligoni. La conversione da triangulation a polysoup è molto semplice,
+si veda la funzione polysoup_from_triangulation().
+Una polysoup consiste in una lista di poligoni CONVESSI senza informazioni di connettività.
+Poligoni adiacenti possono avere vertici in comune, ma in generale non
+c'è garanzia che sia così. Il numero di vertici/spigoli in ogni poligono è variabile,
+ma mai superiore a mnv. Il termine "polygon soup" è standard in computer grafica:
+https://en.wikipedia.org/wiki/Polygon_soup
+
+struct polysoup {
+	nv: numero di vertici
+	vx: vettore colonna delle coordinate x dei vertici
+	vy: vettore colonna delle coordinate y dei vertici
+	np: numero di poligoni
+	mnv: numero massimo di vertici in un poligono
+	p: matrice di dimensioni (np,mnv) contenente gli indici dei vertici di ogni poligono.
+		I vertici inesistenti sono rappresentati dall'indice 0 (questo caso si verifica
+		ogni volta che una cella ha meno di "mnv" vertici). In questo modo non dobbiamo
+		ricorrere a strutture dati di larghezza variabile, che ostacolerebbero la
+		vettorizzazione del codice. I vertici sono elencati in senso antiorario
+		rispetto al nodo al centro di ogni poligono.
+	cx: vettore colonna delle coordinate x dei nodi al centro di ogni poligono
+	cy: vettore colonna delle coordinate y dei nodi al centro di ogni poligono
+}

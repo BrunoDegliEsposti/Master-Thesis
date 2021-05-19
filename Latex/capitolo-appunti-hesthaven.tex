@@ -1,0 +1,353 @@
+\chapter{Metodi numerici per le equazioni di Eulero}
+
+Questa è una prima stesura del capitolo \dots
+
+\section{Appunti sul capitolo 4 di Hesthaven}
+
+Consideriamo le griglie spaziali e temporali
+\[
+x_j = hj = \frac{L}{N}j
+\qquad t^n = kn = \frac{T}{K}k
+\]
+Consideriamo una sola legge di conservazione in una sola dimensione spaziale.
+Uno schema è in forma di conservazione se
+\[
+U_j^{n+1} = U_j^n - \frac{k}{h} (F_{j+1/2}^n - F_{j-1/2}^n)
+\]
+con flussi numerici
+\[
+F_{j+1/2}^n = F(U_{j-p}^n, \dots, U_{j+q}^n)
+\qquad F_{j-1/2}^n = F(U_{j-p-1}^n, \dots, U_{j+q-1}^n)
+\]
+Ipotesi utili: flusso consistente
+\[
+F(u,\dots,u) = f(u)
+\]
+e flusso (localmente?) lischitziano in ogni sua variabile.
+
+\begin{teor} Uno schema in forma conservativa con flusso consistente
+è conservativo a livello discreto.
+\end{teor}
+
+\begin{coro} Uno schema in forma conservativa con flusso consistente
+propaga le discontinuità alla velocità giusta perché rispetta la
+condizione di Rankine-Hugoniot.
+\end{coro}
+
+\begin{teor}[Lax-Wendroff] Se schema in forma conservativa con flusso consistente
+e lischitziano converge a una soluzione con variazione totale limitata in $L^1$,
+allora tale soluzione è una soluzione debole della legge di conservazione.
+\end{teor}
+
+\noindent Ma è anche soluzione di entropia? Non è detto.
+Consideriamo l'equazione di Burgers
+\[
+u_t + (u^2)_x = 0
+\qquad x \in [-1,1]
+\]
+con condizioni iniziali
+\[
+u_0(x) = \begin{cases}
+-1 & \text{se $x < 0$} \\
+ 1 & \text{se $x \geq 0$}
+\end{cases}
+\]
+È noto che la soluzione giusta, cioè quella debole di entropia,
+è l'onda di rarefazione
+\[
+u(t) = \begin{cases}
+-1 & \text{se $x \leq -2t$} \\
+x/(2t) & \text{se $-2t < x < 2t$} \\
+ 1 & \text{se $x \geq 2t$}
+\end{cases}
+\]
+Tuttavia, se scegliamo come flusso numerico il flusso di Roe
+\[
+F_R(u,v) = \begin{cases}
+f(u) & \text{se $s \geq 0$} \\
+f(v) & \text{se $s < 0$}
+\end{cases}
+\qquad s = \frac{f(u)-f(v)}{u-v}
+\]
+otteniamo come soluzione $u(t) \equiv u_0$, la quale è certamente
+una soluzione debole, ma non quella desiderata.
+Introduciamo quindi il concetto di schema numerico \emph{monotono}.
+Sia $G$ la funzione tale che
+\[
+U_j^{n+1} = G(U_{j-p-1}^n, \dots, U_{j+q}^n)
+\]
+Per esempio, se $p = 0$, $q = 1$ e lo schema è in forma di conservazione,
+allora
+\begin{gather*}
+U_j^{n+1}
+= U_j^n - \frac{k}{h} (F(U_j^n, U_{j+1}^n) - F(U_{j-1}^n, U_j^n)) \\
+G(U_{j-1}^n,U_j^n,U_{j+1}^n)
+= U_j^n - \frac{k}{h} (F(U_j^n, U_{j+1}^n) - F(U_{j-1}^n, U_j^n))
+\end{gather*}
+Uno schema numerico si dice \emph{monotono} se la funzione $G$
+è crescente in ogni suo argomento.
+
+\begin{teor}
+Il flusso numerico di Lax–Friedrichs
+\[
+F_{LF}(u,v) = \frac{f(u)+f(v)}{2} - \frac{\alpha}{2} (v-u)
+\]
+dà luogo a uno schema monotono, a patto che
+\[
+\alpha \geq \max \Bigl\{ \abs{f'(u)},\abs{f'(v)} \Bigr\}
+\qquad 1 - \frac{k}{h} \left( \frac{f'(u)-f'(v)}{2} + \alpha \right) \geq 0
+\]
+Osserviamo che la seconda diseguaglianza è sicuramente soddisfatta
+se il passo temporale è sufficientemente piccolo rispetto a quello spaziale.
+\end{teor}
+
+\begin{proof}
+Basta scrivere $G$ e imporre che tutte le derivate parziali siano positive.
+\end{proof}
+
+\begin{teor}
+Sia $G$ uno schema numerico monotono. Allora
+\begin{enumerate}
+\item $U_j^n \leq V_j^n$ per ogni $j$ implica $G(U^n)_j \leq G(V^n)_j$ per ogni $j$.
+\item Sia $S_j = \{ j-p-1, \dots, j+q \}$. Allora la soluzione numerica
+	soddisfa un principio di massimo locale su ogni stencil $S_j$:
+	\[
+	\min_{i \in S_j} U_i^n \leq G(U^n)_j \leq \max_{i \in S_j} U_i^n
+	\]
+\item Lo schema è contrattivo in norma $\ell^1$:
+	\[
+	\norm{G(U^n)-G(V^n)}_1 \leq \norm{U^n-V^n}_1
+	\]
+\item Lo schema non aumenta la variazione totale a ogni iterazione:
+	\[
+	\TV(G(U^n)) \leq \TV(U^n)
+	\]
+\end{enumerate}
+\end{teor}
+
+\noindent Dunque la soluzione numerica ottenuta con uno schema
+monotono preserva tutti gli aspetti qualitativi della soluzione analitica.
+In particolare, lo schema è stabile e non produce oscillazioni spurie.
+
+\begin{teor}
+Sia $G$ uno schema numerico monotono e supponiamo che le soluzioni numeriche
+$U^n$ convergano, nel limite di $k \to 0, h \to 0$, a una soluzione debole
+della legge di conservazione. Allora tale soluzione soddisfa tutte le
+condizioni di entropia.
+\end{teor}
+
+\noindent Uno schema numerico $G$ si dice che \emph{preserva la monotonicità}
+a ogni iterazione se $U_j^n \leq U_{j+1}^n$ per ogni $j$ implica che
+$U_j^{n+1} \leq U_{j+1}^{n+1}$ per ogni $j$.
+
+\begin{teor}
+Uno schema numerico che non aumenta la variazione totale a ogni iterazione
+preserva la monotonicità.
+\end{teor}
+
+\noindent Abbiamo quindi dimostrato la seguente catena di implicazioni
+per le proprietà di uno schema numerico:
+\begin{equation} \label{eq:catena}
+\text{Monotonia}
+\Rightarrow \text{Non aumenta $\norm{\cdot}_1$}
+\Rightarrow \text{Non aumenta TV}
+\Rightarrow \text{Preserva la monotonicità}
+\end{equation}
+La catena di implicazioni addirittura si chiude in alcuni casi particolari.
+Consideriamo ad esempio l'equazione delle onde lineare del primo ordine
+\begin{equation} \label{eq:onde-lineare-1D}
+\partial_t u + \partial_x u = 0
+\end{equation}
+e uno schema numerico \emph{lineare} per la sua soluzione
+\[
+U_j^{n+1} = \sum_{i = -p-1}^q c_i(k,h) U_{j+i}^n
+\]
+I coefficienti $c_i$ dipendono quindi solo dalla discretizzazione scelta,
+ma non da $x$, $t$ o $U$. Osserviamo che gli schemi visti finora si scrivono
+tutti in questa forma.
+
+\begin{teor}
+Uno schema numerico lineare per la soluzione dell'equazione \eqref{eq:onde-lineare-1D}
+è monotono se e solo se preserva la monotonicità.
+\end{teor}
+
+Purtroppo, l'ipotesi di monotonicità non è priva di controindicazioni:
+essendo molto stringente, non permette di ottenere metodi con ordine
+di convergenza superiore al primo:
+
+\begin{teor}
+Uno schema numerico monotono ha ordine di convergenza al più uno.
+\end{teor}
+
+Per ottenere uno schema di ordine superiore al primo
+nel caso dell'equazione \eqref{eq:onde-lineare-1D} dobbiamo quindi
+rinunciare a tutte le proprietà della catena \eqref{eq:catena}, oppure
+all'utilizzo di uno schema numerico lineare.
+Nel caso di una generica equazione non lineare, invece, vedremo
+che sarà opportuno concentrarsi su metodi che non aumentano
+la variazione totale.
+
+\section{Appunti sul capitolo 5 di Hesthaven}
+
+Ma perché stare a complicarsi la vita con il flusso di Lax-Friedrichs,
+con tecniche di upwinding, o altro? Se in uno schema in forma di conservazione
+\begin{equation} \label{eq:schema-forma-conservazione}
+U_j^{n+1} = U_j^n - \frac{k}{h} (F_{j+1/2}^n - F_{j-1/2}^n)
+\end{equation}
+il flusso $F_{j+1/2}^n$ rappresenta un'approssimazione di
+$f(u(x_{j+1/2}))$, perché non scegliere
+\[
+F_{j+1/2}^n = \frac{f(u(x_{j})) + f(u(x_{j+1}))}{2}
+\qquad
+F_{j-1/2}^n = \frac{f(u(x_{j-1})) + f(u(x_{j}))}{2}
+\]
+e festa finita? Il problema è che si ottiene uno schema numerico consistente,
+sì, ma instabile. Dimostriamo questo fatto nel caso più semplice possibile,
+ossia per l'equazione delle onde lineare monodimensionale
+\[
+\partial_t u + c \partial_x u = 0
+\]
+con coefficiente $c$ costante.
+Lo schema numerico è
+\[
+U_j^{n+1} = U_j^n - \frac{ck}{2h} U_{j+1}^n + \frac{ck}{2h} U_{j-1}^n
+\]
+Supponiamo che le condizioni al bordo siano periodiche,
+cioè che gli indici $j$ abbiano valore modulo $N$.
+Allora, indicando con $\hat{U}_k$ la trasformata di Fourier discreta
+del vettore $U_j$, si ha
+\begin{align*}
+\hat{U}^{n+1}_k
+& = \frac{1}{\sqrt{N}} \sum_{j=0}^{N-1} U^{n+1}_j e^{-i \frac{2\pi}{N} kj}
+  = \frac{1}{\sqrt{N}} \sum_{j=0}^{N-1} \left(
+	U_j^n - \frac{ck}{2h} U_{j+1}^n + \frac{ck}{2h} U_{j-1}^n
+	\right) e^{-i \frac{2\pi}{N} kj} \\
+& = \hat{U}^n_k
+  - \frac{ck}{2h} e^{i \frac{2\pi}{N} k} \hat{U}^n_k
+  + \frac{ck}{2h} e^{-i \frac{2\pi}{N} k} \hat{U}^n_k
+  = \left(1 - i \frac{ck}{h} \frac{e^{i \frac{2\pi}{N} k}
+                                  -e^{-i \frac{2\pi}{N} k}}{2i}
+    \right) \hat{U}^n_k \\
+& = \left(1 - i \frac{ck}{h} \sin(\frac{2\pi}{N} k)
+    \right) \hat{U}^n_k
+\end{align*}
+Osserviamo che per quasi ogni valore di $k$ il coefficiente
+\[
+1 - i \frac{ck}{h} \sin(\frac{2\pi}{N} k)
+\]
+ha modulo maggiore di 1, quindi il modulo di $\hat{U}^n_k$ tende
+a infinito per $n \to \infty$. Di conseguenza, tende a infinito anche la norma
+euclidea di $\hat{U}^n$, che per per il teorema di Plancherel discreto
+è uguale a quella di $U^n$. In conclusione, la soluzione numerica ottenuta
+è incondizionatamente instabile.
+Questo tipo di analisi è noto in letteratura come \emph{Von Neumann stability analysis}
+e funziona per tutti gli schemi numerici basati su stencil costanti.
+
+Ripetendo questa analisi nel caso del flusso di Roe, si vede invece come
+la tecnica di upwinding produca uno schema numerico stabile, a patto che
+\[
+\abs{c}k \leq h
+\]
+Questa disuguaglianza, nota come \emph{condizione CFL}, si generalizza
+a qualunque sistema iperbolico di equazioni alle derivate parziali:
+
+\begin{prop}
+Una condizione necessaria (non sempre sufficiente) alla stabilità
+di uno schema numerico per un sistema iperbolico di equazioni alle derivate parziali
+è che a ogni passo il dominio di dipendenza numerica
+includa il dominio di dipendenza analitica.
+\end{prop}
+
+\noindent Tutti gli schemi numerici visti finora hanno la parte temporale
+dell'errore di troncamento che va a zero come $O(k)$. D'altra parte, visto
+che sono schemi del primo ordine anche rispetto a $h$, non avrebbe senso
+migliorare la tecnica di integrazione temporale, perché tanto
+la condizione CFL pone una limitazione superiore a $k$ in termini di $h$.
+Ad ogni modo, ci sono due approcci allo sviluppo di schemi numerici
+di ordine superiore al primo rispetto al tempo.
+Il primo si riconduce a un sistema di equazioni differenziali
+ordinarie discretizzando il problema rispetto allo spazio
+\[
+\frac{d}{dt} U_j(t) = - \frac{F_{j+1/2}(t) - F_{j-1/2}(t)}{h}
+\]
+e poi integra numericamente il sistema di ODE con un metodo di ordine superiore
+al primo (per esempio, un metodo di Runge-Kutta).
+Il secondo comincia sviluppando in serie di Taylor la soluzione rispetto al tempo
+\[
+u(x,t^{n}+k)
+= u(x,t^{n})
++ \partial_t u(x,t^n) k
++ \frac{1}{2} \partial_{tt} u(x,t^n) k^2
++ \dots
+\]
+e poi sfrutta la definizione della PDE
+\[
+\partial_t u + \diver(f(u)) = 0
+\]
+per sostituire tutte le derivate temporali con altrettante derivate spaziali
+\begin{gather*}
+\partial_t u(x,t^n) = -\diver(f(u(x,t^n))) \\
+\partial_{tt} u(x,t^n) = \diver\Bigl( \partial_u f(u(x,t^n)) \diver(f(u(x,t^n))) \Bigr) \\
+\partial_{ttt} u(x,t^n) = \dots
+\end{gather*}
+In questo modo, rimangono solo da valutare le derivate spaziali in
+$u(x,t^n)$ per ottenere un'approssimazione di $u(x,t^{n}+k)$.
+Questa tecnica, ispirata al teorema di Cauchy-Kovalevskaya, è nota in questo
+contesto come procedimento di \emph{Lax-Wendroff}.
+Se ci limitiamo a uno sviluppo al secondo ordine rispetto al tempo e discretizziamo
+le derivate spaziali con differenze finite centrate, otteniamo uno schema
+della forma \eqref{eq:schema-forma-conservazione} con flusso
+\[
+F(u,v) = \frac{f(u)+f(v)}{2}
+       - \frac{k}{2} \partial_u f \Bigl( \frac{u+v}{2} \Bigr) \frac{f(v)-f(u)}{h}
+\]
+noto come \emph{flusso di Lax-Wendroff}. Lo schema numerico si può dimostrare
+che, nonostante l'utilizzo di differenze finite centrate, è stabile
+e ha ordine di convergenza quadratico. Tuttavia, lo schema presenta
+forti oscillazioni in presenza di discontinuità.
+Questo fatto lascia presagire che nello studio dei metodi di ordine
+superiore al primo avranno grande importanza le tecniche in grado
+di ridurre il più possibile il numero e l'ampiezza di tali oscillazioni.
+
+Concludiamo riportando un risultato di convergenza per schemi monotoni:
+\begin{teor}
+Uno schema monotono in forma di conservazione, il cui flusso è
+lipschitziano e consistente, è convergente, e la soluzione a cui converge
+è una soluzione di entropia. Riguardo alla velocità di convergenza,
+se $u_0$ ha variazione limitata, allora
+\[
+\norm{ u(t^n) - u^n }_{h,1} \leq C(t^n) \sqrt{h}
+\]
+\end{teor}
+
+% time step size: paragrafo 6.3.2 toro
+%  + remark 6.9 paragrafo 6.4
+%  + rejection method?
+% boundary conditions: 6.3.3 toro
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

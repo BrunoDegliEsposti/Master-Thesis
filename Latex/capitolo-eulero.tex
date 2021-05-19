@@ -1,0 +1,1049 @@
+\chapter{Equazioni di Eulero}
+
+Questa è una prima stesura del capitolo sulle equazioni di Eulero.
+L'introduzione e il paragrafo 1.3 sono un po' da rivedere,
+anche in funzione di quello che verrà scritto in futuro,
+mentre il resto mi sembra abbastanza completo.
+\vspace{1em}
+
+%	La fluidodinamica moderna, 
+%	
+%	nacque alle ...
+%	con l'introduzione da parte di Eulero delle equazioni
+%	che ancora oggi portano il suo nome.
+%	Le equazioni di Eulero, inizialmente formulate soltanto
+%	per fluidi incomprimibili o gas barotropici,
+%	furono poi estese al caso di 
+%	
+%	L?introduzione delle equazioni di Eulero alla fine del ...
+%	segna l'inizio della fluidodinamica moderna,
+%	basata su un approccio differenziale locale,
+%	fondata sulla matematica delle equazioni alle derivate perziali.
+%	
+%	
+%	
+%	Ancora oggi le equazioni di Eulero mantengono grande importanza
+%	sia nelle 
+%	
+%	Le equazioni di Eulero sono un sistema di equazioni
+%	alle derivate parziali introdotto per la prima volta da Eulero
+%	...
+%	e in seguito generalizzato a qualunque flusso adiabatico e non viscoso,
+%	cioè flusso in cui si possono trascurare le in assenza di scambio di calore
+%	e di forze di attrito interne al fluido.
+
+In fluidodinamica, le \emph{equazioni di Eulero per fluidi compressibili}
+sono un sistema di equazioni alle derivate parziali
+adatto a descrivere il moto di un fluido di densità variabile nelle ipotesi
+semplificative di flusso non viscoso e adiabatico, vale a dire
+in assenza di forze d'attrito interne al fluido o trasmissione di calore.
+Rispetto ad altri modelli fluidodinamici più completi,
+% vedi paragrafo 2.3.2 di "un approccio libero ecc"
+% e la pagina wikipedia sull'inviscid flow.
+come le equazioni di Navier-Stokes, queste ipotesi rendono
+le equazioni di Eulero totalmente prive di termini diffusivi,
+cosicché la loro dinamica è governata interamente da termini del primo ordine
+di tipo convettivo non lineare. Quest'ultimi
+conferiscono alle equazioni di Eulero un carattere puramente iperbolico
+e permettono la formazione e la propagazione di discontinuità durante il moto.
+(qui probabilmente commento sul fatto che la ricerca di metodi numerici in grado di
+preservare al meglio tali discontinuità sia un argomento chiave
+di questo lavoro \dots)
+
+In letteratura esistono più versioni delle equazioni di Eulero.
+A distinguerle sono diversi aspetti:
+il numero di dimensioni spaziali lungo le quali avviene il moto,
+le particolari grandezze fisiche associate alle incognite dell'equazione,
+le proprietà termodinamiche del fluido
+e il tipo di interazioni con l'ambiente esterno.
+In questo lavoro ci occuperemo nello specifico delle
+equazioni di Eulero per gas perfetti in $\R^3$ in assenza di forze esterne.
+Sotto tali ipotesi, le equazioni di Eulero formano un sistema di
+cinque equazioni scalari che può essere scritto come
+\emph{sistema iperbolico di leggi di conservazione}
+\begin{equation} \label{eq:sistema-iperbolico-di-leggi-di-conservazione}
+\partial_t u + \diver(F(u)) = 0,
+\end{equation}
+la cui particolare forma esprime in modo esplicito
+la conservazione di quantità fisiche rilevanti,
+quali la massa, la quantità di moto o l'energia.
+È senz'altro notevole che la conservazione di tali quantità
+non sia solo condizione necessaria alla scrittura delle equazioni
+di Eulero (perché è noto che massa, quantità di moto
+ed energia si conservano in un sistema isolato),
+ma sia anche condizione sufficiente: queste leggi
+di conservazione vincolano a tal punto il moto del fluido
+da determinarlo univocamente, perché ne esauriscono tutti i gradi
+di libertà.
+Pertanto, quando più avanti esprimeremo le leggi di conservazione
+in forma differenziale, otterremo un sistema \emph{chiuso} di equazioni
+alle derivate parziali.
+
+Il primo paragrafo di questo capitolo è dedicato a delle nozioni di base
+di meccanica dei continui e di termodinamica.
+Il secondo paragrafo è dedicato all'espressione in forma differenziale
+delle leggi di conservazione della massa, della quantità di moto e
+dell'energia, le quali ci permetteranno di scrivere le equazioni di Eulero
+nella forma \eqref{eq:sistema-iperbolico-di-leggi-di-conservazione}.
+Il terzo paragrafo è in lavorazione \dots
+
+\section{Richiami di meccanica dei continui e termodinamica}
+
+\subsection*{Cinematica dei continui}
+
+L'idea alla base della meccanica dei continui è quella di
+descrivere il moto e le deformazioni di un dominio
+$\Omega$ in $\R^n$ andando ad applicare i principi della meccanica
+(per i nostri scopi, classica) a ogni porzione infinitesima di materia
+che lo costituisce.
+Supponiamo che nell'istante iniziale del moto $t_0$ il continuo si trovi in
+una configurazione di riferimento $\Omega_{t_0}$, e che
+a partire da $t_0$ ogni sua porzione infinitesima,
+che chiameremo d'ora in poi \emph{particella},
+si muova in $\R^n$ lungo una curva in modo regolare e reversibile.
+Allora è ben definita e regolare (sarà opportuno almeno $C^2$) la funzione \emph{traiettoria}
+\[
+\varphi(X,t) \colon \Omega_{t_0} \times [t_0,+\infty) \to \R^n
+\]
+che descrive la posizione all'istante $t$ della particella
+che all'istante $t_0$ si trovava in $X$.
+Indichiamo con $\Omega_t$ la porzione di spazio occupata dal dominio
+$\Omega$ all'istante $t$, cioè l'insieme $\varphi(\Omega_{t_0},t)$.
+Per l'ipotesi di reversibilità del moto, è ben definita e regolare anche la funzione
+\emph{traiettoria inversa}
+\[
+\psi(x,t) \colon \Omega_t \times [t_0,+\infty) \to \Omega_{t_0},
+\]
+che riconduce alla propria posizione iniziale in $\Omega_{t_0}$
+ogni particella passante per $x$ all'istante $t$ .
+Per come sono state definite $\varphi$ e $\psi$, è chiaro che
+\begin{gather*}
+\varphi(\psi(x,t),t) = x
+\quad \text{per ogni $x \in \Omega_t$ e per ogni $t \geq t_0$,} \\
+\psi(\varphi(X,t),t) = X
+\quad \text{per ogni $X \in \Omega_{t_0}$ e per ogni $t \geq t_0$.}
+\end{gather*}
+Derivando quest'ultima identità rispetto a $t$
+e operando il cambio di variabile $X = \psi(x,t)$, si ottiene
+\begin{equation} \label{eq:phi-psi-funzione-inversa}
+\psi_x(x,t) \, \varphi_t(\psi(x,t),t) + \psi_t(x,t) = 0.
+\end{equation}
+%\psi_x(\varphi(X,t),t) \, \varphi_t(X,t) + \psi_t(\varphi(X,t),t) = 0
+Questa relazione ci tornerà utile in seguito.
+Vediamo ora come le grandezze cinematiche del continuo
+possano essere espresse mediante le funzioni $\varphi$ e $\psi$.
+Definiamo la velocità $v(x,t)$ del continuo come la velocità
+della particella (se esiste) che all'istante $t$ passa per $x$:
+\[
+v \colon \Omega_t \times [t_0,+\infty) \to \R^n
+\qquad v(x,t) = \varphi_t(\psi(x,t),t).
+\]
+La velocità è quindi la derivata rispetto al tempo della funzione traiettoria,
+con l'unica accortezza di ricondurre prima $x$
+a una posizione $X = \psi(x,t)$ nella configurazione di riferimento
+(dato che le traiettorie descritte da $\varphi$ partono sempre da $\Omega_{t_0}$).
+Questa conversione è nota in letteratura come passaggio dalle
+coordinate \emph{euleriane} alle coordinate \emph{lagrangiane}.
+In questo paragrafo abbiamo preferito per una questione di chiarezza
+rendere sempre esplicita tale conversione, tuttavia è una consuetudine
+ben affermata in meccanica dei continui quella di trattare $X$ come
+funzione di $x$ per un istante di tempo fissato e viceversa.
+
+In modo analogo alla velocità,
+definiamo l'accelerazione $a(x,t)$ del continuo come
+\[
+a \colon \Omega_t \times [t_0,+\infty) \to \R^n
+\qquad a(x,t) = \varphi_{tt}(\psi(x,t),t).
+\]
+La presenza di $\psi$ nelle definizioni di velocità e accelerazione fa sì che,
+a differenza del moto di un punto materiale in un sistema di
+riferimento inerziale, $a$ non sia semplicemente la derivata rispetto
+al tempo di $v$. Tuttavia, grazie alla relazione \eqref{eq:phi-psi-funzione-inversa},
+è possibile dimostrare che
+\begin{equation} \label{eq:derivata-euleriana-u}
+v_t(x,t) = -v_x(x,t) v(x,t) + a(x,t).
+\end{equation}
+La notazione $v_x(x,t) v(x,t)$ indica il prodotto tra la matrice jacobiana
+di $v$ rispetto alle variabili spaziali e il vettore colonna $v$ stesso.
+Osserviamo che tale termine non è lineare.
+
+Alla luce della~\eqref{eq:derivata-euleriana-u},
+risulta naturale definire un nuovo operatore differenziale
+$D_t$, detto \emph{derivata lagrangiana}, in modo tale che
+\[
+D_t v(x,t) \deq v_t(x,t) + v_x(x,t) v(x,t) = a(x,t).
+\]
+È un fatto notevole che si possa esprimere
+l'accelerazione del continuo solamente come derivata (lagrangiana)
+della funzione velocità, senza più fare riferimento alle funzioni
+traiettoria e traiettoria inversa.
+Più in generale, definiamo la derivata lagrangiana per un qualunque
+campo tensoriale $g(x,t)$ come
+\begin{equation} \label{eq:derivata-lagrangiana}
+D_t g(x,t) = \partial_t g(x,t) + v^i(x,t) \partial_i g(x,t).
+\end{equation}
+(riferimento a un'ipotetica appendice sul calcolo tensoriale?) \\
+Da un punto di vista fisico, la derivata lagrangiana $D_t$ si può
+interpretare come la variazione della quantità~$g$ misurata
+da un osservatore che si muove lungo la traiettoria
+di una particella del continuo, in contrapposizione alla derivata
+parziale $\partial_t$, detta \emph{euleriana}, che si può interpretare
+come la variazione nel tempo di~$g$ misurata da un osservatore
+stazionario in $\R^n$.
+
+\subsection*{Tensore degli sforzi in $\R^3$}
+
+Le deformazioni di un sistema continuo durante il moto
+sono causate dalle forze che ogni porzione infinitesima di materia
+esercita sulla materia circostante.
+Pertanto, la descrizione di tali forze è un argomento di primaria
+importanza in meccanica dei continui.
+
+Fissiamo un istante di tempo $t \geq t_0$, un punto $x$ all'interno
+del continuo $\Omega_t$ in $\R^3$ e una direzione qualunque $\nu \in S^3$.
+Sia $S$ una superficie regolare contenuta in $\Omega_t$,
+passante per $x$ e avente vettore normale in $x$ uguale a $\nu$.
+Siano, inoltre, $W_1$ e $W_2$ due porzioni di continuo di misura
+positiva tali che
+\[
+W_1 \subset \Omega_t,
+\qquad W_2 \subset \Omega_t,
+\qquad W_1 \cap W_2 = \emptyset,
+\qquad \partial W_1 \cap \partial W_2 = S.
+\]
+Supponiamo che la normale $\nu$ sia uscente da $W_1$ ed entrante in $W_2$.
+Indichiamo con $F(W_1,W_2)$ la forza di contatto che $W_2$ esercita
+su $W_1$ al tempo $t$ attraverso la superficie $S$ che li separa.
+Indichiamo inoltre con $A(S)$ l'area di tale superficie
+e con $B(x,h)$ la palla aperta di centro $x$ e raggio $h$.
+Se per ogni $t \geq t_0$, $x \in \Omega_t$, $\nu \in S^3$
+esiste finito il limite
+\begin{equation} \label{eq:limite-sforzi}
+\tau =
+\lim_{h \to 0}
+	\frac{F\bigl(W_1 \cap B(x,h), \, W_2 \cap B(x,h)\bigr)}
+	     {A\bigl(S \cap B(x,h)\bigr)}
+\end{equation}
+e se il valore di tale limite non dipende né dalla scelta della superficie $S$
+né dalla scelta delle porzioni di continuo $W_1$ e $W_2$, allora
+è ben definito il \emph{vettore degli sforzi di Cauchy}
+\[
+\tau(x,t,\nu) \colon \Omega_t \times [t_0,+\infty) \times S^3 \to \R^3.
+\]
+L'importanza di questa densità superficiale di forza $\tau$
+è che, una volta nota, può essere integrata su una qualunque
+superficie $S$ interna a $\Omega_t$ per calcolare la forza macroscopica 
+di contatto tra due porzioni di continuo separate da $S$.
+
+Durante il moto, un continuo può essere soggetto sia a forze esterne
+di volume (come la forza di gravità), sia a forze esterne
+di superficie (come quella esercitata dalla parete di un contenitore).
+Le forze esterne di volume non danno alcun contributo al limite
+\eqref{eq:limite-sforzi}, perché tendono a zero come $h^3$ a fronte
+di un denominatore che tende a zero come $h^2$.
+Per il momento possiamo quindi ignorarle.
+Le forze esterne di superficie, invece, vanno a definire $\tau$
+sul bordo di $\Omega_t$. Formalmente, sia $x \in \partial \Omega_t$
+e $\nu$ la normale uscente da $\Omega_t$ in $x$. Allora, se indichiamo
+con $f_s^e(x,t)$ la densità superficiale di forza esterna
+in $x$ al tempo $t$, si ha che
+\begin{equation} \label{eq:sforzo-sul-bordo}
+\tau(x,t,\nu) = f_s^e(x,t).
+\end{equation}
+
+%Il seguente teorema, dovuto a Cauchy, descrive la dipendenza di $\tau$ da $\nu$:
+%\begin{teor}[Teorema degli sforzi di Cauchy]
+%Supponiamo che il vettore degli sforzi di Cauchy esista e sia sufficientemente
+%regolare. Allora
+%\begin{enumerate}
+%\item Per il terzo principio della dinamica,
+%	$\tau(x,t,-\nu) = -\tau(x,t,\nu)$.
+%\item Per la prima equazione cardinale della dinamica,
+%	$\tau$ è lineare rispetto a $\nu$.
+%\item Per la seconda equazione cardinale della dinamica,
+%	l'applicazione lineare che manda $\nu$ in $\tau$ fissati $x$ e $t$ è simmetrica.
+%\end{enumerate}
+%\end{teor}
+
+\noindent Il seguente teorema, dovuto a Cauchy, descrive la dipendenza
+di $\tau$ da $\nu$:
+\begin{teor}[Teorema degli sforzi di Cauchy]
+Supponiamo che il vettore degli sforzi di Cauchy sia ben definito e
+sufficientemente regolare in ogni punto del suo dominio.
+Allora esiste un campo tensoriale controvariante $\tau^{ij}(x,t)$,
+detto \emph{tensore degli sforzi di Cauchy}, tale che
+\begin{enumerate}
+\item $\tau^{ij}(x,t) \nu_j = \tau(x,t,\nu)$ per ogni $\nu \in S^3$.
+\item Il tensore $\tau$ è simmetrico, cioè $\tau^{ij}(x,t) = \tau^{ji}(x,t)$.
+\end{enumerate}
+\end{teor}
+
+\noindent La dimostrazione di questo teorema consiste nell'applicazione
+delle due equazioni cardinali della dinamica a delle opportune
+porzioni di materia a forma di tetraedro e parallelepipedo.
+
+\subsection*{Proprietà intensive ed estensive di un sistema continuo}
+
+Le proprietà fisiche di un sistema continuo si dividono in \emph{intensive}
+ed \emph{estensive}. Le prime sono locali e non dipendono dalla dimensione
+del sistema o dalla quantità di materia in esso contenuta, quindi
+possono essere descritte da un campo tensoriale $g(x,t)$
+e di conseguenza la loro variazione nel tempo,
+misurata su ogni porzione infinitesima di $\Omega$ durante il moto,
+è data dalla derivata lagrangiana \eqref{eq:derivata-lagrangiana}.
+Alcuni esempi di proprietà intensive sono la densità di massa,
+la pressione e la temperatura.
+
+Le proprietà estensive, d'altro canto, sono globali e additive,
+quindi la loro descrizione matematica prevede l'uso di un integrale
+su una porzione $W$ di $\Omega$ di misura positiva:
+\begin{equation} \label{eq:definizione-estensiva}
+G(t) = \int_{W_t} g(x,t) \dx.
+\end{equation}
+In questa formula, $W_t$ indica il sottoinsieme di $\Omega_t$
+occupato dalle particelle di $W$ all'istante di tempo $t$.
+Il campo tensoriale $g$ è detto \emph{densità} della grandezza
+estensiva $G$.
+La variazione nel tempo di una grandezza estensiva misurata
+su $W_t$ durante il moto è data dal seguente teorema:
+
+\begin{teor}[Teorema del trasporto di Reynolds] \label{teor:reynolds}
+Se $W_t = \varphi(W_{t_0},t)$ è un insieme di $\R^n$ sufficientemente
+regolare, allora
+\begin{align*}
+\frac{d}{dt} G(t)
+&= \int_{W_t} D_t g + g \diver(v) \dx & \text{(forma lagrangiana)} \\
+&= \int_{W_t} \partial_t g + \diver_i(g \otimes v^i) \dx & \text{(forma euleriana)}
+\end{align*}
+La notazione $\diver_i(g \otimes v^i)$ serve a rendere esplicito
+l'indice rispetto al quale viene calcolata la divergenza del tensore
+$g \otimes v$. Per semplicità, lasciamo muti gli indici del tensore $g$.
+% indica che la divergenza del tensore $g \otimes v$ è calcolata
+% rispetto all'indice di $v$.
+\end{teor}
+
+\begin{proof}[Dimostrazione (traccia)]
+Passiamo alle variabili lagrangiane $X = \psi(x,t)$, al fine di rimuovere
+la dipendenza temporale dal dominio di integrazione $W_t$.
+Dopodiché, deriviamo sotto segno di integrale e usiamo la formula di Jacobi
+per calcolare la derivata del determinante jacobiano.
+Infine, torniamo alle variabili originali per ottenere la tesi
+in forma lagrangiana. La tesi in forma euleriana si ottiene
+immediatamente da quest'ultima sfruttando l'identità tensoriale
+\[
+\diver_i(g \otimes v^i)
+= \partial_i (g v^i)
+= (\partial_i g) v^i + g (\partial_i v^i)
+= D_t g - \partial_t g + g \diver(v). \qedhere
+\]
+\end{proof}
+
+\noindent Alcuni esempi di grandezze estensive sono il volume, la massa e l'energia.
+
+\subsection*{Termodinamica di un gas perfetto}
+
+Lo stato termodinamico classico di un sistema 
+è descritto in ogni istante da un vettore di~$N$
+grandezze fisiche macroscopiche %direttamente osservabili
+dette \emph{coordinate termodinamiche} o \emph{variabili di stato}.
+Affiché il valore di tali coordinate sia globalmente definito in modo
+univoco, supponiamo per il momento che tutte le grandezze fisiche
+intensive (per esempio, la pressione) siano in ogni istante uniformi
+all'interno del sistema.
+Più avanti, quando andremo a descrivere la dinamica di un fluido,
+tale ipotesi sarà soddisfatta localmente.
+Supponiamo inoltre di avere a che fare con un sistema omogeneo,
+cioè composto da una sola specie chimica e una sola fase.
+Per la \emph{regola delle fasi di Gibbs}, un tale sistema ha solamente
+due gradi di libertà termodinamici, il che significa che è sempre possibile
+dedurre il valore di tutte le variabili di stato a partire solamente
+dal valore di due di esse.
+Affinché ciò sia possibile, dovranno necessariamente esistere $N-2$
+equazioni, dette \emph{equazioni di stato}, che legano in modo
+implicito e tipicamente non lineare tutte le $N$ variabili termodinamiche del sistema.
+
+Consideriamo un sistema composto da $n$ moli di gas
+e scegliamo come variabili di stato la pressione $p$,
+il volume $V$, la temperatura $T$ e l'energia interna $U$.
+%cioè l'energia contenuta nel gas sotto forma di energia microscopica
+%sia cinetica che potenziale.
+Per i nostri scopi, sarà più che sufficiente il modello di \emph{gas perfetto},
+per il quale valgono le equazioni di stato 
+\begin{equation} \label{eq:equazione-stato-gas-perfetti-pVT}
+pV = nRT, \qquad U = n C_v T.
+\end{equation}
+Una definizione formale di gas perfetto richiederebbe l'introduzione
+di modelli microscopici
+%TODO
+che esulano dallo scopo di questo lavoro.%
+\footnote{L'energia interna, per esempio, è definita come la somma
+delle energie cinetiche e potenziali (microscopiche)
+di tutte le particelle del gas. Si rende quindi necessario un approccio
+di tipo statistico.}
+La costante $R$ è detta \emph{costante universale dei gas}
+e vale circa \SI{8,3145}{\joule\per\mol\per\kelvin}.
+La quantità $C_v$ è detta \emph{calore molare a volume costante}
+ed è definita dal rapporto
+\[
+C_v = \frac{1}{n} \left(\frac{\delta Q}{dT}\right)_{dV = 0}
+\]
+tra la quantità infinitesima $\delta Q$ di calore assorbito dal gas
+durante una qualsiasi%
+\footnote{Purché la trasformazione sia \emph{quasistatica},
+cioè preservi la definizione globale e univoca di tutte
+le coordinate termodinamiche in ogni istante delle trasformazione.}
+trasformazione a volume costante
+e il suo incremento di temperatura $dT$.
+In linea di principio, $C_v$ dovrebbe essere una funzione di $V$ e
+di $T$, ma si può dimostrare che per un gas perfetto tale quantità
+è costante e il suo valore dipende unicamente dal numero $d$ di
+gradi di libertà associati al moto delle molecole del gas:
+\[
+C_v = \frac{d}{2}R.
+\]
+Nel caso di un gas monoatomico, $d = 3$, mentre per un gas
+diatomico (come l'aria, approssimativamente) si ha $d = 5$.
+Con lo stesso principio con cui abbiamo definito il calore molare
+a volume costante, è possibile definire anche il calore
+molare a \emph{pressione} costante:
+\[
+C_p = \frac{1}{n} \left(\frac{\delta Q}{dT}\right)_{dp = 0}
+\]
+Nel caso di un gas perfetto è possibile dimostrare la \emph{relazione di Mayer}
+tra i due calori molari
+\[
+C_p = C_v + R,
+\]
+da cui segue
+\[
+C_p = \frac{d}{2}R + R = \frac{d+2}{2}R.
+\]
+Il rapporto
+\[
+\gamma = \frac{C_p}{C_v} = \frac{d+2}{d} > 1
+\]
+è una quantità adimensionale importante,
+detta \emph{coefficiente di dilatazione adiabatica}.
+
+Indichiamo ora con $m$ la massa del gas, con $\rho$ la sua densità
+$m/V$ e con $u$ la sua energia interna specifica $U/m$.
+Dalle due equazioni di stato \eqref{eq:equazione-stato-gas-perfetti-pVT}
+e dalla relazione di Mayer possiamo dedurre che
+\begin{equation} \label{eq:equazione-stato-gas-perfetti-p-rho-u}
+\frac{pV}{m} = \frac{nRT}{m} \qquad
+\frac{p}{\rho} = \frac{RU}{C_v m} \qquad
+p = \frac{R}{C_v} \rho u = \frac{C_p - C_v}{C_v} \rho u = (\gamma-1) \rho u.
+\end{equation}
+Questa nuova equazione di stato, espessa mediante le coordinate termodinamiche
+$p$, $\rho$ e $u$, sarà molto utile in seguito, quando andremo a scrivere
+il sistema delle equazioni di Eulero per i fluidi.
+
+% In questo modo, queste ultime funzioni non compariranno esplicitamente
+% nelle equazioni del moto
+
+% \footnote{Per semplicità, evitiamo il formalismo degli spazi affini
+% e lavoriamo direttamente in R3xR+.}
+
+% In assenza di forze esterne, tali equazioni sono autonome
+% e quindi, senza perdita di generalità, possiamo
+% eliminare da phi la dipendenza da t_0 supponendo d'ora in poi che t_0 = 0.
+
+\section{Deduzione delle equazioni di Eulero}
+
+Come abbiamo ricordato all'inizio del capitolo,
+in letteratura esistono più versioni delle equazioni di Eulero:
+in questo paragrafo andremo a ricavare quelle per gas perfetti
+diatomici in $\R^3$ in assenza di forze esterne di volume.
+Affinché sia più facile in seguito fare riferimento alle varie
+ipotesi di lavoro, le elenchiamo qui in modo schematico una volta per tutte:
+\begin{description}
+\item[(H1)] Il flusso è adiabatico, cioè ogni porzione di fluido
+	scambia durante il moto una quantità di calore $Q$ con il
+	fluido circostante pari a zero.
+\item[(H2)] Il flusso non è viscoso, cioè le uniche forze di contatto
+	interne al fluido sono dovute alla pressione e non a eventuali
+	attriti viscosi. Pertanto il tensore degli sforzi ha la forma
+	\[
+	\tau^{ij}(x,t) = -p(x,t)\delta^{ij}.
+	\]
+	La scelta del tensore di Knonecker $\delta^{ij}$ è sostanzialmente
+	obbligata dal fatto che gli sforzi di pressione all'interno di un fluido
+	sono normali e isotropi.
+\item[(H3)] Le coordinate termodinamiche del fluido sono legate in ogni punto
+	 e in ogni istante dalle equazioni di stato dei gas perfetti
+	 \eqref{eq:equazione-stato-gas-perfetti-pVT}, o dalla loro
+	 riformulazione \eqref{eq:equazione-stato-gas-perfetti-p-rho-u}.
+	 Il gas è diatomico, quindi il coefficiente di dilatazione adiabatica
+	 $\gamma$ vale $7/5$.
+\item[(H4)] Non sono presenti forze esterne di volume.
+\end{description}
+
+\subsection*{Conservazione della massa}
+
+La massa $m$ di una porzione di fluido $W \subseteq \Omega$ è una
+grandezza estensiva che si conserva durante il moto di $W$:
+\[
+\frac{d}{dt} m(t) = 0.
+\]
+La sua densità, detta \emph{densità di massa}, è un campo scalare
+e lo si indica con $\rho(x,t)$:
+\[
+m(t) = \int_{W_t} \rho(x,t) \dx.
+\]
+Affinché la densità di massa abbia significato fisico, è necessario
+supporre che $\rho$ sia strettamente positiva in ogni punto di $\Omega_t$
+e per ogni istante $t \geq t_0$.
+
+%TODO
+(commento sul fatto che questa ipotesi non è da dare affatto per scontata:
+più avanti vedremo che $\rho \to 0$ è uno dei possibili
+motivi per cui una soluzione classica delle equazioni di Eulero
+può non esistere per tutti i tempi)
+
+Per il teorema di trasporto di Reynolds e le due equazioni precedenti,
+si ha che
+\begin{equation} \label{eq:continuita-forma-integrale}
+0
+= \frac{d}{dt} m(t)
+= \frac{d}{dt} \int_{W_t} \rho \dx
+= \int_{W_t} \partial_t \rho + \diver(\rho v) \dx.
+\end{equation}
+Questa relazione è nota come \emph{equazione di continuità
+per la massa in forma integrale}.
+Per l'arbitrarietà del dominio $W_t$ in $\Omega_t$
+e per la continuità della funzione integranda,
+possiamo dedurne anche una versione locale, più forte,
+detta \emph{equazione di continuità per la massa in forma differenziale}:
+\begin{equation} \label{eq:continuita-forma-differenziale}
+\partial_t \rho + \diver(\rho v) = 0
+\quad \text{per ogni $(x,t) \in \Omega_t \times [t_0,+\infty)$.}
+\end{equation}
+L'equazione di continuità per la massa permette di
+dimostrare la seguente variante del teorema del trasporto di Reynolds:
+\begin{teor}[Teorema del trasporto di Reynolds, densità
+per unità di massa] \label{teor:reynolds-per-unita-di-massa}
+Se la grandezza estensiva $G$ è definita come
+\[
+G(t) = \int_{W_t} \rho(x,t) g(x,t) \dx
+\]
+e se $W_t = \varphi(W_{t_0},t)$ è un insieme di $\R^n$ sufficientemente
+regolare, allora
+\[
+\frac{d}{dt} G(t) = \int_{W_t} \rho \, D_t g \dx.
+\]
+\end{teor}
+
+\noindent Alla luce di questo teorema, risulta spesso vantaggioso
+(al fine di semplificare i calcoli) scegliere la densità di
+una grandezza estensiva \emph{per unità di massa}, cioè
+una densità della forma $\rho g$ anziché soltanto $g$ come nella
+\eqref{eq:definizione-estensiva}.
+
+\subsection*{Bilancio della quantità di moto}
+
+La quantità di moto $P$ di una porzione di fluido $W \subseteq \Omega$ è la
+seguente grandezza estensiva:
+\[
+P(t) = \int_{W_t} \rho(x,t) v(x,t) \dx.
+\]
+La prima equazione cardinale della dinamica afferma che la variazione
+della quantità di moto di un sistema di masse è uguale alla
+risultante delle forze esterne che agiscono su di esso:
+\[
+\frac{d}{dt} P(t) = F^e(t).
+\]
+Nel caso di un continuo, è opportuno distinguere due tipi di forze
+esterne: quelle di volume~$F_v^e$ e quelle di superficie~$F_s^e$.
+Le forze esterne di volume sono date dall'integrale di 
+una densità volumetrica di forza per unità di massa $f_v^e$,
+mentre le forze esterne di superficie sono date dall'integrale
+di una densità superficiale di forza $f_s^e$:
+\[
+F_v^e(t) = \int_{W_t} \rho(x,t) f_v^e(x,t) \dx
+\qquad F_s^e(t) = \int_{\partial W_t} f_s^e(x,t) \dsigma.
+\]
+Osserviamo che una stessa forza di superficie $F_s$ può essere
+considerata sia esterna che interna, a seconda del punto di vista
+(quello di $W_t$ o quello di $\Omega_t$).
+Viceversa, una forza di volume $F_v$ esterna rispetto a $W_t$
+sarà sempre esterna anche rispetto a $\Omega_t$.
+In questo caso, $F_s^e$ è per definizione esterna a $W_t$,
+quindi l'equazione \eqref{eq:sforzo-sul-bordo} ci permette di
+esprimere $F_s^e$ mediante il tensore degli sforzi~$\tau$:
+\[
+F_s^e(t) = \int_{\partial W_t} \tau(x,t) \cdot \nu(x) \dsigma.
+\]
+La funzione $\nu(x)$ indica il vettore normale uscente da $W_t$ in $x$.
+Non è necessario specificare l'indice di $\tau^{ij}$ rispetto al quale
+viene calcolato il prodotto scalare (sarebbe $j$), perché il tensore
+degli sforzi è simmetrico. Le quattro equazioni viste fino a ora,
+insieme al teorema del trasporto di Reynolds e al teorema della divergenza,
+implicano complessivamente che
+\begin{gather*}
+\frac{d}{dt} \int_{W_t} \rho(x,t) v(x,t) \dx
+	= \int_{W_t} \rho(x,t) f_v^e(x,t) \dx
+	+ \int_{\partial W_t} \tau(x,t) \cdot \nu(x) \dsigma \\
+\int_{W_t} \partial_t (\rho v) + \diver_j(\rho v \otimes v^j) \dx
+	= \int_{W_t} \rho f_v^e \dx
+	+ \int_{W_t} \diver_j(\tau^j) \dx.
+\end{gather*}
+A questo punto, per le ipotesi sul fluido \textbf{(H2)} e \textbf{(H4)},
+concludiamo che
+\[
+\int_{W_t} \partial_t (\rho v^i)
+	+ \partial_j (\rho v^i v^j + p\delta^{ij}) \dx
+= 0.
+\]
+Infine, l'arbitrarietà del dominio $W_t$ in $\Omega_t$ e la continuità
+della funzione integranda ci permettono anche in questo caso di ricavare 
+la forma differenziale dell'equazione precedente:
+\begin{equation} \label{eq:bilancio-quantita-di-moto}
+\partial_t (\rho v^i) + \partial_j (\rho v^i v^j + p\delta^{ij}) = 0.
+\end{equation}
+
+\subsection*{Bilancio dell'energia}
+
+L'energia totale $E$ di una porzione di fluido $W \subseteq \Omega$
+è data dalla somma di tre termini:
+\begin{itemize}
+\item L'energia cinetica macroscopica $E_k$, la cui
+	densità è $\frac{1}{2} \rho \!\!\: \norm{v}^2$.
+\item L'energia potenziale macroscopica $E_p$, che nel nostro caso
+	è nulla per l'ipotesi \textbf{(H4)}.
+\item L'energia interna $U$, la cui densità è $\rho u$.
+	La quantità $u(x,t)$ è detta \emph{energia interna specifica}.
+\end{itemize}
+Indichiamo con $e(x,t)$ la densità dell'energia totale $E(t)$.
+Per quanto detto, possiamo scrivere
+\[
+E(t) = \int_{W_t} \frac{1}{2} \rho \norm{v}^2 \dx
+	 + \int_{W_t} \rho u \dx,
+\qquad e = \frac{1}{2} \rho \norm{v}^2 + \rho u.
+\]
+La variazione dell'energia totale $E(t)$ è descritta dalla prima legge
+della termodinamica:
+\[
+E(t+h) - E(t) = Q + L.
+\]
+Precisiamo che in questo caso non sarebbe lecito usare la versione
+differenziale di tale legge, cioè $dE = \delta Q + \delta L$,
+perché $W$ non subisce trasformazioni quasistatiche.
+Per aggirare l'ostacolo, abbiamo quindi considerato la variazione di
+$E$ sull'intervallo $[t,t+h]$.
+
+L'ipotesi di flusso adiabatico \textbf{(H1)} ci assicura che il calore $Q$
+assorbito da $W$ in questo intervallo di tempo è nullo.
+Possiamo poi suddividere il lavoro $L$ compiuto dall'ambiente
+su $W$ in un termine dovuto alle forze esterne di volume e un
+termine dovuto a quelle di superficie:
+\[
+L = \int_{W_{[t,t+h]}} \rho f_v^e \cdot v \,\dx\!\!\!\;\dt
+  + \int_{\partial W_{[t,t+h]}} f_s^e \cdot v \,\dsigma\!\!\!\:\dt.
+\]
+Allora, passando al limite per $h \to 0$ e applicando il teorema del
+trasporto di Reynolds, si ha
+\begin{gather*}
+\frac{d}{dt} E(t)
+	= \frac{d}{dt} \int_{W_t} e \dx
+	= \int_{\partial W_t} f_s^e \cdot v \dsigma \\
+\int_{W_t} \partial_t e + \diver(ev) \dx
+	= \int_{\partial W_t} \tau^{ij} \nu_j v_i \dsigma
+	= \int_{W_t} \diver_j(\tau^{ij} v_i) \dx \\
+\int_{W_t} \partial_t e + \diver(ev) - \diver_j(-p \delta^{ij} v_i) \dx = 0
+	\qquad \int_{W_t} \partial_t e + \diver(ev+pv) \dx = 0
+\end{gather*}
+Ancora una volta, abbiamo fatto uso dell'ipotesi \textbf{(H4)},
+dell'equazione \eqref{eq:sforzo-sul-bordo} e del teorema della divergenza.
+La corrispondente forma differenziale è
+\begin{equation} \label{eq:bilancio-energia}
+\partial_t e + \diver(ev+pv) = 0.
+\end{equation}
+
+\subsection*{Equazioni di Eulero in forma conservativa}
+
+Possiamo ora combinare le equazioni
+\eqref{eq:continuita-forma-differenziale},
+\eqref{eq:bilancio-quantita-di-moto} e \eqref{eq:bilancio-energia}
+in un unico sistema di equazioni alle derivate parziali,
+detto \emph{sistema delle equazioni di Eulero in forma conservativa}:
+\begin{equation} \label{eq:sistema-eulero}
+\begin{cases}
+\partial_t \rho + \diver(\rho v) = 0 \\
+\partial_t (\rho v^i) + \partial_j (\rho v^i v^j + p\delta^{ij}) = 0 \\
+\partial_t e + \diver(ev+pv) = 0
+\end{cases}
+\end{equation}
+Per chiudere questo sistema di cinque equazioni scalari nelle sei incognite
+\[
+\rho, \rho v^1, \rho v^2, \rho v^3, e, p
+\]
+è necessario esprimere la pressione in funzione delle altre cinque variabili.
+Questo è possibile grazie all'ipotesi~\textbf{(H3)}, secondo cui possiamo
+applicare l'equazione di stato dei gas perfetti
+\eqref{eq:equazione-stato-gas-perfetti-p-rho-u}
+a ogni porzione infinitesima di fluido:
+\[
+p
+= (\gamma-1) \rho u
+= (\gamma-1) \left( e - \frac{1}{2} \rho \norm{v}^2 \right)
+= (\gamma-1) \left( e - \frac{\norm{\rho v}^2}{2\rho} \right)
+\]
+Operiamo ora un cambio di notazione, così da poter
+scrivere il sistema \eqref{eq:sistema-eulero} in forma vettoriale e
+con la notazione tipica delle equazioni alle derivate parziali.
+La variabile $u$ non indicherà più l'energia interna specifica,
+bensì il vettore delle incognite
+\[
+u(x,t) \colon \Omega_t \times [t_0,\infty) \to \R^5
+\qquad u(x,t) = \begin{pmatrix} \rho(x,t) \\ \rho(x,t) v(x,t) \\ e(x,t) \end{pmatrix}
+\]
+e la variabile $F$ non indicherà più una generica forza macroscopica,
+bensì la funzione \emph{flusso}
+\[
+F \colon \R^+ \! \times \R^3 \! \times \R \to \R^{5 \times 3}
+\qquad
+F(u) =
+\frac{1}{u_1}
+\begin{pmatrix*}[l]
+u_1 u_2            & u_1 u_3            & u_1 u_4            \\
+u_2 u_2 + u_1 p(u) & u_2 u_3            & u_2 u_4            \\
+u_3 u_2            & u_3 u_3 + u_1 p(u) & u_3 u_4            \\
+u_4 u_2            & u_4 u_3            & u_4 u_4 + u_1 p(u) \\
+u_5 u_2 + u_2 p(u) & u_5 u_3 + u_3 p(u) & u_5 u_4 + u_4 p(u)
+\end{pmatrix*}
+\]
+con
+\begin{equation*}
+p(u) = (\gamma-1) \left( u^5 - \frac{u_2^2+u_3^2+u_4^2}{2 u^1} \right)
+\qquad \gamma = \frac{7}{5}.
+\end{equation*}
+A questo punto si verifica facilmente che il sistema \eqref{eq:sistema-eulero}
+è equivalente a
+\[
+\partial_t u + \diver(F(u)) = 0.
+\]
+Per convenzione, la divergenza viene calcolata rispetto alle righe
+della matrice $F(u)$.
+Abbiamo quindi ottenuto le equazioni di Eulero sotto forma di
+\emph{sistema di leggi di conservazione}.
+
+%La funzione tensoriale \emph{flusso} $F \colon \R^5 \to \R^5 \otimes \R^3$,
+%che per comodità riportiamo sotto forma di matrice (basta abbassare
+%il secondo indice controvariante) e mettendo in evidenza $u_1^{-1}$:
+
+\section{Proprietà delle equazioni di Eulero}
+
+In questo capitolo provvisorio ho pensato di riassumere schematicamente
+i risultati più importanti sulle equazioni di Eulero per gas perfetti
+(da un punto di vista dell'analisi matematica).
+Ho fatto una ricerca in letteratura per capire cosa si sappia
+sulle loro soluzioni (molto poco, mi sono accorto).
+I testi più utili per il caso multidimensionale (quello di interesse)
+si sono rivelati~\cite{serre} e~\cite{benzoni-gavage-serre}.
+Le cose da dire sarebbero molte, ma ancora non so quali saranno
+utili successivamente per la trattazione numerica delle equazioni.
+Inoltre, potrebbe essere meglio non introdurre qui
+la teoria sui sistemi iperbolici di leggi di conservazione,
+bensì in un paragrafo o un capitolo precedente.
+Alcune idee su cosa includere in questo capitolo (forse troppe):
+
+\subsection*{Teoria quasilineare}
+
+\begin{itemize}
+% 3.1 serre
+\item Definizione di \emph{iperbolicità} di un sistema lineare
+	a coefficienti costanti del primo ordine
+	\[
+	\partial_t u + \sum_{i=1}^n A_i \partial_i u = 0,
+	\qquad A_i \in \R^{m \times m}
+	\]
+	Motivazione della definizione in quanto condizione necessaria e
+	sufficiente affinché il problema di Cauchy
+	sia ben posto in $L^2$ (oppure in $H^s$ spazio di Sobolev).
+	Sia
+	\[
+	A(\xi) = \sum_{i=1}^n \xi_i A_i
+	\quad 	\text{per ogni $\xi \in \R^n$.}
+	\]
+	Un sistema è iperbolico se e solo se gli autovalori di $A(\xi)$
+	sono reali per ogni $\xi \in \R^n$ e la matrice $A(\xi)$
+	è diagonalizzabile in modo uniforme.
+	Interpretazione degli autovalori di $A(\xi)$ come velocità
+	di propagazione delle onde piane nella direzione $\xi$.
+\item I sistemi simmetrizzabili sono iperbolici. Definizione di sistema
+	strettamente iperbolico (autovalori semplici) e costantemente iperbolico
+	(autospazi di dimensione costante).
+	I sistemi strettamente/costantemente iperbolici sono iperbolici.
+% 3.2 serre
+\item Definizione di \emph{iperbolicità} per il sistema quasilineare
+	\[
+	\partial_t u + \sum_{i=1}^n A_i(u) \partial_i u = 0,
+	\qquad A_i \colon \R^n \to \R^{m \times m}
+	\]
+	La diagonalizzabilità di $A(\xi,u)$ è richiesta in modo uniforme
+	anche rispetto a $u$.
+	Stavolta l'iperbolicità non è condizione sufficiente all'esistenza
+	di soluzioni del problema di Cauchy, servono ipotesi più forti
+	(ad esempio, simmetrizzabilità). Le equazioni di Eulero
+	formano un sistema quasilineare in ogni punto in cui
+	la soluzione $u$ è regolare.
+% 3.3 serre
+\item Definizione di campo caratteristico come applicazione da $(\xi,u)$
+	agli autovalori (detti velocità caratteristiche) e autospazi di $A(\xi,u)$.
+	Definizione di campi caratteristici linearmente degeneri e
+	genuinamente non lineari.
+% 13.2.2 benzoni-gavage
+\item Il sistema delle equazioni di Eulero è iperbolico, se $\rho > 0$.
+	Calcolo dei campi caratteristici. Il sistema è strettamente iperbolico
+	in 1D e costantemente iperbolico in 2D/3D.
+	Formula per la velocità di propagazione delle onde
+	(utile per la condizione numerica CFL in seguito).
+% proposizione 1.4 benzoni-gavage o la prima prop. di sideris84
+\item L'informazione si propaga dunque a velocità finita, limitata nella
+	direzione $\xi$ dal massimo autovalore di $A(\xi,u)$.
+	Definizione di dominio di dipendenza.
+	Principio di località (prima proposizione di \cite{sideris84}).
+	Un teorema analogo non può valere per le equazioni di Navier-Stokes
+	a causa del carattere parabolico dei processi di diffusione.
+% 13.2.3 benzoni-gavage
+\item Il sistema delle equazioni di Eulero è simmetrizzabile, se $\rho > 0$.
+	Questo risultato è alla base della teoria di esistenza locale di soluzioni
+	classiche.
+\end{itemize}
+
+\subsection*{Soluzioni classiche del problema di Cauchy}
+
+\begin{itemize}
+\item Esistenza e unicità locale di soluzioni $C^1$ a partire da
+	una condizione iniziale $H^s$ con $s > 5/2$.
+	Ho trovato molti riferimenti, ognuno con un enunciato leggermente
+	diverso: Teorema 3.6.1 in \cite{serre},
+	Teorema 2.1 in \cite{chen-wang},
+	Teorema 13.1 in \cite{benzoni-gavage-serre} e
+	Teorema 5.1.1 in \cite{dafermos}.
+	Quest'ultimo mi pare il più completo, perché è l'unico a occuparsi
+	di regolarità rispetto al tempo maggiore di $C^1$ (inclusione 5.1.5)
+	e a dimostrare anche la dipendenza continua dai dati iniziali
+	(Teorema 5.2.1). Tuttavia, per poter applicare questo risultato
+	alle equazioni di Eulero è richiesta una trasformazione affine,
+	dato che il flusso $F$ è definito solo sull'insieme $\{\rho > 0\}$
+	e invece la palla $\overline{\mathscr{B}_\rho}$ è centrata nell'origine.
+	La modifica richiesta è spiegata bene nel commento che segue immediatamente
+	il Teorema 10.1 in \cite{benzoni-gavage-serre}.
+\item Sarebbe utile, al fine di giustificare l'uso di metodi numerici
+	di ordine elevato, un risultato di regolarità $C^\infty$
+	anziché $C^1$ (per dati iniziali $C^\infty$, ovviamente).
+	Non ho trovato nessun riferimento in letteratura,
+	perché le soluzioni classiche sono in genere definite come
+	$C^1$ o localmente lipschitziane.
+	Mi pare però che il risultato di regolarità rispetto al
+	tempo menzionato nel punto precedente possa essere sfruttato
+	per ottenere questo tipo di regolarità (la regolarità spaziale segue
+	senza problemi dai teoremi di embedding di Sobolev).
+\item L'esistenza globale di soluzioni classiche $C^\infty$, ancora aperta
+	per Eulero incomprimibile o Navier-Stokes, qui è sicuramente falsa.
+	Le equazioni di Eulero possono sviluppare singolarità in tempo finito
+	anche in presenza di dati iniziali $C^\infty$.
+	I teoremi precedenti ci dicono che esistono tre possibili motivi
+	per cui una soluzione classica può smettere di esistere:
+	\begin{itemize}
+	\item $\rho \to 0$ in almeno un punto, cioè si viene a creare un vuoto nel fluido.
+	\item $\norm{u}_\infty \to \infty$, cioè almeno una delle variabili del fluido
+		sviluppa un asintoto verticale (fenomeno di blowup).
+	\item $\norm{\nabla u}_\infty \to \infty$, cioè almeno una delle variabili
+		del fluido sviluppa un flesso a tangente verticale (fenomeno di wave-breaking).
+		Fenomeni di compressione che portano i fronti d'onda
+		a diventare più ripidi al passare del tempo.
+		Analogia con l'intersezione di caratteristiche per
+		l'equazione di Burgers non viscosa $u_t + (u^2)_x = 0$.
+	\end{itemize}
+\item Ho trovato pochissimi risultati della forma: \emph{se la condizione iniziale
+	$u_0$ soddisfa la proprietà X, allora la soluzione classica $u(t)$
+	diventa singolare in tempo finito per il motivo Y}
+	(un risultato è \cite{yin}, ma sono 40 pagine di articolo!).
+	Comunque è fuori discussione che esistano dati $C^\infty$
+	niente affatto patologici che sviluppano singolarità in tempo finito:
+	in \cite{sideris85} l'autore dimostra che esistono condizioni iniziali (anche piccole)
+	che in un tempo finito $T$ rendono singolare la quantità di moto in almeno un punto,
+	nell'ipotesi che la soluzione $u(t)$ sia regolare fino a $T$.
+	Purtroppo questa dimostrazione di perdita di regolarità
+	non è costruttiva (il ragionamento è: supponiamo che la soluzione
+	classica esista per un tempo maggiore di $T$,
+	allora si verificherebbe un blowup, assurdo),
+	quindi nulla vieta che si sviluppi prima di $T$ un altro tipo di singolarità,
+	anzi, per come sono fatti i dati iniziali sembra più intuitivo
+	che si formi un'onda di shock piuttosto che un blowup della quantità di moto.
+	
+\item C'è da dire che, rispetto al caso 1D, il processo di formazione delle singolarità
+	non è ancora chiaro. Un'idea per dare esempi costruttivi di formazione
+	di certi tipi di singolarità (per esempio, onde di shock)
+	potrebbe essere quella di estendere esempi 1D al caso 3D in modo
+	costante lungo i piani ortogonali all'asse $x$.
+	In questo modo si potrebbe dedurre che tutte le singolarità che si possono
+	formare in 1D si possono anche formare in 3D.
+	Magari in 1D esistono esempi costruttivi ragionevolmente semplici.
+	Non sono però sicuro al 100\%
+	che l'estensione costante di una soluzione 1D sia una soluzione 3D,
+	dovrei fare due conti\dots
+
+\item Precisazione: in 3D i fenomeni di dispersione delle onde contrastano
+	i fenomeni di compressione a tal punto da rallentare o addirittura
+	impedire del tutto la formazione di singolarità.
+	Questo fa sì che esistano condizioni di tipo dispersivo sui dati iniziali
+	sufficienti a garantire l'esistenza di soluzioni classiche per tutti i tempi
+	\cite{grassin}.
+	Si può dimostrare che non possono esistere risultati analoghi in 1D
+	(paragrafo 7.8 di \cite{dafermos}).
+	Questa è quindi una differenza qualitativa importante tra la formazione
+	di shock in 3D e in 1D.
+	
+\item Alla luce di tutto questo, è necessario introdurre il concetto di soluzioni deboli.
+\end{itemize}
+
+\subsection*{Soluzioni deboli del problema di Cauchy}
+
+\begin{itemize}
+\item Definizione di soluzione debole in $L^\infty$ del problema di Cauchy
+	% paragrafo 3.5 serre
+\item In 1D, è stata dimostrato che esiste $\delta > 0$ tale che
+	il problema di Cauchy è ben posto
+	(esistenza \textbf{globale}, unicità, dipendenza continua dai dati iniziali)
+	se la condizione iniziale ha variazione totale minore di $\delta$,
+	più ipotesi su campi caratteristici genuinamente non lineari
+	oppure linearmente degeneri
+	(esistenza globale dovuta a Glimm, il resto a Bressan et al.
+	Un breve survey paper di Bressan è \cite{bressan}).
+	Dunque in 1D lo spazio di funzioni giusto in cui lavorare è BV.
+	Il problema per dati iniziali arbitrari è ancora aperto.
+\item L'esistenza di soluzioni deboli in 3D è un problema totalmente aperto.
+	Non è nemmeno chiaro in quale spazio di funzioni sia opportuno lavorare,
+	quindi la scelta di $L^\infty$ nella definizione di soluzione
+	debole non ha motivazioni profonde (mentre in altri contesti, più semplici,
+	è la scelta giusta; comunque qui rimane un'ipotesi fisica importante).
+\item La condizione di Rankine-Hugoniot è necessaria e sufficiente affinché
+	una soluzione regolare che presenta una superficie di discontinuità
+	sia una soluzione debole.
+\item Velocità di propagazione di una discontinuità.
+	Il caso delle equazioni di Eulero.
+% 13.4 bensoni-gavage
+\item Differenza tra una discontinuità dinamica (es.\ onda d'urto)
+	e una discontinuità di contatto (es.\ strati di un vortice).
+	Differenza tra una discontinuità dinamica compressiva e una espansiva
+	(es.\ onda di rarefazione).
+\item Altro problema: le soluzioni deboli, ammesso che esistano,
+	non sono in generale uniche.
+	Idea: escludiamo quelle che violano il secondo principio della termodinamica.
+\end{itemize}
+
+\subsection*{Soluzioni deboli di entropia del problema di Cauchy}
+
+\begin{itemize}
+% paragrago 10.2 benzoni-gavage
+\item Definizione di \emph{entropia matematica} e \emph{flusso di entropia}
+	per un sistema di leggi di conservazione.
+	Definizione di soluzione debole di entropia.
+	Le soluzioni deboli di entropia non sono invertibili rispetto al tempo.
+\item Nel caso dell'equazione di Eulero, l'entropia termodinamica
+	è un'entropia matematica concava (quindi $-S$ è convessa; in
+	matematica e in fisica si usano due convenzioni diverse).
+	% unicità di tale funzione?
+%\item L'esistenza di una funzione entropia strettamente convessa
+%	implica la simmetrizzabilità di un sistema quasilineare.
+\item Se un sistema di leggi di conservazione ammette un'entropia convessa,
+	allora ogni sua soluzione debole	di entropia coincide con la sua
+	soluzione classica per tutto il tempo in cui quest'ultima esiste.
+\item Disuguaglianza necessaria e sufficiente affinché una soluzione regolare
+	che presenta una superficie di discontinuità sia una soluzione debole di entropia.
+% 13.4 bensoni-gavage
+\item Non tutte le discontinuità sono fisicamente ammissibili.
+	Condizione di entropia: il salto di entropia dev'essere positivo.
+	Una discontinuità soddisfa la condizione di entropia se e solo se è compressiva.
+	Definizione di shock come Rankine-Hugoniot più condizione di entropia.
+% pagina 409 benzoni-gavage
+\item Condizione di ammissibilità di Lax per gli shock.
+	Shock sufficientemente piccoli soddisfano automaticamente questa
+	condizione. La condizione di Lax permette di dimostrare
+	risultati di stabilità degli shock (esistenza locale nel tempo
+	di una soluzione regolare a tratti in 3D) % teorema 21.11 benzoni-gavage
+	e risultati di unicità delle soluzioni deboli di entropia in 1D.
+\item L'unicità delle soluzioni deboli entropiche in 3D è un problema aperto,
+	ma ci sono buone ragioni per pensare che
+	la risposta sia negativa alla luce dei risultati ottenuti
+	per le equazioni di Eulero isoentropiche \cite{chiodaroli}.
+	In letteratura sono quindi state proposte nozioni più forti
+	di soluzioni deboli di entropia (per esempio, basate su
+	limiti singolari delle equazioni di Navier-Stokes),
+	ma ancora non esiste un criterio per estrarre una soluzione debole canonica.
+\end{itemize}
+
+\subsection*{Problema di Cauchy con condizioni al bordo}
+
+\begin{itemize}
+\item L'aggiunta di condizioni al bordo al problema di Cauchy
+	non rende affatto più semplice la sua soluzione.
+	Anzi, in prima battuta non è nemmeno chiaro quale tipo di condizioni al bordo
+	possano essere imposte. Per questo gran parte della teoria
+	per le equazioni di Eulero (e sistemi iperbolici
+	di leggi di conservazione in generale) è stata sviluppata sul dominio $\R^n$.
+
+\item La difficoltà nella prescrizione di condizioni al bordo
+	è comune a tutte le PDE iperboliche. Per esempio,
+	già nell'equazione del trasporto lineare scalare
+	\[
+	u_t + cu_x = 0
+	\qquad x \in [a,b]
+	\]
+	è evidente il fatto che le condizioni al bordo (per esempio, di Dirichlet)
+	non possono essere imposte in entrambi gli estremi contemporaneamente,
+	e che la scelta dell'estremo di inflow è dettata dal segno di $c$.
+	In dimensione più alta, bisogna andare a esaminare lo spettro
+	delle matrici $A(\xi,u)$.
+
+\item Allo stato attuale della teoria, non esiste un criterio
+	per stabilire la buona posizione globale di un IBVP
+	per le equazioni di Eulero in 3D.
+	Esiste solamente una teoria locale per soluzioni regolari (teorema 5.6.1
+	\cite{dafermos}), del tutto analoga al caso senza bordo.
+
+\item Una classificazione esaustiva delle condizioni al bordo
+	per le equazioni di Eulero si trova nel capitolo 14 di \cite{benzoni-gavage-serre}.
+	Pacchetti software di riferimento come \texttt{clawpack} permettono
+	di gestire in modo automatico solo tre tipi di condizioni al bordo
+	(documentazione \url{https://www.clawpack.org/bc.html}):
+	\begin{itemize}
+	\item Pareti trasmettenti in uscita (outflow)
+	\item Condizioni al bordo periodiche
+	\item Pareti isolanti (slip walls)
+	\end{itemize}
+	Il testo di Hesthaven suppone quasi sempre che le condizioni al bordo siano
+	periodiche, oppure che il tempo di simulazione sia inferiore a quello richiesto
+	affinché l'informazione contenuta nella condizione iniziale raggiunga il bordo.
+	Nei paragrafi 5.3.1 e 11.5.1 accenna agli altri casi.
+\end{itemize}
+
+\subsection*{Soluzioni di riferimento}
+
+\begin{itemize}
+\item In conclusione, non esiste una teoria sulla buona posizione delle
+	equazioni di Eulero in 3D su cui fare affidamento per
+	lo sviluppo di metodi numerici stabili e accurati.
+	% Possiamo imparare molto dal confronto col caso 1D, ma
+	% in 3D le dinamiche sono incomparabilmente più ricche
+	Per valutare la qualità delle soluzioni numeriche ottenute
+	possiamo al massimo fare un confronto con quelle fornite da altri metodi numerici
+	ritenuti affidabili, oppure con soluzioni di riferimento in forma chiusa.
+\item Sarebbe utile avere delle soluzioni di riferimento per la stima
+	dell'errore dei metodi numerici.
+	Ho trovato diversi esempi in 2D, ma niente in 3D\dots
+	Se fosse possibile aggiungere forze esterne di volume, allora
+	con queste si potrebbe forzare qualunque soluzione desiderata
+	(ma sarebbe un sistema iperbolico di leggi di bilancio,
+	e non più di conservazione).
+\item Alcune configurazioni iniziali interessanti: onde d'urto piane,
+	onde d'urto sferiche, problema di Riemann, instabilità di Kelvin-Helmholtz,
+	double mach reflection, vortice isoentropico, scontro tra shock e vortice, \dots
+\end{itemize}
+
+%\item Problema di Riemann
+%\item Non esistono invarianti di Riemann per le equazioni in $\R^3$
+%https://www.theoretical-physics.net/dev/fluid-dynamics/euler.html

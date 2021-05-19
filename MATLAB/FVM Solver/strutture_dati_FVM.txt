@@ -1,0 +1,100 @@
+Una polymesh descrive una mesh poligonale, con tutte le informazioni
+di connettività richieste dal metodo dei volumi finiti.
+I poligoni sono convessi.
+Al fine di rendere il codice vettorizzabile, organizziamo i dati
+come struct di vettori e non come vettori di struct:
+https://en.wikipedia.org/wiki/AoS_and_SoA
+
+struct vertices {
+    nv: number of vertices, cioè numero totale di vertici.
+    x,y: vettori delle coordinate di ogni vertice della mesh.
+}
+
+struct edges {
+    nie: number of internal edges, cioè numero di
+        spigoli strettamente all'interno della mesh poligonale.
+    nbe: number of boundary edges, cioè numero di
+        spigoli sul bordo della mesh poligonale.
+    ne: number of edges, cioè numero totale di spigoli.
+        In memoria, gli spigoli interni vengono prima di quelli sul bordo.
+    type: vettore dei tipi degli spigoli (0 interno, >0 di bordo)
+        Il tipo associato a ogni spigolo di bordo identifica la particolare
+        condizione al bordo a cui è soggetto (inflow/outflow, parete, ecc).
+    v1, v2: vettori degli indici dei vertici di ogni spigolo della mesh.
+    length: vettore delle lunghezze di ogni spigolo.
+    nx, ny: vettori delle normali a ogni spigolo. Con il palmo della mano
+        sul foglio centrato in v2 e il pollice che punta verso v1,
+        la normale ha lo stesso verso dell'indice.
+    cp: vettore degli indici delle celle dal lato "+" di ogni spigolo.
+    	Le celle inesistenti sono rappresentate dall'indice 0 (questo caso
+    	si verifica ogni volta che uno spigolo appartiene al bordo).
+    cm: vettore degli indici delle celle dal lato "-" di ogni spigolo.
+        Le celle inesistenti sono rappresentate dall'indice 0 (questo caso
+    	si verifica ogni volta che uno spigolo appartiene al bordo).
+    nq: number of quadrature points, cioè numero di punti utilizzati
+    	nella formula di quadratura di Gauss-Legendre per
+    	approssimare l'integrale del flusso sullo spigolo.
+    qx: ascisse della formula di quadratura relative all'intervallo [0,1].
+    	Per convenzione, l'ascissa 0 corrisponde a v1, l'ascissa 1 a v2.
+    qw: pesi della formula di quadratura relativa all'intervallo [0,1]
+    up: u plus, cioè ricostruzione di u dal lato della normale.
+    	up è un tensore di dimensioni (ne,nu,nq). Il primo indice è associato
+    	al numero dello spigolo. Il secondo indice alla variabile fisica.
+    	Il terzo indice al punto di quadratura.
+    um: u minus, cioè ricostruzione di u dal lato opposto alla normale.
+    	um è un tensore di dimensioni (ne,nu,nq). Il primo indice è associato
+    	al numero dello spigolo. Il secondo indice alla variabile fisica.
+    	Il terzo indice al punto di quadratura.
+    tnf: total normal flux, cioè matrice degli integrali (approssimati)
+        del flusso normale su ogni spigolo.
+        tnf è una matrice di dimensioni (ne,nu) e serve come accumulatore
+        per il calcolo della formula di quadratura.
+    mws: maximum wave speed, cioè la velocità dell'onda più veloce tra quelle
+    	che compongono la soluzione approssimata del problema di Riemann 1D
+    	definito in ogni punto di quadratura di ogni spigolo dai valori in up e um.
+    	Il massimo viene calcolato tra tutte le onde e tutti gli nq punti di quadratura,
+    	così rimane una sola quantità scalare associata a ogni spigolo.
+}
+
+struct cells {
+    nc: number of cells, cioè numero totale di celle poligonali nella mesh.
+    cx, cy: vettori di coordinate dei nodi al centro di ogni cella.
+    area: vettore delle aree di ogni cella.
+    perimeter: vettore dei perimetri di ogni cella.
+    mne: maximum number of edges, cioè il massimo numero di spigoli
+        che costituiscono ciascuna cella (per esempio, se le celle
+        sono triangoli, mne=3).
+    ne: vettore del numero di spigoli di ciascuna cella (3 <= ne <= mne).
+    e: matrice degli indici degli spigoli che formano il bordo di ogni cella.
+        Indice di riga: numero di cella.
+        Indice di colonna: numero di spigolo.
+        Gli spigoli inesistenti sono rappresentati dall'indice 0
+        (questo caso si verifica ogni volta che una cella ha meno
+        di "mne" spigoli). In questo modo non dobbiamo ricorrere
+        a strutture dati di larghezza variabile, che ostacolerebbero
+        la vettorizzazione del codice.
+        Per rendere più facile spostarsi tra celle confinanti,
+        gli spigoli in ogni riga sono memorizzati in senso antiorario
+        rispetto al centro della cella.
+        Inoltre, il segno di ogni indice permette di stabilire se
+        la normale allo spigolo punta verso l'interno della cella
+        (indice positivo) oppure verso l'esterno (indice negativo).
+    nac: number of adjacent cells, cioè vettore della quantità di celle
+        immediatamente adiacenti. Di solito nac = ne, ma all'estremità
+        del dominio esistono celle per cui nac < ne.
+    ac: matrice degli indici delle celle adiacenti. Gli elementi
+        sono in corrispondenza con la matrice "e", in modo che abs(e(i,j))
+        sia lo spigolo che separa la cella i dalla cella na(i,j).
+        Se oltre lo spigolo e(i,j) non c'è alcuna cella, oppure
+        se lo spigolo e(i,j) è inesistente, allora na(i,j) = 0.
+    nu: dimensione del vettore delle incognite u, cioé numero di leggi
+        di conservazione nel sistema di PDE. Questo è anche il numero
+        di variabili fisiche associate alla simulazione.
+    u: matrice di dimensione (nc,nu) delle medie integrali delle soluzioni
+        su ogni cella. Indice di riga: numero di cella.
+        Indice di colonna: variabile fisica.
+    mws: maximum wave speed, cioè massima velocità con cui si propaga
+        l'informazione dei problemi di Riemann 1D (metodo di Godunov) all'interno
+        delle celle. Il valore mws in ogni cella è il massimo tra i valori mws
+        associati ai propri spigoli.
+}

@@ -1,0 +1,6 @@
+*.deja-dup-ignore
+build/
+results/
+*/Meshes/*.mat
+/Documentazione
+

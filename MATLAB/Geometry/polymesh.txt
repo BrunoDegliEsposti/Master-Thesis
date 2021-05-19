@@ -1,0 +1,57 @@
+Una polymesh descrive una mesh poligonale, con tutte le informazioni di connettività
+richieste dal metodo dei volumi finiti. I poligoni sono convessi.
+
+struct vertices {
+    nv: number of vertices, cioè numero totale di vertici.
+    x,y: vettori delle coordinate di ogni vertice della mesh.
+}
+
+struct edges {
+    nie: number of internal edges, cioè numero di
+        spigoli strettamente all'interno della mesh poligonale.
+    nbe: number of boundary edges, cioè numero di
+        spigoli sul bordo della mesh poligonale.
+    ne: number of edges, cioè numero totale di spigoli.
+        In memoria, gli spigoli interni vengono prima di quelli sul bordo.
+    type: vettore dei tipi degli spigoli (0 interno, >0 di bordo)
+        Il tipo associato a ogni spigolo di bordo identifica la particolare
+        condizione al bordo a cui è soggetto (inflow/outflow, parete, ecc).
+    v1, v2: vettori degli indici dei vertici di ogni spigolo della mesh.
+    length: vettore delle lunghezze di ogni spigolo.
+    nx, ny: vettori delle normali a ogni spigolo. Con il palmo della mano
+        sul foglio centrato in v2 e il pollice che punta verso v1,
+        la normale ha lo stesso verso dell'indice.
+}
+
+struct cells {
+    nc: number of cells, cioè numero totale di celle poligonali nella mesh.
+    cx, cy: vettori di coordinate dei nodi al centro di ogni cella.
+    area: vettore delle aree di ogni cella.
+    perimeter: vettore dei perimetri di ogni cella.
+    mne: maximum number of edges, cioè il massimo numero di spigoli
+        che costituiscono ciascuna cella (per esempio, se le celle
+        sono triangoli, mne=3).
+    ne: vettore del numero di spigoli di ciascuna cella (3 <= ne <= mne).
+    e: matrice degli indici degli spigoli che formano il bordo di ogni cella.
+        Indice di riga: numero di cella.
+        Indice di colonna: numero di spigolo.
+        Gli spigoli inesistenti sono rappresentati dall'indice 0
+        (questo caso si verifica ogni volta che una cella ha meno
+        di "mne" spigoli). In questo modo non dobbiamo ricorrere
+        a strutture dati di larghezza variabile, che ostacolerebbero
+        la vettorizzazione del codice.
+        Per rendere più facile spostarsi tra celle confinanti,
+        gli spigoli in ogni riga sono memorizzati in senso antiorario
+        rispetto al centro della cella.
+        Inoltre, il segno di ogni indice permette di stabilire se
+        la normale allo spigolo punta verso l'interno della cella
+        (indice positivo) oppure verso l'esterno (indice negativo).
+    nac: number of adjacent cells, cioè vettore della quantità di celle
+        immediatamente adiacenti. Di solito nac = ne, ma all'estremità
+        del dominio esistono celle per cui nac < ne.
+    ac: matrice degli indici delle celle adiacenti. Gli elementi
+        sono in corrispondenza con la matrice "e", in modo che abs(e(i,j))
+        sia lo spigolo che separa la cella i dalla cella na(i,j).
+        Se oltre lo spigolo e(i,j) non c'è alcuna cella, oppure
+        se lo spigolo e(i,j) è inesistente, allora na(i,j) = 0.
+}

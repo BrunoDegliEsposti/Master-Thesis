@@ -1,0 +1,9 @@
+Controlla:
+- Se i floats sono messi in posti ragionevoli
+- Se il discorso fila
+- Captions
+- Riferimenti
+- Separazione dei paragrafi
+- Formule
+- Spelling
+- TODO e FIXME

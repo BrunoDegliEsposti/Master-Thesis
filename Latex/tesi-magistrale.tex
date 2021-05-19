@@ -1,0 +1,97 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{geometry}
+	\geometry{a4paper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,heightrounded}
+\usepackage{amsmath, amsthm, amssymb, mathtools}
+\usepackage{siunitx}
+\usepackage{resizegather}
+	\addtolength{\jot}{4pt}
+\usepackage{mathrsfs}
+\usepackage{caption, subcaption}
+	\captionsetup{tableposition=top,figureposition=bottom}
+	\captionsetup{justification=centering,font=small,labelfont=bf}
+\usepackage[autostyle,italian=guillemets]{csquotes}
+\usepackage[backend=biber,style=numeric,hyperref]{biblatex}
+	\addbibresource{bibliografia.bib}
+\usepackage{hyperref}
+	\hypersetup{hidelinks}
+\usepackage{microtype}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\deq}{\vcentcolon=}
+\newcommand{\eqd}{=\vcentcolon}
+\newcommand{\dx}{\, dx}
+\newcommand{\dt}{\, dt}
+\newcommand{\dsigma}{\, d\sigma}
+\newcommand{\grad}{\nabla}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\Rank}{Rank}
+\DeclareMathOperator{\spn}{span} % \span è già utilizzato da latex
+\DeclareMathOperator{\diver}{div}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\TV}{TV}
+\DeclareMathOperator{\tr}{tr}
+
+\theoremstyle{definition}
+\newtheorem*{defi}{Definizione}
+\newtheorem*{esem}{Esempio}
+\newtheorem*{prob}{Problema}
+
+\theoremstyle{plain}
+\newtheorem{teor}{Teorema}[chapter]
+\newtheorem{lemm}[teor]{Lemma}
+\newtheorem{prop}[teor]{Proposizione}
+\newtheorem{coro}[teor]{Corollario}
+\newtheorem{dimo}{Dimostrazione}
+
+\theoremstyle{remark}
+\newtheorem*{osse}{Osservazione}
+
+\begin{document}
+
+\input{capitolo-eulero.tex}
+
+%\input{capitolo-appunti-hesthaven.tex}
+
+%\input{capitolo-volumi-finiti.tex}
+
+\printbibliography[heading=bibintoc]
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
