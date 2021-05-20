@@ -29,11 +29,11 @@ p = polysoup_from_grid(Nx,Ny,blcx,blcy,Lx,Ly);
 [v,e,c] = polymesh_from_polysoup(p);
 polymesh_save('regular_square_400x400.mat',v,e,c);
 
-% Nx = 800;
-% Ny = 800;
-% p = polysoup_from_grid(Nx,Ny,blcx,blcy,Lx,Ly);
-% [v,e,c] = polymesh_from_polysoup(p);
-% polymesh_save('regular_square_800x800.mat',v,e,c);
+Nx = 800;
+Ny = 800;
+p = polysoup_from_grid(Nx,Ny,blcx,blcy,Lx,Ly);
+[v,e,c] = polymesh_from_polysoup(p);
+polymesh_save('regular_square_800x800.mat',v,e,c);
 
 
 
