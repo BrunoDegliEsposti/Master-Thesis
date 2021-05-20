@@ -97,4 +97,7 @@ struct cells {
         l'informazione dei problemi di Riemann 1D (metodo di Godunov) all'interno
         delle celle. Il valore mws in ogni cella è il massimo tra i valori mws
         associati ai propri spigoli.
+    imm: integral mean of monomials, cioè matrice di dimensione (nc,(k+1)(k+2)/2)
+    	delle medie integrali dei monomi 1,x,y,x^2,xy,y^2,ecc su ogni cella,
+    	fino al grado k. Indice di riga: numero di cella. Indice di colonna: monomio.
 }

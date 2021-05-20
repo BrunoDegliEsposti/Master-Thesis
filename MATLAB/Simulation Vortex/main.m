@@ -24,18 +24,18 @@ u_exact = @(x,y,t) vortex(x,y,t,cx0,cy0,cvx,cvy,beta);
 u0 = @(x,y) u_exact(x,y,t0);
 
 % Definizione del dominio discreto e dell'IVBP
-[vertices,edges,cells] = polymesh_load('regular_square_50x50.mat');
+[vertices,edges,cells] = polymesh_load('voronoi_square_2500.mat');
 cells.nu = 4;
-cells.u = cell_integral(u0,cells.nu,vertices,edges,cells)./cells.area;
+cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
 bc = containers.Map('KeyType','uint32','ValueType','any');
 bc(1) = u_exact;
 
 % Scelta dei metodi numerici
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-L = @constant_WR_Rusanov_FVM;
-%cells = initialise_cell_stencils(vertices,edges,cells); TODO...
-ODE_solver = @SSPRK11;
+L = @linear_WR_Rusanov_FVM;
+cells = interpolation_linear_initialize(vertices,edges,cells);
+ODE_solver = @SSPRK22;
 courant_number = 1;
 
 % Calcolo della soluzione numerica
