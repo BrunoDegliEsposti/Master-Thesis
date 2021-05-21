@@ -26,10 +26,10 @@ function [vertices,edges,cells] = interpolation_linear(vertices,edges,cells)
         
         % ricostruzione lineare ai minimi quadrati
         V = cells.imm(stencil,:);
-        V(1,:) = 1e12 * V(1,:);
+        V(1,:) = 1e8 * V(1,:);
         for l = 1:cells.nu
             u = cells.u(stencil,l);
-            u(1) = 1e12 * u(1);
+            u(1) = 1e8 * u(1);
             p = V\u;
             for j = 1:cells.ne(i)
                 e = cells.e(i,j);
