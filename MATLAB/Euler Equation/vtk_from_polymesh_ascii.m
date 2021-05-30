@@ -1,8 +1,8 @@
-function [] = vtk_from_polymesh(filename,comment,vertices,edges,cells)
-%VTK_FROM_POLYMESH Salva la soluzione in un file vtk
+function [] = vtk_from_polymesh_ascii(filename,vertices,edges,cells)
+%VTK_FROM_POLYMESH_ASCII Salva la soluzione in un file vtk in formato testuale
     fileID = fopen(filename,'w');
-    fprintf(fileID,'# vtk DataFile Version 2.0\n');
-    fprintf(fileID,'%s\n',comment);
+    fprintf(fileID,'# vtk DataFile Version 4.2\n');
+    fprintf(fileID,'vtk output\n');
     fprintf(fileID,'ASCII\n');
     fprintf(fileID,'DATASET POLYDATA\n');
     

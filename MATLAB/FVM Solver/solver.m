@@ -46,7 +46,7 @@ function [vertices,edges,cells,niter] = solver(t0,T,prefix,tsnapshots,...
     filename = sprintf('%s-%05u.vtk',prefix,snapshot_counter);
     fprintf('Salvataggio file %s...\n',[foldername,'/',filename]);
     fprintf(timeseries,'    { "name" : "%s", "time" : %.12f }',filename,t);
-    vtk_from_polymesh([foldername,'/',filename],prefix,vertices,edges,cells);
+    vtk_from_polymesh_bin([foldername,'/',filename],vertices,edges,cells);
     snapshot_counter = snapshot_counter + 1;
     
     % Loop principale
@@ -68,7 +68,7 @@ function [vertices,edges,cells,niter] = solver(t0,T,prefix,tsnapshots,...
         filename = sprintf('%s-%05u.vtk',prefix,snapshot_counter);
         fprintf('Salvataggio file %s...\n',[foldername,'/',filename]);
         fprintf(timeseries,',\n    { "name" : "%s", "time" : %.12f }',filename,t);
-        vtk_from_polymesh([foldername,'/',filename],prefix,vertices,edges,cells);
+        vtk_from_polymesh_bin([foldername,'/',filename],vertices,edges,cells);
         snapshot_counter = snapshot_counter + 1;
     end
     tend = cputime();
