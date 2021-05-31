@@ -23,7 +23,7 @@ edges = initialize_edge_quadrature(edges);
 
 % Calcolo delle ricostruzioni interne e sul bordo
 cells = interpolation_linear_initialize(vertices,edges,cells);
-[vertices,edges,cells] = interpolation_linear(vertices,edges,cells);
+[edges.up, edges.um] = interpolation_linear(vertices,edges,cells);
 for j = edges.nie+(1:edges.nbe)
     for k = 1:edges.nq
         [x,y] = edge_lerp(edges.qx(k),vertices,edges,j);

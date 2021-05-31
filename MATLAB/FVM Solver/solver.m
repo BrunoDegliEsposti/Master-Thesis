@@ -7,13 +7,6 @@ function [vertices,edges,cells,niter] = solver(t0,T,prefix,tsnapshots,...
 % degli istanti di tempo contenuti nel vettore tsnapshots
 % nella cartella "results" con nome "prefix-number.vtk",
 % insieme a un file di tipo vtk.series che può essere letto da ParaView.
-
-    % Alloca le variabili ausiliarie utilizzate dal FVM
-    edges.up = zeros(edges.ne,cells.nu,edges.nq);
-    edges.um = zeros(edges.ne,cells.nu,edges.nq);
-    edges.tnf = zeros(edges.ne,cells.nu);
-    edges.mws = zeros(edges.ne,1);
-    cells.mws = zeros(cells.nc,1);
     
     % Crea la cartella di output. Il file .deja-dup-ignore serve a evitare
     % che il mio computer faccia il backup automatico di questa cartella,

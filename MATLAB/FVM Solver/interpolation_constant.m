@@ -1,6 +1,8 @@
-function [vertices, edges, cells] = interpolation_constant(vertices, edges, cells)
-%INTERPOLATION_CONSTANT Ricostruzione costante dei valori di u sui punti di quadratura
-% di ogni spigolo (edges.up e edges.um) a partire dalle medie integrali su ogni cella.
+function [up, um] = interpolation_constant(vertices, edges, cells)
+%INTERPOLATION_CONSTANT Ricostruzione costante dei valori di u sui punti
+% di quadratura in ogni spigolo a partire dalle medie integrali su ogni cella.
+    up = zeros(edges.ne,cells.nu,edges.nq);
+    um = zeros(edges.ne,cells.nu,edges.nq);
     for j = 1:cells.mne
         e = cells.e(:,j);
         maskp = (e > 0);
@@ -8,8 +10,8 @@ function [vertices, edges, cells] = interpolation_constant(vertices, edges, cell
         maskm = (e < 0);
         em = -e(maskm);
         for k = 1:edges.nq
-            edges.up(ep,:,k) = cells.u(maskp,:);
-            edges.um(em,:,k) = cells.u(maskm,:);
+            up(ep,:,k) = cells.u(maskp,:);
+            um(em,:,k) = cells.u(maskm,:);
         end
     end
 end
