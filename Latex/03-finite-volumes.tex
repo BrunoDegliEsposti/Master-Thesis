@@ -32,7 +32,54 @@
 %  ===== Metodi runge-kutta SSTVD =====
 %  ===== Flussi numerici HLL, HLLC, ROE, etc =====
 
-\chapter{Metodo dei volumi finiti}
+\chapter{Finite volume discretization}
+
+In the field on numerical analysis, \emph{discretizing} a partial differential
+equation, taken together with its initial and boundary conditions
+on a domain $\Omega$, amounts to finding a finite-dimensional algebraic
+system of equations with scalar unknowns (usually, real numbers) whose
+solution approximates in some way the exact solution of the continuous
+problem. A necessary condition for the existence of a successful discretization
+is that the continuous problem must be \emph{well-posed} in the Hadamard
+sense; that is, given appropriate initial and boundary conditions, a solution
+to the partial differential equation must not only exist, but also
+must be unique and depend continuously on the initial data (with respect
+to a topology typically induced by a norm of some functional space).
+
+Unfortunately, both scientific and industrial applications often demand
+the numerical solution of differential problems whose well-posedness is,
+at best, unknown: a typical example would be the field of computational
+fluidodynamics, to which Euler's equations belong.
+As we've seen in Chapter \dots,
+even in the 2D case the well-posedness theory for hyperbolic systems
+of conservation laws is still far from being complete,
+% specialmente in presenza di salti/discontinuità
+so going forward
+we won't be able to prove much about the quality of the numerical
+schemes which we will introduce to approximate their solutions.
+Therefore, in order to argue their correctness, accuracy and
+stability, we will mostly have to rely on empirical evidence,
+which we will gather by setting up and analyzing well-established
+and meaningful numerical experiments.
+Of course, we hope that one day \dots
+As of now, however, we take this mixed approach as a necessary compromise.
+
+\section{Finite volume method}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
 
 Il \emph{metodo dei volumi finiti} è una delle principali
 tecniche di discretizzazione per la soluzione numerica di equazioni
@@ -124,3 +171,36 @@ che
 
 
 
+% In principle, any discretization technique used in the field
+% of numerical analysis for the approximate solution of a partial
+% differential equation can be thought of as a way to transform a
+% system of differential equations into a system of algebraic ones,
+% whose finitely many scalar unknows (usually real numbers) can
+% then be computed either directly or through the use of an iterative process.
+% 
+% as a way to transform a system of differential equations into
+% a system of algebraic equations, whose solutions can then be computed
+% either directly or through the use of an iterative process.
+% 
+% The quality of a discretization can be 
+% 
+% 
+% Linear partial differential equations are expected to give linear systems
+% of equations, and 
+% 
+% 
+% 
+% Among all discretization techniques,
+% versatile and effective 
+% 
+% as testimoniato by its widespread use in both academic and commercial software.
+% 
+% 
+% 
+% Meshes poligonali
+% Pro:
+% - Più facile raffinare la mesh (hanging nodes)
+% - Raccordo tra griglia strutturata (interna) e bordo non strutturato
+%     senza interpolazione su porzioni di dominio sovrapposte
+% 
+% Più costosa? In realtà molto poco.
