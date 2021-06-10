@@ -1,20 +1,26 @@
-function [vertices,edges,cells,Lu,dt] = ...
-    constant_WR_Rusanov_FVM(vertices,edges,cells,bc,flux,t)
-%CONSTANT_WR_RUSANOV_FVM Metodo dei volumi finiti con ricostruzioni costanti,
-% trattamento numerico delle condizioni al bordo di tipo Weak-Riemann
-% e flusso numerico di Rusanov per la semi-discretizzazione u'(t) = L(u(t),t)
-% di sistemi iperbolici di leggi di conservazione u_t + div(F(u)) = 0.
+function [vertices,edges,cells,Lu,dt] = FVM(vertices,edges,cells,method,t)
+%FVM Metodo dei volumi finiti per la discretizzazione spaziale
+% di un sistema iperbolico di leggi di conservazione (schema di Godunov).
+% L'argomento method è uno struct con membri "reconstruction_strategy",
+% "bc" (boundary conditions), "flux" e "numerical_flux".
+% Le medie integrali su ogni cella vengono interpolate e valutate
+% sui bordi (u_plus e u_minus) dalla funzione reconstruction_strategy().
+% Le condizioni al bordo sono descritte dal vettore bc e vengono
+% imposte in modo debole (approccio Weak-Riemann).
+% La funzione flux() è il flusso analitico esatto, la funzione
+% numerical_flux() è il flusso numerico (per esempio, quello di Rusanov).
 
     % Controlla che i valori di u siano ammissibili
     check_state2D(cells.u);
 
     % Ricostruzione di u_plus e u_minus sui due lati di ogni spigolo,
     % tranne i lati esterni degli spigoli di bordo
-    [edges.up, edges.um] = interpolation_constant(vertices,edges,cells);
+    [edges.up, edges.um] = method.reconstruction_strategy(vertices,edges,cells);
 
     % Condizioni al bordo al tempo t con approccio weak-riemann:
     % calcolo di u_minus sul lato esterno di ogni spigolo di bordo
     % (per convenzione, le normali puntano verso l'interno del dominio)
+    bc = method.bc;
     for j = edges.nie+(1:edges.nbe)
         bc_id = edges.type(j);
         if isa(bc(bc_id),'double')
@@ -52,15 +58,15 @@ function [vertices,edges,cells,Lu,dt] = ...
     edges.tnf = zeros(edges.ne,cells.nu);
     edges.mws = zeros(edges.ne,1);
     for k = 1:edges.nq
-        [nf,kmws] = numerical_flux_rusanov(...
-            flux,edges.um(:,:,k),edges.up(:,:,k),edges.nx,edges.ny);
+        [nf,kmws] = method.numerical_flux(...
+            method.flux,edges.um(:,:,k),edges.up(:,:,k),edges.nx,edges.ny);
         edges.tnf = edges.tnf + edges.qw(k) * nf;
         edges.mws = max(edges.mws,kmws);
     end
     edges.tnf = edges.length .* edges.tnf;
 
-    % Condizione CFL sul passo temporale (euristica)
-    % TODO: investigare la dipendenza dal numero di punti di quadratura sugli spigoli
+    % Condizione CFL sul passo temporale (euristica). TODO: investigare la
+    % dipendenza dal numero di punti di quadratura sugli spigoli.
     cells.mws = zeros(cells.nc,1);
     mask = (edges.cp~=0);
     cells.mws(edges.cp(mask)) = edges.mws(mask);

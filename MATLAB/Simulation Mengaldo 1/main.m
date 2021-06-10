@@ -26,16 +26,18 @@ bc(1) = freestream_u;
 % Scelta dei metodi numerici
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-L = @constant_WR_Rusanov_FVM;
-%cells = initialise_cell_stencils(vertices,edges,cells); TODO...
-ODE_solver = @SSPRK11;
-courant_number = 1;
+method.reconstruction_strategy = @reconstruction_constant;
+method.bc = bc;
+method.flux = flux;
+method.numerical_flux = @numerical_flux_rusanov;
+method.ODE_solver = @SSPRK11;
+method.courant_number = 1;
 
 % Calcolo della soluzione numerica
 prefix = 'mengaldo1';
 tsnapshots = linspace(t0,T,61);
-[vertices,edges,cells,niter] = solver(t0,T,prefix,tsnapshots,...
-    vertices,edges,cells,ODE_solver,courant_number,L,bc,flux);
+[vertices,edges,cells,niter] = solver(...
+    t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 
 
 

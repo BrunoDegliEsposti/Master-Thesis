@@ -1,5 +1,5 @@
-function [vertices,edges,cells,niter] = solver(t0,T,prefix,tsnapshots,...
-    vertices,edges,cells,ODE_solver,courant_number,L,bc,flux)
+function [vertices,edges,cells,niter] = ...
+    solver(t0,T,prefix,tsnapshots,vertices,edges,cells,method)
 %SOLVER Metodo delle linee (ODE_solver + FVM) per la soluzione numerica
 % di un sistema iperbolico di leggi di conservazione.
 % La simulazione avviene nell'intervallo di tempo [t0,T].
@@ -48,8 +48,8 @@ function [vertices,edges,cells,niter] = solver(t0,T,prefix,tsnapshots,...
         % Avanza la simulazione fino al prossimo istante da salvare
         try
             tnext = tsnapshots(snapshot_counter+1);
-            [niter,vertices,edges,cells] = ...
-                ODE_solver(t,tnext,T,niter,vertices,edges,cells,courant_number,L,bc,flux);
+            [niter,vertices,edges,cells] = method.ODE_solver(...
+                t,tnext,T,niter,vertices,edges,cells,method);
             t = tnext;
         catch ME
             fprintf(timeseries,'\n  ]\n}\n');

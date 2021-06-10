@@ -1,5 +1,5 @@
-function cells = interpolation_linear_initialize(vertices,edges,cells)
-%INTERPOLATION_LINEAR_INITIALIZE Inizializza il campo cells.imm nel caso
+function cells = reconstruction_linear_initialize(vertices,edges,cells)
+%RECONSTRUCTION_LINEAR_INITIALIZE Inizializza il campo cells.imm nel caso
 % di ricostruzioni lineari (grado 1, quindi ordine 2).
     cells.imm = zeros(cells.nc,3);
     cells.imm(:,1) = 1;

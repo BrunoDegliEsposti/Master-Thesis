@@ -1,5 +1,5 @@
-function [up, um] = interpolation_linear(vertices,edges,cells)
-%INTERPOLATION_LINEAR Ricostruzione lineare dei valori di u sui punti di
+function [up, um] = reconstruction_linear(vertices,edges,cells)
+%RECONSTRUCTION_LINEAR Ricostruzione lineare dei valori di u sui punti di
 % quadratura in ogni spigolo a partire dalle medie integrali su ogni cella.
 % La ricostruzione viene effettuata componente per componente,
 % senza decomposizione caratteristica.

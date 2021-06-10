@@ -33,16 +33,19 @@ bc(1) = u_exact;
 % Scelta dei metodi numerici
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-L = @linear_WR_Rusanov_FVM;
-cells = interpolation_linear_initialize(vertices,edges,cells);
-ODE_solver = @SSPRK22;
-courant_number = 1;
+cells = reconstruction_linear_initialize(vertices,edges,cells);
+method.reconstruction_strategy = @reconstruction_linear_unstable;
+method.bc = bc;
+method.flux = flux;
+method.numerical_flux = @numerical_flux_rusanov;
+method.ODE_solver = @SSPRK22;
+method.courant_number = 1;
 
 % Calcolo della soluzione numerica
 prefix = 'vortex-grid';
 tsnapshots = linspace(t0,T,11);
-[vertices,edges,cells,niter] = solver(t0,T,prefix,tsnapshots,...
-    vertices,edges,cells,ODE_solver,courant_number,L,bc,flux);
+[vertices,edges,cells,niter] = solver(...
+    t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 
 % Stima degli errori L1 e Linf
 uT = @(x,y) u_exact(x,y,T);

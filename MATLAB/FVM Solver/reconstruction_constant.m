@@ -1,5 +1,5 @@
-function [up, um] = interpolation_constant(vertices, edges, cells)
-%INTERPOLATION_CONSTANT Ricostruzione costante dei valori di u sui punti
+function [up, um] = reconstruction_constant(vertices, edges, cells)
+%RECONSTRUCTION_CONSTANT Ricostruzione costante dei valori di u sui punti
 % di quadratura in ogni spigolo a partire dalle medie integrali su ogni cella.
     up = zeros(edges.ne,cells.nu,edges.nq);
     um = zeros(edges.ne,cells.nu,edges.nq);

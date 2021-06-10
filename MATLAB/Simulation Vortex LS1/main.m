@@ -14,17 +14,21 @@ addpath('../Meshes');
 % Definizione dell'equazione differenziale
 flux = @euler_flux2D;
 t0 = 0;
-T = 0.2;
-u0 = @(x,y) [1,   0, 0,   1/(adiabatic_index-1)].*(x<0.5) + ...
-            [1/8, 0, 0, 0.1/(adiabatic_index-1)].*(x>=0.5);
+T = 1;
+cx0 = 0;
+cy0 = 0;
+cvx = 1;
+cvy = 0;
+beta = 5;
+u_exact = @(x,y,t) vortex(x,y,t,cx0,cy0,cvx,cvy,beta);
+u0 = @(x,y) u_exact(x,y,t0);
 
 % Definizione del dominio discreto e dell'IVBP
-polysoup = polysoup_from_grid(1024,3,0,0,1,3/1024);
-[vertices,edges,cells] = polymesh_from_polysoup(polysoup);
+[vertices,edges,cells] = polymesh_load('regular_square_50x50.mat');
 cells.nu = 4;
-cells.u = cell_integral(u0,cells.nu,vertices,edges,cells)./cells.area;
+cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
 bc = containers.Map('KeyType','uint32','ValueType','any');
-bc(1) = 'absorbing';
+bc(1) = u_exact;
 
 % Scelta dei metodi numerici
 edges.nq = 1;
@@ -37,10 +41,17 @@ method.ODE_solver = @SSPRK11;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica
-prefix = 'shock-tube';
+prefix = 'vortex-grid';
 tsnapshots = linspace(t0,T,11);
 [vertices,edges,cells,niter] = solver(...
     t0,T,prefix,tsnapshots,vertices,edges,cells,method);
+
+% Stima degli errori L1 e Linf
+uT = @(x,y) u_exact(x,y,T);
+errL1 = cell_norm_L1(...
+    cells.u - cell_integral_mean(uT,cells.nu,vertices,edges,cells), cells);
+errLinf = cell_norm_Linf(...
+    cells.u - cell_integral_mean(uT,cells.nu,vertices,edges,cells));
 
 
 
