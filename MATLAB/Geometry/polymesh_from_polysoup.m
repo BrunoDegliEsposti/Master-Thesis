@@ -87,6 +87,7 @@ function [vertices,edges,cells] = polymesh_from_polysoup(polysoup,tol)
     assert(all(cells.area>0));
     cells.perimeter = cell_perimeter(vertices,edges,cells);
     assert(all(cells.perimeter>0));
+    cells.h = 4*cells.area./cells.perimeter;
     
     % Riordina gli spigoli: prima quelli interni, poi quelli sul bordo
     P = [find(edges.type == 0); find(edges.type == 1)];

@@ -28,6 +28,8 @@ struct cells {
     cx, cy: vettori di coordinate dei nodi al centro di ogni cella.
     area: vettore delle aree di ogni cella.
     perimeter: vettore dei perimetri di ogni cella.
+    h: vettore delle approssimazioni del diametro delle circonferenze
+        inscritte in ogni cella (4*cells.area./cells.perimeter).
     mne: maximum number of edges, cioè il massimo numero di spigoli
         che costituiscono ciascuna cella (per esempio, se le celle
         sono triangoli, mne=3).
