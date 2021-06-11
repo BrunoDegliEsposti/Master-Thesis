@@ -33,7 +33,6 @@ bc(1) = u_exact;
 % Scelta dei metodi numerici
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-cells = reconstruction_linear_initialize(vertices,edges,cells);
 method.reconstruction_strategy = @reconstruction_linear_unstable;
 method.bc = bc;
 method.flux = flux;

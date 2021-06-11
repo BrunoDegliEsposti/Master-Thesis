@@ -25,7 +25,7 @@ struct edges {
 
 struct cells {
     nc: number of cells, cioè numero totale di celle poligonali nella mesh.
-    cx, cy: vettori di coordinate dei nodi al centro di ogni cella.
+    cx, cy: vettori di coordinate dei baricentri di ogni cella.
     area: vettore delle aree di ogni cella.
     perimeter: vettore dei perimetri di ogni cella.
     h: vettore delle approssimazioni del diametro delle circonferenze

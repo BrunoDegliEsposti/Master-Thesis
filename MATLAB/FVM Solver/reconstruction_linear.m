@@ -26,24 +26,34 @@ function [up, um] = reconstruction_linear(vertices,edges,cells)
         end
         stencil = stencil(1:n);
         
-        % ricostruzione lineare ai minimi quadrati
-        V = cells.imm(stencil,:);
-        V(1,:) = 1e8 * V(1,:);
+        % ricostruzione lineare ai minimi quadrati (solo sulla
+        % parte lineare del polinomio per questioni di stabilità)
+        V = ones(n,3);
+        x0 = cells.cx(stencil(1));
+        y0 = cells.cy(stencil(1));
+        h0 = cells.h(stencil(1));
+        V(:,2) = (cells.cx(stencil)-x0)./h0;
+        V(:,3) = (cells.cy(stencil)-y0)./h0;
+        V_reduced = V(2:end,2:end) - V(1,2:end);
         for l = 1:cells.nu
             u = cells.u(stencil,l);
-            u(1) = 1e8 * u(1);
-            p = V\u;
+            u_reduced = u(2:end)-u(1);
+            p = V_reduced \ u_reduced;
             for j = 1:cells.ne(i)
                 e = cells.e(i,j);
                 if e > 0
                     for k = 1:edges.nq
                         [x,y] = edge_lerp(edges.qx(k),vertices,edges,e);
-                        up(e,l,k) = p(1) + p(2)*x + p(3)*y;
+                        csi = (x-x0)/h0;
+                        eta = (y-y0)/h0;
+                        up(e,l,k) = u(1) + p(1)*csi + p(2)*eta;
                     end
                 elseif e < 0
                     for k = 1:edges.nq
                         [x,y] = edge_lerp(edges.qx(k),vertices,edges,-e);
-                        um(-e,l,k) = p(1) + p(2)*x + p(3)*y;
+                        csi = (x-x0)/h0;
+                        eta = (y-y0)/h0;
+                        um(-e,l,k) = u(1) + p(1)*csi + p(2)*eta;
                     end
                 end
             end

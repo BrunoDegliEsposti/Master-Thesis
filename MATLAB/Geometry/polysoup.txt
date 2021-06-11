@@ -19,6 +19,6 @@ struct polysoup {
 		ricorrere a strutture dati di larghezza variabile, che ostacolerebbero la
 		vettorizzazione del codice. I vertici sono elencati in senso antiorario
 		rispetto al nodo al centro di ogni poligono.
-	cx: vettore colonna delle coordinate x dei nodi al centro di ogni poligono
-	cy: vettore colonna delle coordinate y dei nodi al centro di ogni poligono
+	cx: vettore colonna delle coordinate x del baricentro di ogni poligono
+	cy: vettore colonna delle coordinate y del baricentro di ogni poligono
 }

@@ -58,7 +58,7 @@ struct edges {
 
 struct cells {
     nc: number of cells, cioè numero totale di celle poligonali nella mesh.
-    cx, cy: vettori di coordinate dei nodi al centro di ogni cella.
+    cx, cy: vettori di coordinate dei baricentri di ogni cella.
     area: vettore delle aree di ogni cella.
     perimeter: vettore dei perimetri di ogni cella.
     h: vettore delle approssimazioni del diametro delle circonferenze
@@ -99,7 +99,11 @@ struct cells {
         l'informazione dei problemi di Riemann 1D (metodo di Godunov) all'interno
         delle celle. Il valore mws in ogni cella è il massimo tra i valori mws
         associati ai propri spigoli.
-    imm: integral mean of monomials, cioè matrice di dimensione (nc,(k+1)(k+2)/2)
-    	delle medie integrali dei monomi 1,x,y,x^2,xy,y^2,ecc su ogni cella,
-    	fino al grado k. Indice di riga: numero di cella. Indice di colonna: monomio.
+    camb: cell average of monomial basis, cioè matrice di dimensione
+        (nc,(k+1)(k+2)/2 - 3) delle medie integrali dei monomi
+        x^2, xy, y^2, x^3, x^2y, xy^2, y^3,... su ogni cella, a partire
+        dal grado 2 e fino al grado k. Indice di riga: numero di cella.
+        Indice di colonna: monomio. Le medie integrali dei monomi "1","x","y"
+        non vengono memorizzate, perché corrispondono rispettivamente alla
+        costante 1 e alle variabili cells.cx e cells.cy.
 }
