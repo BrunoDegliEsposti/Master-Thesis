@@ -72,7 +72,7 @@ function [vertices,edges,cells,Lu,dt] = FVM(vertices,edges,cells,method,t)
     cells.mws(edges.cp(mask)) = edges.mws(mask);
     mask = (edges.cm~=0);
     cells.mws(edges.cm(mask)) = max(cells.mws(edges.cm(mask)),edges.mws(mask));
-    dt = min((2*cells.area./cells.perimeter) ./ cells.mws);
+    dt = min(0.5 * cells.h ./ cells.mws);
 
     % Somma del flusso totale entrante/uscente in ogni cella ordinaria
     Lu = zeros(cells.nc,cells.nu);

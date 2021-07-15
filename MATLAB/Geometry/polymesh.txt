@@ -1,5 +1,9 @@
-Una polymesh descrive una mesh poligonale, con tutte le informazioni di connettività
-richieste dal metodo dei volumi finiti. I poligoni sono convessi.
+Una polymesh descrive una mesh poligonale, con tutte le informazioni
+di connettività richieste dal metodo dei volumi finiti.
+I poligoni sono convessi.
+Al fine di rendere il codice vettorizzabile, organizziamo i dati
+come struct di vettori e non come vettori di struct:
+https://en.wikipedia.org/wiki/AoS_and_SoA
 
 struct vertices {
     nv: number of vertices, cioè numero totale di vertici.
@@ -21,6 +25,12 @@ struct edges {
     nx, ny: vettori delle normali a ogni spigolo. Con il palmo della mano
         sul foglio centrato in v2 e il pollice che punta verso v1,
         la normale ha lo stesso verso dell'indice.
+    cp: vettore degli indici delle celle dal lato "+" di ogni spigolo.
+        Le celle inesistenti sono rappresentate dall'indice 0 (questo caso
+        si verifica ogni volta che uno spigolo appartiene al bordo).
+    cm: vettore degli indici delle celle dal lato "-" di ogni spigolo.
+        Le celle inesistenti sono rappresentate dall'indice 0 (questo caso
+        si verifica ogni volta che uno spigolo appartiene al bordo).
 }
 
 struct cells {

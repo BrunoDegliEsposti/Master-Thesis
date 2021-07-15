@@ -1,5 +1,8 @@
-function [] = polymesh_plot(vertices,edges,cells,i)
+function [] = polymesh_plot(vertices,edges,cells,i,draw_normals)
 %POLYMESH_PLOT Disegna una polygonal mesh.
+    if nargin < 5
+        draw_normals = true;
+    end
     if nargin < 4
         i = 1:cells.nc;
     elseif size(i,2) == 1
@@ -25,11 +28,13 @@ function [] = polymesh_plot(vertices,edges,cells,i)
     scatter(cells.cx(i),cells.cy(i),'.k','DisplayName','Centri');
     
     % Disegna le normali a ogni spigolo
-    j = cells.e(i,:);
-    j = nonzeros(unique(abs(j(:))));
-    [mx,my] = edge_midpoint(vertices,edges,j);
-    [nx,ny] = edge_normal(vertices,edges,j);
-    quiver(mx,my,nx,ny,0.2,'k','DisplayName','Normali');
+    if draw_normals
+        j = cells.e(i,:);
+        j = nonzeros(unique(abs(j(:))));
+        [mx,my] = edge_midpoint(vertices,edges,j);
+        [nx,ny] = edge_normal(vertices,edges,j);
+        quiver(mx,my,nx,ny,0.2,'k','DisplayName','Normali');
+    end
     
     % Disegna gli spigoli sul bordo con colori diversi in base
     % al'identificativo delle condizioni al bordo
