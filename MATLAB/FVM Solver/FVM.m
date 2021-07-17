@@ -20,22 +20,22 @@ function [vertices,edges,cells,Lu,dt] = FVM(vertices,edges,cells,method,t)
     % Condizioni al bordo al tempo t con approccio weak-riemann:
     % calcolo di u_minus sul lato esterno di ogni spigolo di bordo
     % (per convenzione, le normali puntano verso l'interno del dominio)
-    bc = method.bc;
     for j = edges.nie+(1:edges.nbe)
         bc_id = edges.type(j);
-        if isa(bc(bc_id),'double')
+        bc = method.bc{bc_id};
+        if isa(bc,'double')
             % Constant far-field BC
             for k = 1:edges.nq
-                edges.um(j,:,k) = bc(bc_id);
+                edges.um(j,:,k) = bc;
             end
-        elseif isa(bc(bc_id),'function_handle')
+        elseif isa(bc,'function_handle')
             % Variable far-field BC
-            g = bc(bc_id);
+            g = bc;
             for k = 1:edges.nq
                 [x,y] = edge_lerp(edges.qx(k),vertices,edges,j);
                 edges.um(j,:,k) = g(x,y,t);
             end
-        elseif isa(bc(bc_id),'char') && strcmp(bc(bc_id),'wall')
+        elseif isa(bc,'char') && strcmp(bc,'wall')
             % Slip wall BC
             [nx,ny] = edge_normal(vertices,edges,j);
             for k = 1:edges.nq
@@ -45,7 +45,7 @@ function [vertices,edges,cells,Lu,dt] = FVM(vertices,edges,cells,method,t)
                 um(3) = up(3) - 2*ny*(up(2)*nx+up(3)*ny);
                 edges.um(j,:,k) = um;
             end
-        elseif isa(bc(bc_id),'char') && strcmp(bc(bc_id),'absorbing')
+        elseif isa(bc,'char') && strcmp(bc,'absorbing')
             % Absorbing outflow BC
             edges.um(j,:,:) = edges.up(j,:,:);
         else

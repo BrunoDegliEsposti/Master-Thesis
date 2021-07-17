@@ -20,8 +20,8 @@ u0 = @(x,y) initial_conditions_u(x,y,freestream_u,A,s);
 % polymesh_plot(vertices,edges,cells);
 cells.nu = 4;
 cells.u = cell_integral(u0,cells.nu,vertices,edges,cells)./cells.area;
-bc = containers.Map('KeyType','uint32','ValueType','any');
-bc(1) = freestream_u;
+bc = {};
+bc{1} = freestream_u;
 
 % Scelta dei metodi numerici
 edges.nq = 1;

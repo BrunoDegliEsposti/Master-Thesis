@@ -23,8 +23,8 @@ polysoup = polysoup_from_grid(1024,3,0,0,1,3/1024);
 [vertices,edges,cells] = polymesh_from_polysoup(polysoup);
 cells.nu = 4;
 cells.u = cell_integral(u0,cells.nu,vertices,edges,cells)./cells.area;
-bc = containers.Map('KeyType','uint32','ValueType','any');
-bc(1) = 'absorbing';
+bc = {};
+bc{1} = 'absorbing';
 
 % Scelta dei metodi numerici
 edges.nq = 1;

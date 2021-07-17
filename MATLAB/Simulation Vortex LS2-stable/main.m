@@ -27,8 +27,8 @@ u0 = @(x,y) u_exact(x,y,t0);
 [vertices,edges,cells] = polymesh_load('regular_square_50x50.mat');
 cells.nu = 4;
 cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
-bc = containers.Map('KeyType','uint32','ValueType','any');
-bc(1) = u_exact;
+bc = {};
+bc{1} = u_exact;
 
 % Scelta dei metodi numerici
 edges.nq = 1;
