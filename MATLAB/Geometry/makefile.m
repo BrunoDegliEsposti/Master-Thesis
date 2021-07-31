@@ -1,3 +1,9 @@
+if isunix
+    delete *.mexw64
+else
+    delete *.mexa64
+end
+
 mex -R2018a CXXFLAGS='$CXXFLAGS -Wall' ...
     CXXLIBS='$CXXLIBS' ...
     CXXOPTIMFLAGS='$CXXOPTIMFLAGS -O3 -march=native' ...
