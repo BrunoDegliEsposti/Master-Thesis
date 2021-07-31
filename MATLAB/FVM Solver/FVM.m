@@ -52,6 +52,10 @@ function [vertices,edges,cells,Lu,dt] = FVM(vertices,edges,cells,method,t)
             error('Condizione al bordo sconosciuta');
         end
     end
+    
+    % Controlla che i valori ricostruiti e delle condizioni al bordo
+    % siano ammissibili
+    check_edges_state2D(edges);
 
     % Approssimazione dell'integrale del flusso su ogni interfaccia tra celle
     % e calcolo della maximum wave speed

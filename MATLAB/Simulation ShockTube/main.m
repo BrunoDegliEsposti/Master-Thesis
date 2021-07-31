@@ -29,11 +29,11 @@ bc{1} = 'absorbing';
 % Scelta dei metodi numerici
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-method.reconstruction_strategy = @reconstruction_constant;
+method.reconstruction_strategy = @reconstruction_LLS2;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK11;
+method.ODE_solver = @SSPRK22;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica
