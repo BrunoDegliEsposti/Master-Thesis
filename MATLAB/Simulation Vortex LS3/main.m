@@ -24,7 +24,7 @@ u_exact = @(x,y,t) vortex(x,y,t,cx0,cy0,cvx,cvy,beta);
 u0 = @(x,y) u_exact(x,y,t0);
 
 % Definizione del dominio discreto e dell'IVBP
-[vertices,edges,cells] = polymesh_load('regular_square_100x100.mat');
+[vertices,edges,cells] = polymesh_load('regular_square_50x50.mat');
 cells.nu = 4;
 cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
 bc = {};

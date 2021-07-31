@@ -4,6 +4,7 @@
 #include <cstring>
 #include "mex.h"
 #include "matrix.h"
+#include "omp.h"
 #include "polymesh_FVM.h"
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
@@ -21,10 +22,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	plhs[1] = mxCreateNumericArray(3, um_dims, mxDOUBLE_CLASS, mxREAL);
 	double *um = mxGetDoubles(plhs[1]);
 
-	int32_t e;
+	#pragma omp parallel num_threads(8)
+	{
+
+	#pragma omp for
 	for (uint32_t i = 1; i <= cells.nc; i++) {
 		for (uint32_t j = 0; j < cells.mne; j++) {
-			e = cells.e[i-1 + j*cells.nc];
+			int32_t e = cells.e[i-1 + j*cells.nc];
 			if (e > 0) {
 				for (uint32_t k = 0; k < edges.nq; k++) {
 					for (uint32_t l = 0; l < cells.nu; l++) {
@@ -41,5 +45,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 				}
 			}
 		}
+	}
+
+	// fine del blocco omp parallel
 	}
 }

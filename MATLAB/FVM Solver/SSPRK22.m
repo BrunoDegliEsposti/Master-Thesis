@@ -7,7 +7,7 @@ function [niter,vertices,edges,cells] = ...
     
     t = t0;
     while t < T
-        tstart = cputime();
+        tic();
         
         % La scelta di un numero di Courant ridotto per le prime iterazioni
         % permette di gestire meglio dati iniziali discontinui (vedi
@@ -26,8 +26,7 @@ function [niter,vertices,edges,cells] = ...
         t = t + dt;
         niter = niter + 1;
         
-        tend = cputime();
         fprintf('%6.2f%% Iterazione %d conclusa con successo in %f secondi\n',...
-                100*t/finalT, niter, tend-tstart);
+                100*t/finalT, niter, toc());
     end
 end

@@ -43,7 +43,7 @@ function [vertices,edges,cells,niter] = ...
     snapshot_counter = snapshot_counter + 1;
     
     % Loop principale
-    tstart = cputime();
+    tstart = tic();
     while snapshot_counter < length(tsnapshots)
         % Avanza la simulazione fino al prossimo istante da salvare
         try
@@ -64,8 +64,7 @@ function [vertices,edges,cells,niter] = ...
         vtk_from_polymesh_bin([foldername,'/',filename],vertices,edges,cells);
         snapshot_counter = snapshot_counter + 1;
     end
-    tend = cputime();
-    et = tend-tstart;
+    et = toc(tstart);
     em = floor(et/60);
     es = floor(et-60*em);
     

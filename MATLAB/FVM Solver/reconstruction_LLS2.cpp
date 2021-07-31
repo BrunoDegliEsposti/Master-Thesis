@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "mex.h"
 #include "matrix.h"
+#include "omp.h"
 #include "lapacke.h"
 #include "polymesh_FVM.h"
 #include "reconstruction.h"
@@ -26,14 +27,18 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	plhs[1] = mxCreateNumericArray(3, um_dims, mxDOUBLE_CLASS, mxREAL);
 	double *um = mxGetDoubles(plhs[1]);
 
+	#pragma omp parallel num_threads(8)
+	{
+
+	// variabili di lavoro private di ogni thread
 	std::vector<uint32_t> stencil;
 	std::queue<uint32_t> q;
-
 	std::vector<double> V(3*16);
 	std::vector<double> e1(3);
 	std::vector<double> ubar(16);
 	std::vector<double> p(3);
-
+	
+	#pragma omp for
 	for (uint32_t i_center = 1; i_center <= cells.nc; i_center++) {
 
 		double x0 = cells.cx[i_center-1];
@@ -106,5 +111,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 				}
 			}
 		}
+	}
+
+	// fine del blocco omp parallel
 	}
 }
