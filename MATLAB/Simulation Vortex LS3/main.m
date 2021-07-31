@@ -24,20 +24,21 @@ u_exact = @(x,y,t) vortex(x,y,t,cx0,cy0,cvx,cvy,beta);
 u0 = @(x,y) u_exact(x,y,t0);
 
 % Definizione del dominio discreto e dell'IVBP
-[vertices,edges,cells] = polymesh_load('regular_square_50x50.mat');
+[vertices,edges,cells] = polymesh_load('regular_square_100x100.mat');
 cells.nu = 4;
 cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
 bc = {};
 bc{1} = u_exact;
 
 % Scelta dei metodi numerici
-edges.nq = 1;
+edges.nq = 2;
 edges = initialize_edge_quadrature(edges);
-method.reconstruction_strategy = @reconstruction_LLS2_naive;
+cells = reconstruction_LLS3_initialize(vertices,edges,cells);
+method.reconstruction_strategy = @reconstruction_LLS3;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK22;
+method.ODE_solver = @SSPRK33;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica

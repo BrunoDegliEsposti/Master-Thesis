@@ -1,6 +1,6 @@
-function cells = reconstruction_quadratic_initialize(vertices,edges,cells)
-%RECONSTRUCTION_QUADRATIC_INITIALIZE Inizializza il campo cells.camb nel caso
-% di ricostruzioni quadratiche (grado 2, quindi ordine 3).
+function cells = reconstruction_LLS3_initialize(vertices,edges,cells)
+%RECONSTRUCTION_LLS3_INITIALIZE Inizializza il campo cells.camb nel caso
+% di ricostruzioni di ordine 3
     cells.camb = zeros(cells.nc,3);
     gxx = @(x,y) x.*x;
     cells.camb(:,1) = cell_integral_mean(gxx,1,vertices,edges,cells);

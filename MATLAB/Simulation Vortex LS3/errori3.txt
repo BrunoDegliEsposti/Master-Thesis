@@ -1,0 +1,19 @@
+t0 = 0; T = 1; courant number = 1;
+cx0 = 0; cy0 = 0; cvx = 1; cvy = 0; beta = 5;
+Metodo di ordine 3
+
+Regular Grid Nx = Ny = 50
+L1:     1.4940e-03   3.2603e-03   2.9479e-03   5.7393e-03
+Linf:   4.4514e-02   7.4216e-02   8.0123e-02   2.3101e-01
+
+Regular Grid Nx = Ny = 100
+L1:     2.9815e-04   6.1686e-04   5.5675e-04   1.0731e-03
+Linf:   1.0176e-02   2.0490e-02   1.8005e-02   5.6533e-02
+
+Regular Grid Nx = Ny = 200
+L1:     ...
+Linf:   ...
+
+Voronoi N = 2500
+L1:     ...
+Linf:   ...

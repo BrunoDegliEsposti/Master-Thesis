@@ -33,7 +33,7 @@ bc{1} = u_exact;
 % Scelta dei metodi numerici
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-method.reconstruction_strategy = @reconstruction_constant;
+method.reconstruction_strategy = @reconstruction_LLS1;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
