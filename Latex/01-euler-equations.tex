@@ -1,4 +1,4 @@
-\chapter{Equazioni di Eulero}
+\chapter{Equazioni di Eulero} \label{ch:euler-equations}
 
 Questa è una prima stesura del capitolo sulle equazioni di Eulero.
 L'introduzione e il paragrafo 1.3 sono un po' da rivedere,
@@ -87,200 +87,210 @@ dell'energia, le quali ci permetteranno di scrivere le equazioni di Eulero
 nella forma \eqref{eq:sistema-iperbolico-di-leggi-di-conservazione}.
 Il terzo paragrafo è in lavorazione \dots
 
-\section{Richiami di meccanica dei continui e termodinamica}
+\section{Elements of continuum mechanics and thermodynamics}
 
-\subsection*{Cinematica dei continui}
+\subsection*{Kinematics of a continuum}
 
-L'idea alla base della meccanica dei continui è quella di
-descrivere il moto e le deformazioni di un dominio
-$\Omega$ in $\R^n$ andando ad applicare i principi della meccanica
-(per i nostri scopi, classica) a ogni porzione infinitesima di materia
-che lo costituisce.
-Supponiamo che nell'istante iniziale del moto $t_0$ il continuo si trovi in
-una configurazione di riferimento $\Omega_{t_0}$, e che
-a partire da $t_0$ ogni sua porzione infinitesima,
-che chiameremo d'ora in poi \emph{particella},
-si muova in $\R^n$ lungo una curva in modo regolare e reversibile.
-Allora è ben definita e regolare (sarà opportuno almeno $C^2$) la funzione \emph{traiettoria}
+The whole field of continuum mechanics is built on the fundamental idea that
+the motion and the deformations of a domain $\Omega$ in $\R^n$
+can be described by applying the principles of mechanics (for our purposes,
+\emph{classical} mechanics) to each of its infinitesimal portions of matter.
+Suppose that in the first instant of motion $t_0$ the continuum is
+in a reference configuration $\Omega_{t_0}$, and that starting from
+$t_0$ each of its infinitesimal portions of matter, which from
+now on we will refer to as \emph{particles}, is moving in $\R^n$
+in a regular and reversible way along a curve. Then, it is well-defined
+and regular (we shall need at least $C^2$ regularity)
+the \emph{trajectory} function
 \[
-\varphi(X,t) \colon \Omega_{t_0} \times [t_0,+\infty) \to \R^n
+\varphi(\vec{X},t) \colon \Omega_{t_0} \times [t_0,+\infty) \to \R^n,
 \]
-che descrive la posizione all'istante $t$ della particella
-che all'istante $t_0$ si trovava in $X$.
-Indichiamo con $\Omega_t$ la porzione di spazio occupata dal dominio
-$\Omega$ all'istante $t$, cioè l'insieme $\varphi(\Omega_{t_0},t)$.
-Per l'ipotesi di reversibilità del moto, è ben definita e regolare anche la funzione
-\emph{traiettoria inversa}
+which describes the position at time $t \geq t_0$ of the particle which
+was in $\vec{X}$ at time $t_0$. We denote by $\Omega_t$ the portion
+of space that the domain $\Omega$ occupies at time $t$,
+i.e.\ the set $\varphi(\Omega_{t_0},t)$.
+By the assumption that the motion of each particle must be reversible,
+it is also well-defined and regular the \emph{inverse trajectory} function
 \[
-\psi(x,t) \colon \Omega_t \times [t_0,+\infty) \to \Omega_{t_0},
+\psi(\vec{x},t) \colon \Omega_t \times [t_0,+\infty) \to \Omega_{t_0},
 \]
-che riconduce alla propria posizione iniziale in $\Omega_{t_0}$
-ogni particella passante per $x$ all'istante $t$ .
-Per come sono state definite $\varphi$ e $\psi$, è chiaro che
+which takes a particle passing through $\vec{x}$ at time $t$ back
+to its starting position in $\Omega_{t_0}$.
+
+Looking at the definitions of $\varphi$ and $\psi$, it is clear that
 \begin{gather*}
-\varphi(\psi(x,t),t) = x
-\quad \text{per ogni $x \in \Omega_t$ e per ogni $t \geq t_0$,} \\
-\psi(\varphi(X,t),t) = X
-\quad \text{per ogni $X \in \Omega_{t_0}$ e per ogni $t \geq t_0$.}
+\varphi(\psi(\vec{x},t),t) = \vec{x}
+\quad \text{for each $\vec{x} \in \Omega_t$ and for each $t \geq t_0$,} \\
+\psi(\varphi(\vec{X},t),t) = \vec{X}
+\quad \text{for each $\vec{X} \in \Omega_{t_0}$ and for each $t \geq t_0$.}
 \end{gather*}
-Derivando quest'ultima identità rispetto a $t$
-e operando il cambio di variabile $X = \psi(x,t)$, si ottiene
+By taking the derivative with respect to $t$ on both sides
+of the second equation and then operating the change of variable
+$\vec{X} = \psi(\vec{x},t)$, we get that
 \begin{equation} \label{eq:phi-psi-funzione-inversa}
-\psi_x(x,t) \, \varphi_t(\psi(x,t),t) + \psi_t(x,t) = 0.
+\psi_{\vec{x}}(\vec{x},t) \, \varphi_t(\psi(\vec{x},t),t) + \psi_t(\vec{x},t) = 0.
 \end{equation}
-%\psi_x(\varphi(X,t),t) \, \varphi_t(X,t) + \psi_t(\varphi(X,t),t) = 0
-Questa relazione ci tornerà utile in seguito.
-Vediamo ora come le grandezze cinematiche del continuo
-possano essere espresse mediante le funzioni $\varphi$ e $\psi$.
-Definiamo la velocità $v(x,t)$ del continuo come la velocità
-della particella (se esiste) che all'istante $t$ passa per $x$:
-\[
-v \colon \Omega_t \times [t_0,+\infty) \to \R^n
-\qquad v(x,t) = \varphi_t(\psi(x,t),t).
-\]
-La velocità è quindi la derivata rispetto al tempo della funzione traiettoria,
-con l'unica accortezza di ricondurre prima $x$
-a una posizione $X = \psi(x,t)$ nella configurazione di riferimento
-(dato che le traiettorie descritte da $\varphi$ partono sempre da $\Omega_{t_0}$).
-Questa conversione è nota in letteratura come passaggio dalle
-coordinate \emph{euleriane} alle coordinate \emph{lagrangiane}.
-In questo paragrafo abbiamo preferito per una questione di chiarezza
-rendere sempre esplicita tale conversione, tuttavia è una consuetudine
-ben affermata in meccanica dei continui quella di trattare $X$ come
-funzione di $x$ per un istante di tempo fissato e viceversa.
+This identity will soon be useful. Let us now see how kinematic quantities
+of the continuum can be expressed through the functions $\varphi$ and $\psi$.
 
-In modo analogo alla velocità,
-definiamo l'accelerazione $a(x,t)$ del continuo come
+We define the velocity $\vec{v}(\vec{x},t)$ of the continuum as the
+velocity of the particle that passes through $\vec{x}$ at time $t$,
+provided that such a particle exists:
 \[
-a \colon \Omega_t \times [t_0,+\infty) \to \R^n
-\qquad a(x,t) = \varphi_{tt}(\psi(x,t),t).
+\vec{v} \colon \Omega_t \times [t_0,+\infty) \to \R^n
+\qquad \vec{v}(\vec{x},t) = \varphi_t(\psi(\vec{x},t),t).
 \]
-La presenza di $\psi$ nelle definizioni di velocità e accelerazione fa sì che,
-a differenza del moto di un punto materiale in un sistema di
-riferimento inerziale, $a$ non sia semplicemente la derivata rispetto
-al tempo di $v$. Tuttavia, grazie alla relazione \eqref{eq:phi-psi-funzione-inversa},
-è possibile dimostrare che
-\begin{equation} \label{eq:derivata-euleriana-u}
-v_t(x,t) = -v_x(x,t) v(x,t) + a(x,t).
-\end{equation}
-La notazione $v_x(x,t) v(x,t)$ indica il prodotto tra la matrice jacobiana
-di $v$ rispetto alle variabili spaziali e il vettore colonna $v$ stesso.
-Osserviamo che tale termine non è lineare.
+Velocity is therefore the time derivative of the trajectory function $\varphi$
+evaluated at $\vec{X} = \psi(\vec{x},t)$: all trajectories described by $\varphi$
+start from $\Omega_{t_0}$, so we need to trace $\vec{x}$ back to the reference
+configuration $\Omega_{t_0}$ first. This operation is known in the literature as
+the conversion from \emph{Eulerian coordinates} to \emph{Lagrangian coordinates}.
+In this work we have preferred to always keep this conversion explicit
+for additional clarity, however it is a well-established convention in continuum
+mechanics to do it implicitly by treating $\vec{X}$ as a function of $\vec{x}$
+(or vice versa) at every fixed instant in time.
 
-Alla luce della~\eqref{eq:derivata-euleriana-u},
-risulta naturale definire un nuovo operatore differenziale
-$D_t$, detto \emph{derivata lagrangiana}, in modo tale che
+Similarly, we define the acceleration $\vec{a}(\vec{x},t)$ of the continuum as
 \[
-D_t v(x,t) \deq v_t(x,t) + v_x(x,t) v(x,t) = a(x,t).
+\vec{a} \colon \Omega_t \times [t_0,+\infty) \to \R^n
+\qquad \vec{a}(\vec{x},t) = \varphi_{tt}(\psi(\vec{x},t),t).
 \]
-È un fatto notevole che si possa esprimere
-l'accelerazione del continuo solamente come derivata (lagrangiana)
-della funzione velocità, senza più fare riferimento alle funzioni
-traiettoria e traiettoria inversa.
-Più in generale, definiamo la derivata lagrangiana per un qualunque
-campo tensoriale $g(x,t)$ come
+The function $\psi$ in the definitions of velocity and acceleration
+makes it so that, unlike the motion of a point particle in an inertial
+frame of reference, $\vec{a}$ is not just the time derivative of $\vec{v}$.
+However, by the chain rule and identity \eqref{eq:phi-psi-funzione-inversa},
+we can prove that
+\begin{align} \label{eq:derivata-euleriana-u}
+\vec{v}_t(\vec{x},t)
+&= \varphi_{t\vec{x}}(\psi(\vec{x},t),t) \, \psi_t(\vec{x},t)
+ + \varphi_{tt}(\psi(\vec{x},t),t) \nonumber \\
+&= - \varphi_{t\vec{x}}(\psi(\vec{x},t),t) \, \psi_{\vec{x}}(\vec{x},t)
+\, \varphi_t(\psi(\vec{x},t),t) + \vec{a}(\vec{x},t) \nonumber \\
+&= -\vec{v}_{\vec{x}}(\vec{x},t) \vec{v}(\vec{x},t) + \vec{a}(\vec{x},t).
+\end{align}
+The term $\vec{v}_{\vec{x}}(\vec{x},t) \vec{v}(\vec{x},t)$ denotes the
+product between the Jacobian matrix of $\vec{v}$ with respect to
+spatial variables only and the column vector $\vec{v}$ itself.
+Crucially, this term is nonlinear.
+
+Looking at identity~\eqref{eq:derivata-euleriana-u}, it feels natural
+to define a new differential operator $D_t$, known as
+\emph{Lagrangian derivative}, such that
+\[
+D_t \vec{v}(\vec{x},t) \deq \vec{v}_t(\vec{x},t)
++ \vec{v}_{\vec{x}}(\vec{x},t) \vec{v}(\vec{x},t)
+= \vec{a}(\vec{x},t).
+\]
+The fact that acceleration in a continuum can be expressed
+as the Lagrangian derivative of velocity, without any
+reference to $\varphi$ and $\psi$, is a simple yet deep result.
+More generally, we can define the Lagrangian derivative of
+any tensor field $\tns{g}(x,t)$ as
 \begin{equation} \label{eq:derivata-lagrangiana}
-D_t g(x,t) = \partial_t g(x,t) + v^i(x,t) \partial_i g(x,t).
+D_t \tns{g}(\vec{x},t)
+= \partial_t \tns{g}(\vec{x},t)
++ \partial_i \tns{g}(\vec{x},t) \, \vec{v}^i(\vec{x},t).
 \end{equation}
-(riferimento a un'ipotetica appendice sul calcolo tensoriale?) \\
-Da un punto di vista fisico, la derivata lagrangiana $D_t$ si può
-interpretare come la variazione della quantità~$g$ misurata
-da un osservatore che si muove lungo la traiettoria
-di una particella del continuo, in contrapposizione alla derivata
-parziale $\partial_t$, detta \emph{euleriana}, che si può interpretare
-come la variazione nel tempo di~$g$ misurata da un osservatore
-stazionario in $\R^n$.
+From a physical point of view, the Lagrangian derivative $D_t$
+can be understood as the variation of the quantity~$\tns{g}$ as
+measured by an observer who is moving along the trajectory
+of a particle of the continuum, whereas the usual time derivative $\partial_t$,
+also known in this context as \emph{Eulerian derivative}, can be understood
+as the variation of the quantity~$\tns{g}$ as measured by a stationary
+observer in $\R^n$.
+For a short introduction to tensors and their notation,
+we refer to Appendix \ref{ch:appendix-tensors}.
 
-\subsection*{Tensore degli sforzi in $\R^3$}
+\subsection*{Cauchy stress tensor}
 
-Le deformazioni di un sistema continuo durante il moto
-sono causate dalle forze che ogni porzione infinitesima di materia
-esercita sulla materia circostante.
-Pertanto, la descrizione di tali forze è un argomento di primaria
-importanza in meccanica dei continui.
-
-Fissiamo un istante di tempo $t \geq t_0$, un punto $x$ all'interno
-del continuo $\Omega_t$ in $\R^3$ e una direzione qualunque $\nu \in S^3$.
-Sia $S$ una superficie regolare contenuta in $\Omega_t$,
-passante per $x$ e avente vettore normale in $x$ uguale a $\nu$.
-Siano, inoltre, $W_1$ e $W_2$ due porzioni di continuo di misura
-positiva tali che
+The deformations of a continuum throughout its motion are caused by
+the forces that each infinitesimal portion of matter exerts on
+its surroundings. Therefore, the description of such forces is
+a topic of utmost importance in continuum mechanics.
+Let us fix an instant in time $t \geq t_0$, a point $\vec{x}$ belonging to
+the continuum $\Omega_t$ in $\R^n$, and a versor $\vec{\nu} \in \R^n$.
+Since $\vec{\nu}$ has norm 1, we can write $\vec{\nu} \in S^{n-1}$,
+with $S^{n-1}$ being the unit sphere in $\R^n$.
+Let $S$ be an oriented smooth hypersurface in $\Omega_t$ such that
+$\vec{x}$ belongs to $S$ and the normal vector
+to $S$ in $\vec{x}$ is equal to $\vec{\nu}$.
+Furthermore, let $W_1$ and $W_2$ be two portions of continuum of positive
+measure such that
 \[
 W_1 \subset \Omega_t,
 \qquad W_2 \subset \Omega_t,
 \qquad W_1 \cap W_2 = \emptyset,
 \qquad \partial W_1 \cap \partial W_2 = S.
 \]
-Supponiamo che la normale $\nu$ sia uscente da $W_1$ ed entrante in $W_2$.
-Indichiamo con $F(W_1,W_2)$ la forza di contatto che $W_2$ esercita
-su $W_1$ al tempo $t$ attraverso la superficie $S$ che li separa.
-Indichiamo inoltre con $A(S)$ l'area di tale superficie
-e con $B(x,h)$ la palla aperta di centro $x$ e raggio $h$.
-Se per ogni $t \geq t_0$, $x \in \Omega_t$, $\nu \in S^3$
-esiste finito il limite
+Without loss of generality, we can suppose that the normal $\vec{\nu}$
+is pointing away from $W_1$ and into $W_2$. We denote by $\vec{F}(W_1,W_2)$
+the contact force that $W_2$ exerts on $W_1$ at time $t$ through the
+separating hypersurface $S$. Let $A(R)$ be the surface measure
+of a given hypersurface $R$, and let $B(\vec{x},h)$ be the open ball centered
+at $\vec{x}$ with radius $h > 0$.
+If for each $t \geq t_0$, $\vec{x} \in \Omega_t$, $\vec{\nu} \in S^{n-1}$
+the limit
 \begin{equation} \label{eq:limite-sforzi}
-\tau =
+\tns{\tau} =
 \lim_{h \to 0}
-	\frac{F\bigl(W_1 \cap B(x,h), \, W_2 \cap B(x,h)\bigr)}
-	     {A\bigl(S \cap B(x,h)\bigr)}
+	\frac{\vec{F}\bigl(W_1 \cap B(\vec{x},h), \, W_2 \cap B(\vec{x},h)\bigr)}
+	     {A\bigl(S \cap B(\vec{x},h)\bigr)}
 \end{equation}
-e se il valore di tale limite non dipende né dalla scelta della superficie $S$
-né dalla scelta delle porzioni di continuo $W_1$ e $W_2$, allora
-è ben definito il \emph{vettore degli sforzi di Cauchy}
+exists, is finite and doesn't depend on the choice of $S$, $W_1$ and $W_2$,
+then the \emph{Cauchy stress vector}
 \[
-\tau(x,t,\nu) \colon \Omega_t \times [t_0,+\infty) \times S^3 \to \R^3.
+\tns{\tau}(\vec{x},t,\vec{\nu})
+\colon \Omega_t \times [t_0,+\infty) \times S^{n-1} \to \R^n
 \]
-L'importanza di questa densità superficiale di forza $\tau$
-è che, una volta nota, può essere integrata su una qualunque
-superficie $S$ interna a $\Omega_t$ per calcolare la forza macroscopica 
-di contatto tra due porzioni di continuo separate da $S$.
+is well-defined.
+The importance of this force density $\tns{\tau}$ is that,
+once known, it can be integrated on any hypersurface $S$ in $\Omega_t$
+in order to compute the macroscopic force of contact between two
+portions of continuum separated by $S$.
 
-Durante il moto, un continuo può essere soggetto sia a forze esterne
-di volume (come la forza di gravità), sia a forze esterne
-di superficie (come quella esercitata dalla parete di un contenitore).
-Le forze esterne di volume non danno alcun contributo al limite
-\eqref{eq:limite-sforzi}, perché tendono a zero come $h^3$ a fronte
-di un denominatore che tende a zero come $h^2$.
-Per il momento possiamo quindi ignorarle.
-Le forze esterne di superficie, invece, vanno a definire $\tau$
-sul bordo di $\Omega_t$. Formalmente, sia $x \in \partial \Omega_t$
-e $\nu$ la normale uscente da $\Omega_t$ in $x$. Allora, se indichiamo
-con $f_s^e(x,t)$ la densità superficiale di forza esterna
-in $x$ al tempo $t$, si ha che
+Throughout its motion, a continuum is subject to both external volume
+forces and external surface forces. An example of the former is gravity,
+while an example of the latter is the force that the walls of a container
+exert on a fluid in order to contain it (like those of a gas bottle).
+As long as they are smooth functions of $\vec{x}$ and $t$,
+external volume forces don't affect the stress tensor in any way,
+because their contribution to limit \eqref{eq:limite-sforzi}
+is an additional term in the numerator which goes to zero like $h^n$,
+whereas the denominator goes to zero like $h^{n-1}$.
+We can therefore ignore external volume forces for the time being.
+
+External surface forces, on the other hand, allow us to define
+the stress vector $\tns{\tau}$ on the boundary of $\Omega_t$.
+Formally, let $\vec{x} \in \partial \Omega_t$ and let $\vec{\nu}(\vec{x})$
+be the normal to $\partial \Omega_t$ in $\vec{x}$ pointing away from $\Omega_t$.
+Then, if we denote the external surface force density in $\vec{x}$ at
+time $t$ by $\vec{f}_s^{\text{ext}}(\vec{x},t)$, we get that
 \begin{equation} \label{eq:sforzo-sul-bordo}
-\tau(x,t,\nu) = f_s^e(x,t).
+\tns{\tau}(\vec{x},t,\vec{\nu}(\vec{x}))
+\deq \vec{f}_s^{\text{ext}}(\vec{x},t)
+\quad \text{for all $\vec{x} \in \partial \Omega_t$}.
 \end{equation}
 
-%Il seguente teorema, dovuto a Cauchy, descrive la dipendenza di $\tau$ da $\nu$:
-%\begin{teor}[Teorema degli sforzi di Cauchy]
-%Supponiamo che il vettore degli sforzi di Cauchy esista e sia sufficientemente
-%regolare. Allora
-%\begin{enumerate}
-%\item Per il terzo principio della dinamica,
-%	$\tau(x,t,-\nu) = -\tau(x,t,\nu)$.
-%\item Per la prima equazione cardinale della dinamica,
-%	$\tau$ è lineare rispetto a $\nu$.
-%\item Per la seconda equazione cardinale della dinamica,
-%	l'applicazione lineare che manda $\nu$ in $\tau$ fissati $x$ e $t$ è simmetrica.
-%\end{enumerate}
-%\end{teor}
-
-\noindent Il seguente teorema, dovuto a Cauchy, descrive la dipendenza
-di $\tau$ da $\nu$:
-\begin{teor}[Teorema degli sforzi di Cauchy]
-Supponiamo che il vettore degli sforzi di Cauchy sia ben definito e
-sufficientemente regolare in ogni punto del suo dominio.
-Allora esiste un campo tensoriale controvariante $\tau^{ij}(x,t)$,
-detto \emph{tensore degli sforzi di Cauchy}, tale che
+\noindent The following theorem, due to Cauchy, describes the dependence
+of $\tns{\tau}$ on the direction $\vec{\nu}$:
+\begin{teor}[Cauchy’s stress theorem]
+Suppose that the Cauchy stress vector is well-defined and sufficiently
+smooth in each point of its domain. Then, there exists a type $(2,0)$
+tensor field $\tns{\tau}^{ij}(\vec{x},t)$,
+known as \emph{Cauchy stress tensor}, such that
 \begin{enumerate}
-\item $\tau^{ij}(x,t) \nu_j = \tau(x,t,\nu)$ per ogni $\nu \in S^3$.
-\item Il tensore $\tau$ è simmetrico, cioè $\tau^{ij}(x,t) = \tau^{ji}(x,t)$.
+\item $\tns{\tau}^{ij}(\vec{x},t) \vec{\nu}_j = \tns{\tau}(\vec{x},t,\vec{\nu})$
+	for each $\vec{\nu} \in S^{n-1}$.
+\item The tensor $\tns{\tau}$ is symmetric,
+	i.e.\ $\tns{\tau}^{ij}(\vec{x},t) = \tns{\tau}^{ji}(\vec{x},t)$.
 \end{enumerate}
 \end{teor}
 
-\noindent La dimostrazione di questo teorema consiste nell'applicazione
-delle due equazioni cardinali della dinamica a delle opportune
-porzioni di materia a forma di tetraedro e parallelepipedo.
+\noindent The proof of this theorem is classical, and can be found
+in any introductory book on continuum mechanics.
+The key insight is to apply Euler's first and second law of motion
+(better known as \emph{equazioni cardinali della dinamica} in Italian)
+to an infinitesimal portion of the continuum shaped like a tetrahedron.
 
 \subsection*{Proprietà intensive ed estensive di un sistema continuo}
 
@@ -448,215 +458,245 @@ il sistema delle equazioni di Eulero per i fluidi.
 % e quindi, senza perdita di generalità, possiamo
 % eliminare da phi la dipendenza da t_0 supponendo d'ora in poi che t_0 = 0.
 
-\section{Deduzione delle equazioni di Eulero}
+\section{Derivation of the compressible Euler equations}
 
-Come abbiamo ricordato all'inizio del capitolo,
-in letteratura esistono più versioni delle equazioni di Eulero:
-in questo paragrafo andremo a ricavare quelle per gas perfetti
-diatomici in $\R^3$ in assenza di forze esterne di volume.
-Affinché sia più facile in seguito fare riferimento alle varie
-ipotesi di lavoro, le elenchiamo qui in modo schematico una volta per tutte:
+As we have pointed out in the introduction to this chapter,
+the term \emph{Euler equations} is slightly ambiguous: all equations
+governing inviscid and adiabatic flow fall under this name,
+regardless of the choice of physical variables for the unknowns,
+of the equation of state, of the Eulerian/Lagrangian framework, etc.
+In this chapter we shall derive the Euler equations pertaining
+to perfect diatomic gases in $\R^n$ that are not subject to external
+volume forces. In order to make it simpler to later reference all the
+various working assumptions, we list them here once and for all:
 \begin{description}
-\item[(H1)] Il flusso è adiabatico, cioè ogni porzione di fluido
-	scambia durante il moto una quantità di calore $Q$ con il
-	fluido circostante pari a zero.
-\item[(H2)] Il flusso non è viscoso, cioè le uniche forze di contatto
-	interne al fluido sono dovute alla pressione e non a eventuali
-	attriti viscosi. Pertanto il tensore degli sforzi ha la forma
+\item[(H1)] The flow is adiabatic: each portion of fluid exchanges
+	no heat with the surrounding fluid while moving.
+\item[(H2)] The flow is inviscid: all contact forces in the interior
+	of the fluid are due to pressure and not to internal friction
+	between the layers of the fluid which are in relative motion.
+	Therefore, the stress tensor has the form
 	\[
-	\tau^{ij}(x,t) = -p(x,t)\delta^{ij}.
+	\tns{\tau}^{ij}(\vec{x},t) = -p(\vec{x},t) \tns{\delta}^{ij}.
 	\]
-	La scelta del tensore di Knonecker $\delta^{ij}$ è sostanzialmente
-	obbligata dal fatto che gli sforzi di pressione all'interno di un fluido
-	sono normali e isotropi.
-\item[(H3)] Le coordinate termodinamiche del fluido sono legate in ogni punto
-	 e in ogni istante dalle equazioni di stato dei gas perfetti
-	 \eqref{eq:equazione-stato-gas-perfetti-pVT}, o dalla loro
-	 riformulazione \eqref{eq:equazione-stato-gas-perfetti-p-rho-u}.
-	 Il gas è diatomico, quindi il coefficiente di dilatazione adiabatica
-	 $\gamma$ vale $7/5$.
-\item[(H4)] Non sono presenti forze esterne di volume.
+	The choice of the Knonecker tensor $\tns{\delta}^{ij}$ is essentially forced
+	by the fact that pressure gives rise to normal and isotropic stresses.
+\item[(H3)] The thermodynamic coordinates of the fluid are constrained
+	at every point and at all times by the equations of state
+	of a perfect gas \eqref{eq:equazione-stato-gas-perfetti-pVT},
+	or by their reformulation \eqref{eq:equazione-stato-gas-perfetti-p-rho-u}.
+	The molecules of the gas are diatomic, so the adiabatic index
+	$\gamma$ is equal to $7/5$.
+\item[(H4)] There are no external volume forces.
 \end{description}
 
-\subsection*{Conservazione della massa}
+\subsection*{Balance law of mass}
 
-La massa $m$ di una porzione di fluido $W \subseteq \Omega$ è una
-grandezza estensiva che si conserva durante il moto di $W$:
+The mass $m$ of a portion of fluid $W \subseteq \Omega$ is an
+extensive physical property that is conserved throughout the motion of the fluid:
 \[
 \frac{d}{dt} m(t) = 0.
 \]
-La sua densità, detta \emph{densità di massa}, è un campo scalare
-e lo si indica con $\rho(x,t)$:
+Its density, known as \emph{mass density}, is a scalar field
+denoted by $\rho(\vec{x},t)$:
 \[
-m(t) = \int_{W_t} \rho(x,t) \dx.
+m(t) = \int_{W_t} \rho(\vec{x},t) \dx.
 \]
-Affinché la densità di massa abbia significato fisico, è necessario
-supporre che $\rho$ sia strettamente positiva in ogni punto di $\Omega_t$
-e per ogni istante $t \geq t_0$.
+Throughout this work, we always assume that $\rho(\vec{x},t)$ is strictly
+positive for all $\vec{x}$ in $\Omega_t$ and all $t \geq t_0$.
+Without this assumption, we would have to allow vacuum states
+and employ ad-hoc techniques to handle them in a satisfactory way.
+In any case, fluid states with negative mass density, like those
+produced by unstable numerical methods (see Section \dots), %TODO
+are always unacceptable, as they have no physical meaning whatsoever.
 
-%TODO
-(commento sul fatto che questa ipotesi non è da dare affatto per scontata:
-più avanti vedremo che $\rho \to 0$ è uno dei possibili
-motivi per cui una soluzione classica delle equazioni di Eulero
-può non esistere per tutti i tempi)
-
-Per il teorema di trasporto di Reynolds e le due equazioni precedenti,
-si ha che
+By the Reynolds transport theorem in Eulerian form, it follows that
 \begin{equation} \label{eq:continuita-forma-integrale}
 0
 = \frac{d}{dt} m(t)
 = \frac{d}{dt} \int_{W_t} \rho \dx
-= \int_{W_t} \partial_t \rho + \diver(\rho v) \dx.
+= \int_{W_t} \partial_t \rho + \diver(\rho \vec{v}) \dx.
 \end{equation}
-Questa relazione è nota come \emph{equazione di continuità
-per la massa in forma integrale}.
-Per l'arbitrarietà del dominio $W_t$ in $\Omega_t$
-e per la continuità della funzione integranda,
-possiamo dedurne anche una versione locale, più forte,
-detta \emph{equazione di continuità per la massa in forma differenziale}:
+This identity is known as \emph{continuity equation for mass in integral form}.
+Since the domain $W_t$ is arbitrary in $\Omega_t$, the continuity of the
+integrand implies a stronger, local version of the identity, known as
+\emph{continuity equation for mass in differential form}:
 \begin{equation} \label{eq:continuita-forma-differenziale}
-\partial_t \rho + \diver(\rho v) = 0
-\quad \text{per ogni $(x,t) \in \Omega_t \times [t_0,+\infty)$.}
+\partial_t \rho + \diver(\rho \vec{v}) = 0
+\quad \text{for each $(\vec{x},t) \in \Omega_t \times [t_0,+\infty)$.}
 \end{equation}
-L'equazione di continuità per la massa permette di
-dimostrare la seguente variante del teorema del trasporto di Reynolds:
-\begin{teor}[Teorema del trasporto di Reynolds, densità
-per unità di massa] \label{teor:reynolds-per-unita-di-massa}
-Se la grandezza estensiva $G$ è definita come
+The continuity equation for mass allows us to prove the following variant
+of the Reynolds transport theorem:
+\begin{teor}[Reynolds transport theorem,
+	density per unit mass] \label{teor:reynolds-per-unita-di-massa}
+If the extensive physical property $\tns{G}$ is defined as
 \[
-G(t) = \int_{W_t} \rho(x,t) g(x,t) \dx
+\tns{G}(t) = \int_{W_t} \rho(\vec{x},t) \tns{g}(\vec{x},t) \dx
 \]
-e se $W_t = \varphi(W_{t_0},t)$ è un insieme di $\R^n$ sufficientemente
-regolare, allora
+and $W_t = \varphi(W_{t_0},t)$ is a sufficiently regular
+subset of $\R^n$, then
 \[
-\frac{d}{dt} G(t) = \int_{W_t} \rho \, D_t g \dx.
+\frac{d}{dt} \tns{G}(t) = \int_{W_t} \rho \, D_t \tns{g} \dx.
 \]
 \end{teor}
 
-\noindent Alla luce di questo teorema, risulta spesso vantaggioso
-(al fine di semplificare i calcoli) scegliere la densità di
-una grandezza estensiva \emph{per unità di massa}, cioè
-una densità della forma $\rho g$ anziché soltanto $g$ come nella
-\eqref{eq:definizione-estensiva}.
+\noindent In the light of this theorem, it is often convenient
+to choose the density of an extensive physical property
+\emph{per unit mass}, that is, a density of the form $\rho \:\! \tns{g}$
+instead of just $\tns{g}$ as in \eqref{eq:definizione-estensiva}.
 
-\subsection*{Bilancio della quantità di moto}
+\subsection*{Balance law of linear momentum}
 
-La quantità di moto $P$ di una porzione di fluido $W \subseteq \Omega$ è la
-seguente grandezza estensiva:
+The linear momentum $\vec{P}$ of a portion of fluid $W \subseteq \Omega$
+is the following extensive property:
 \[
-P(t) = \int_{W_t} \rho(x,t) v(x,t) \dx.
+\vec{P}(t) = \int_{W_t} \rho(\vec{x},t) \vec{v}(\vec{x},t) \dx.
 \]
-La prima equazione cardinale della dinamica afferma che la variazione
-della quantità di moto di un sistema di masse è uguale alla
-risultante delle forze esterne che agiscono su di esso:
+Euler's first law of motion states that the rate of change of
+linear momentum in a system of masses is equal to the resultant
+of all the external forces acting on the system:
 \[
-\frac{d}{dt} P(t) = F^e(t).
+\frac{d}{dt} \vec{P}(t) = \vec{F}^{\text{ext}}(t).
 \]
-Nel caso di un continuo, è opportuno distinguere due tipi di forze
-esterne: quelle di volume~$F_v^e$ e quelle di superficie~$F_s^e$.
-Le forze esterne di volume sono date dall'integrale di 
-una densità volumetrica di forza per unità di massa $f_v^e$,
-mentre le forze esterne di superficie sono date dall'integrale
-di una densità superficiale di forza $f_s^e$:
+In the case of a continuum, it is useful to make a distinction
+between two kinds of external forces: volume forces $\vec{F}_v^{\text{ext}}$
+and surface forces $\vec{F}_s^{\text{ext}}$. External volume forces are
+given by the integral of a volume force density per unit mass
+$\vec{f}_v^{\text{ext}}$, whereas external surface forces are given
+by the integral of a surface force density $\vec{f}_s^{\text{ext}}$:
 \[
-F_v^e(t) = \int_{W_t} \rho(x,t) f_v^e(x,t) \dx
-\qquad F_s^e(t) = \int_{\partial W_t} f_s^e(x,t) \dsigma.
+\vec{F}_v^{\text{ext}}(t)
+= \int_{W_t} \rho(\vec{x},t) \vec{f}_v^{\text{ext}}(\vec{x},t) \dx
+\qquad \vec{F}_s^{\text{ext}}(t)
+= \int_{\partial W_t} \vec{f}_s^{\text{ext}}(\vec{x},t) \dsigma.
 \]
-Osserviamo che una stessa forza di superficie $F_s$ può essere
-considerata sia esterna che interna, a seconda del punto di vista
-(quello di $W_t$ o quello di $\Omega_t$).
-Viceversa, una forza di volume $F_v$ esterna rispetto a $W_t$
-sarà sempre esterna anche rispetto a $\Omega_t$.
-In questo caso, $F_s^e$ è per definizione esterna a $W_t$,
-quindi l'equazione \eqref{eq:sforzo-sul-bordo} ci permette di
-esprimere $F_s^e$ mediante il tensore degli sforzi~$\tau$:
+We observe that the same surface force $\vec{F}_s$ can be
+considered both external and internal, depending on the point of
+view (that of $W_t$, or that of $\Omega_t$).
+On the contrary, a volume force $\vec{F}_v$ that is external to
+$W_t$ will always be external to $\Omega_t$ as well.
+In our case, $\vec{F}_s^{\text{ext}}$ is by definition external
+to~$W_t$, so equation \eqref{eq:sforzo-sul-bordo} allows us
+to express $\vec{F}_s^{\text{ext}}$ through the stress tensor $\tns{\tau}$:
 \[
-F_s^e(t) = \int_{\partial W_t} \tau(x,t) \cdot \nu(x) \dsigma.
+\vec{F}_s^{\text{ext}}(t)
+= \int_{\partial W_t} \tns{\tau}(\vec{x},t) \cdot \vec{\nu}(\vec{x}) \dsigma.
 \]
-La funzione $\nu(x)$ indica il vettore normale uscente da $W_t$ in $x$.
-Non è necessario specificare l'indice di $\tau^{ij}$ rispetto al quale
-viene calcolato il prodotto scalare (sarebbe $j$), perché il tensore
-degli sforzi è simmetrico. Le quattro equazioni viste fino a ora,
-insieme al teorema del trasporto di Reynolds e al teorema della divergenza,
-implicano complessivamente che
+As before, the function $\vec{\nu}(\vec{x})$ denotes the normal to
+$\partial W_t$ in $\vec{x}$ pointing away from $W_t$.
+It is not necessary to specify the index of $\tns{\tau}^{ij}$ against
+which the scalar product is computed (the second one),
+because the stress tensor is symmetric.
+The four equations that we have seen so far, together with
+Reynolds transport theorem and the divergence theorem, imply that
 \begin{gather*}
-\frac{d}{dt} \int_{W_t} \rho(x,t) v(x,t) \dx
-	= \int_{W_t} \rho(x,t) f_v^e(x,t) \dx
-	+ \int_{\partial W_t} \tau(x,t) \cdot \nu(x) \dsigma \\
-\int_{W_t} \partial_t (\rho v) + \diver_j(\rho v \otimes v^j) \dx
-	= \int_{W_t} \rho f_v^e \dx
-	+ \int_{W_t} \diver_j(\tau^j) \dx.
+\frac{d}{dt} \vec{P}(t) = \vec{F}_v^{\text{ext}}(t) + \vec{F}_s^{\text{ext}}(t) \\
+\frac{d}{dt} \int_{W_t} \rho(\vec{x},t) \vec{v}(\vec{x},t) \dx
+	= \int_{W_t} \rho(\vec{x},t) \vec{f}_v^{\text{ext}}(\vec{x},t) \dx
+	+ \int_{\partial W_t} \tns{\tau}(\vec{x},t) \cdot \vec{\nu}(\vec{x}) \dsigma \\
+\int_{W_t} \partial_t (\rho \vec{v}^i)
+	+ \diver_j(\rho \vec{v}^i \otimes \vec{v}^j) \dx
+	= \int_{W_t} \rho \, (\vec{f}_v^{\text{ext}})^i \dx
+	+ \int_{W_t} \diver_j(\tns{\tau}^{ij}) \dx
+	\quad \text{for each $i = 1,\dots,n$}.
 \end{gather*}
-A questo punto, per le ipotesi sul fluido \textbf{(H2)} e \textbf{(H4)},
-concludiamo che
+Now, by assumptions \textbf{(H2)} and \textbf{(H4)} on the flow,
+we get that
 \[
-\int_{W_t} \partial_t (\rho v^i)
-	+ \partial_j (\rho v^i v^j + p\delta^{ij}) \dx
-= 0.
+\int_{W_t} \partial_t (\rho \vec{v}^i)
+	+ \partial_j (\rho \vec{v}^i \vec{v}^j + p \tns{\delta}^{ij}) \dx
+	= 0 \quad \text{for each $i = 1,\dots,n$}.
 \]
-Infine, l'arbitrarietà del dominio $W_t$ in $\Omega_t$ e la continuità
-della funzione integranda ci permettono anche in questo caso di ricavare 
-la forma differenziale dell'equazione precedente:
+As before, we can get a differential version of this identity
+by exploiting the fact that $W_t$ is an arbitrary subset of $\Omega_t$
+(continuity of the integrand remains a key technical assumption):
 \begin{equation} \label{eq:bilancio-quantita-di-moto}
 \partial_t (\rho v^i) + \partial_j (\rho v^i v^j + p\delta^{ij}) = 0.
 \end{equation}
 
-\subsection*{Bilancio dell'energia}
+\subsection*{Balance law of energy}
 
-L'energia totale $E$ di una porzione di fluido $W \subseteq \Omega$
-è data dalla somma di tre termini:
+The total energy $E$ of a portion of fluid $W \subseteq \Omega$
+is given by the sum of three terms:
 \begin{itemize}
-\item L'energia cinetica macroscopica $E_k$, la cui
-	densità è $\frac{1}{2} \rho \!\!\: \norm{v}^2$.
-\item L'energia potenziale macroscopica $E_p$, che nel nostro caso
-	è nulla per l'ipotesi \textbf{(H4)}.
-\item L'energia interna $U$, la cui densità è $\rho u$.
-	La quantità $u(x,t)$ è detta \emph{energia interna specifica}.
+\item The macroscopic kinetic energy $E_k$, whose
+	density is $(1/2) \rho \!\!\: \norm{\vec{v}}^2$.
+\item The macroscopic potential energy $E_p$, which in our case
+	is always 0 by assumption \textbf{(H4)}.
+\item The internal energy $U$, whose density per unit mass
+	$u(x,t)$ is called \emph{specific internal energy}.
 \end{itemize}
-Indichiamo con $e(x,t)$ la densità dell'energia totale $E(t)$.
-Per quanto detto, possiamo scrivere
+If we denote by $e(\vec{x},t)$ the density of total energy,
+we can then write
 \[
-E(t) = \int_{W_t} \frac{1}{2} \rho \norm{v}^2 \dx
-	 + \int_{W_t} \rho u \dx,
-\qquad e = \frac{1}{2} \rho \norm{v}^2 + \rho u.
+E(t)
+= E_k(t) + E_p(t) + U(t)
+= \int_{W_t} \frac{1}{2} \rho \norm{\vec{v}}^2 \dx
++ 0
++ \int_{W_t} \rho u \dx.
 \]
-La variazione dell'energia totale $E(t)$ è descritta dalla prima legge
-della termodinamica:
+Hence, the density of total energy $e$ is equal to
+$(1/2) \rho \norm{\vec{v}}^2 + \rho u$.
+The variation of total energy $E(t)$ in the time interval $[t,t+h]$
+follows the first law of thermodynamics:
 \[
 E(t+h) - E(t) = Q + L.
 \]
-Precisiamo che in questo caso non sarebbe lecito usare la versione
-differenziale di tale legge, cioè $dE = \delta Q + \delta L$,
-perché $W$ non subisce trasformazioni quasistatiche.
-Per aggirare l'ostacolo, abbiamo quindi considerato la variazione di
-$E$ sull'intervallo $[t,t+h]$.
-
-L'ipotesi di flusso adiabatico \textbf{(H1)} ci assicura che il calore $Q$
-assorbito da $W$ in questo intervallo di tempo è nullo.
-Possiamo poi suddividere il lavoro $L$ compiuto dall'ambiente
-su $W$ in un termine dovuto alle forze esterne di volume e un
-termine dovuto a quelle di superficie:
+%We remark that the differential form of this law, namely
+%$dE = \delta Q + \delta L$, cannot be used here because $W$
+%is not subject to quasistatic transformations.
+%Precisiamo che in questo caso non sarebbe lecito usare la versione
+%differenziale di tale legge, cioè $dE = \delta Q + \delta L$,
+%perché $W$ non subisce trasformazioni quasistatiche.
+%Per aggirare l'ostacolo, abbiamo quindi considerato la variazione di
+%$E$ sull'intervallo $[t,t+h]$.
+The assumption of adiabatic flow \textbf{(H1)} assures us that
+the heat $Q$ absorbed by $W$ in this time interval is zero.
+We can then split the work $L$ done to $W$ by its surroundings
+in two terms: one due to external volume forces, and the other due to
+external surface forces:
 \[
-L = \int_{W_{[t,t+h]}} \rho f_v^e \cdot v \,\dx\!\!\!\;\dt
-  + \int_{\partial W_{[t,t+h]}} f_s^e \cdot v \,\dsigma\!\!\!\:\dt.
+L = L_v + L_s
+  = \int_{W_{[t,t+h]}} \hspace{-1em}
+	\rho \, \vec{f}_v^{\text{ext}} \!\cdot \vec{v} \, \dx \hspace{-1.5pt} \dt \,
+  + \int_{\partial W_{[t,t+h]}} \hspace{-1em}
+  	\vec{f}_s^{\text{ext}} \!\cdot \vec{v} \, \dsigma \hspace{-2pt} \dt.
 \]
-Allora, passando al limite per $h \to 0$ e applicando il teorema del
-trasporto di Reynolds, si ha
-\begin{gather*}
+On the one hand, it follows from the definition of time derivative,
+assumption \textbf{(H4)} and the absolute continuity of the Lebesgue
+integral that
+\[
 \frac{d}{dt} E(t)
-	= \frac{d}{dt} \int_{W_t} e \dx
-	= \int_{\partial W_t} f_s^e \cdot v \dsigma \\
-\int_{W_t} \partial_t e + \diver(ev) \dx
-	= \int_{\partial W_t} \tau^{ij} \nu_j v_i \dsigma
-	= \int_{W_t} \diver_j(\tau^{ij} v_i) \dx \\
-\int_{W_t} \partial_t e + \diver(ev) - \diver_j(-p \delta^{ij} v_i) \dx = 0
-	\qquad \int_{W_t} \partial_t e + \diver(ev+pv) \dx = 0
+	= \lim_{h \to 0} \frac{E(t+h)-E(t)}{h}
+	= \lim_{h \to 0} \frac{Q+L}{h}
+	= \lim_{h \to 0} \frac{1}{h} \int_{\partial W_{[t,t+h]}} \hspace{-1em}
+  		\vec{f}_s^{\text{ext}} \!\cdot \vec{v} \, \dsigma \hspace{-2pt} \dt
+	= \int_{\partial W_t} \vec{f}_s^{\text{ext}} \!\cdot \vec{v} \, \dsigma
+\]
+On the other hand, it follows from the definition of $e(\vec{x},t)$ and
+from the Reynolds transport theorem that
+\[
+\frac{d}{dt} E(t)
+	= \frac{d}{dt} \int_{W_t} e(\vec{x},t) \dx
+	= \int_{W_t} \partial_t e + \diver(e \vec{v}) \dx
+\]
+Thus, if we combine these two equations, recall definition 
+\eqref{eq:sforzo-sul-bordo} and apply the divergence theorem, we get that
+\begin{gather*}
+\int_{W_t} \partial_t e + \diver(e \vec{v}) \dx
+	= \int_{\partial W_t} \vec{f}_s^{\text{ext}} \!\cdot \vec{v} \, \dsigma
+	= \int_{\partial W_t} \tns{\tau}^{ij} \vec{v}_i \vec{\nu}_j \dsigma
+	= \int_{W_t} \partial_j (\tns{\tau}^{ij} \vec{v}_i) \dx \\
+0
+	= \int_{W_t} \partial_t e + \diver(e \vec{v})
+	- \diver_j(\tns{\tau}^{ij} \vec{v}_i) \dx
+	= \int_{W_t} \partial_t e + \diver(e \vec{v})
+	- \diver_j(-p \tns{\delta}^{ij} \vec{v}_i) \dx \\
+\int_{W_t} \partial_t e + \diver(e \vec{v} + p \vec{v}) \dx = 0
 \end{gather*}
-Ancora una volta, abbiamo fatto uso dell'ipotesi \textbf{(H4)},
-dell'equazione \eqref{eq:sforzo-sul-bordo} e del teorema della divergenza.
-La corrispondente forma differenziale è
+This identity is in integral form; the corresponding differential form is
 \begin{equation} \label{eq:bilancio-energia}
-\partial_t e + \diver(ev+pv) = 0.
+\partial_t e + \diver(e \vec{v} + p \vec{v}) = 0.
 \end{equation}
 
 \subsection*{Equazioni di Eulero in forma conservativa}

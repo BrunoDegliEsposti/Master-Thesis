@@ -8,7 +8,7 @@
 \usepackage{siunitx}
 \usepackage{resizegather}
 	\addtolength{\jot}{4pt}
-\usepackage{mathrsfs}
+\usepackage{bm, mathrsfs}
 \usepackage{caption, subcaption}
 	\captionsetup{tableposition=top,figureposition=bottom}
 	\captionsetup{justification=centering,font=small,labelfont=bf}
@@ -21,9 +21,9 @@
 	\hypersetup{hidelinks}
 \usepackage{microtype}
 
-\renewcommand{\vec}[1]{\mathbf{#1}}
-\newcommand{\mat}[1]{\mathbf{#1}}
-\newcommand{\tns}[1]{\mathbf{#1}}
+\renewcommand{\vec}[1]{\bm{#1}}
+\newcommand{\mat}[1]{\bm{#1}}
+\newcommand{\tns}[1]{\bm{#1}}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -34,9 +34,9 @@
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\deq}{\vcentcolon=}
 \newcommand{\eqd}{=\vcentcolon}
-\newcommand{\dx}{\, dx}
+\newcommand{\dx}{\, d\vec{x}}
 \newcommand{\dt}{\, dt}
-\newcommand{\dsigma}{\, d\sigma}
+\newcommand{\dsigma}{\, d\vec{\sigma}}
 \newcommand{\grad}{\nabla}
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
