@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdint>
 #include <cstring>
+#include <cmath>
 #include <vector>
 #include "mex.h"
 #include "matrix.h"
