@@ -15,9 +15,9 @@
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 // function [up, um] = reconstruction_LLS2_naive(vertices, edges, cells)
 {
-	Vertices vertices(prhs[0]);
-	Edges edges(prhs[1]);
-	Cells cells(prhs[2]);
+	VerticesFVM vertices(prhs[0]);
+	EdgesFVM edges(prhs[1]);
+	CellsFVM cells(prhs[2]);
 
 	const mwSize up_dims[] = {edges.ne, cells.nu, edges.nq};
 	plhs[0] = mxCreateNumericArray(3, up_dims, mxDOUBLE_CLASS, mxREAL);
