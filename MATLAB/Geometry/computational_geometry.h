@@ -37,9 +37,9 @@ struct Polygon {
 inline bool ray_segment_overlap(double x1, double y1, double x2, double y2,
 	double x3, double y3, double x4, double y4);
 
-bool segment_overlaps_with_convex_polygon(double x1, double y1, double x2, double y2, Polygon &p);
+bool segment_overlaps_with_convex_polygon(double x1, double y1, double x2, double y2, const Polygon &p);
 
-inline bool point_in_convex_polygon(double x, double y, Polygon &p);
+inline bool point_in_convex_polygon(double x, double y, const Polygon &p);
 
 inline bool segments_overlap(double x1, double y1, double x2, double y2,
 	double x3, double y3, double x4, double y4);
