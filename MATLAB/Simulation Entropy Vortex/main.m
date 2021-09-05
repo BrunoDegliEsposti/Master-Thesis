@@ -31,14 +31,14 @@ bc = {};
 bc{1} = u_exact;
 
 % Scelta dei metodi numerici
-edges.nq = 2;
+edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-cells = reconstruction_LLS3_initialize(vertices,edges,cells);
-method.reconstruction_strategy = @reconstruction_LLS3;
+%cells = reconstruction_LLS3_initialize(vertices,edges,cells);
+method.reconstruction_strategy = @reconstruction_LLS1;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK33;
+method.ODE_solver = @SSPRK11;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica
