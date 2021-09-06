@@ -35,6 +35,7 @@ bc{1} = u_exact;
 % Scelta dei metodi numerici
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
+%cells = reconstruction_LLS3_initialize(vertices,edges,cells);
 method.reconstruction_strategy = @reconstruction_LLS2;
 method.bc = bc;
 method.flux = flux;
@@ -44,7 +45,7 @@ method.courant_number = 1;
 
 % Calcolo della soluzione numerica
 prefix = 'vortex-grid';
-tsnapshots = linspace(t0,T,101);
+tsnapshots = linspace(t0,T,11);
 [vertices,edges,cells,niter] = solver(...
     t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 
