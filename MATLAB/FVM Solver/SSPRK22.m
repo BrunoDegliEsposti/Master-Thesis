@@ -21,7 +21,7 @@ function [niter,vertices,edges,cells] = ...
         end
         U1 = U0 + dt*LU0;
         cells.u = U1;
-        [vertices,edges,cells,LU1,~] = FVM(vertices,edges,cells,method,t);
+        [vertices,edges,cells,LU1,~] = FVM(vertices,edges,cells,method,t+dt);
         cells.u = (1/2)*U0 + (1/2)*U1 + (dt/2)*LU1;
         t = t + dt;
         niter = niter + 1;

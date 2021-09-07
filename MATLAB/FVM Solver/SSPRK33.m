@@ -23,12 +23,12 @@ function [niter,vertices,edges,cells] = ...
         % Secondo stadio
         U2 = U1 + dt*LU1;
         cells.u = U2;
-        [vertices,edges,cells,LU2,~] = FVM(vertices,edges,cells,method,t);
+        [vertices,edges,cells,LU2,~] = FVM(vertices,edges,cells,method,t+dt);
         
         % Terzo e ultimo stadio
         U3 = (3/4)*U1 + (1/4)*U2 + (dt/4)*LU2;
         cells.u = U3;
-        [vertices,edges,cells,LU3,~] = FVM(vertices,edges,cells,method,t);
+        [vertices,edges,cells,LU3,~] = FVM(vertices,edges,cells,method,t+dt/2);
         cells.u = (1/3)*U1 + (2/3)*U3 + (2*dt/3)*LU3;
         t = t + dt;
         niter = niter + 1;
