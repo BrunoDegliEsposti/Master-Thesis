@@ -15,6 +15,7 @@
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 // function [up, um] = reconstruction_T1WENO2(vertices, edges, cells)
+// ricostruzione Type-1 WENO di grado 2 (approccio con penalizzazione)
 {
 	VerticesFVM vertices(prhs[0]);
 	EdgesFVM edges(prhs[1]);
@@ -32,10 +33,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	{
 
 	// variabili di lavoro private di ogni thread
-	StencilsVector stencils;
+	std::vector<Stencil> stencils;
 	std::queue<uint32_t> q;
 	std::vector<double> V(3*16);
-	std::vector<double> e1(3);
 	std::vector<double> ubar(16);
 	std::vector<double> p(3);
 	
@@ -55,7 +55,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 			// centrato e altri invece decentrati a forma di cono
 			stencils.clear();
 			Stencil stencil_centered;
-			build_stencil(i_center, 3, stencil_centered, q, edges, cells);
+			bool success = build_centered_stencil(i_center, 3, stencil_centered, q, edges, cells);
+			if (!success) {
+				mexErrMsgIdAndTxt("MEX:FVM_error", "Can't build a large enough centered stencil");
+			}
 			stencils.push_back(stencil_centered);
 			for (uint32_t j = 0; j < ne; j++) {
 				// indice della cella a sinistra rispetto a (x0,y0)
@@ -87,10 +90,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 				Cone cone(x0, y0, lx, ly, rx, ry);
 				cone.widen(1e-8);
 
-				// costruzione dello stencil
-				auto stencil = build_stencil_from_cone(i_center, 3, cone, q, vertices, edges, cells);
-				if (stencil.size() >= 3) {
-					stencils.push_back(stencil);
+				// costruzione dello stencil nella direzione del cono
+				Stencil stencil_biased;
+				bool success = build_biased_stencil(i_center, 3, stencil_biased, cone, q, vertices, edges, cells);
+				if (success) {
+					stencils.push_back(stencil_biased);
 				}
 			}
 
@@ -104,31 +108,36 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 				// riempi V una riga alla volta
 				V.reserve(m*3);
 				for (size_t j = 0; j < m; j++) {
-					uint32_t i = stencil[j];
+					uint32_t i = stencil[j].idx;
 					V[    j] = 1.0;
 					V[  m+j] = (cells.cx[i-1]-x0)/h;
 					V[2*m+j] = (cells.cy[i-1]-y0)/h;
 				}
 
-				// riempi e1
-				e1[0] = 1.0;
-				for (size_t j = 1; j < 3; j++) {
-					e1[j] = 0.0;
-				}
-
 				// riempi ubar
 				ubar.reserve(m);
 				for (size_t j = 0; j < m; j++) {
-					uint32_t i = stencil[j];
+					uint32_t i = stencil[j].idx;
 					ubar[j] = cells.u[i-1 + l*cells.nc];
 				}
 
-				// risolvi il sistema ai minimi quadrati V * p = ubar con vincolo p[0] = ubar[0]
-				// il contenuto di V, e1 e ubar viene sovrascritto da lapack
+				// assegna pesi diversi alle varie equazioni che compongono il sistema
+				// ai minimi quadrati in base alla distanza dal centro dello stencil.
+				for (size_t i = 0; i < m; i++) {
+					uint32_t d = stencil[i].distance;
+					double weight = pow(10,-(double)d);
+					for (size_t j = 0; j < 3; j++) {
+						V[i+j*m] *= weight;
+					}
+					ubar[i] *= weight;
+				}
+				
+				// risolvi il sistema ai minimi quadrati V * p = ubar.
+				// il contenuto di V e di ubar viene sovrascritto da lapack
 				lapack_int info;
-				info = least_squares_constrained(V, e1, ubar, p, m, 3);
+				info = least_squares(V, ubar, p, m, 3);
 				if (info != 0) {
-					mexErrMsgIdAndTxt("MEX:FVM_error", "Lapack dgels() failed");
+					mexErrMsgIdAndTxt("MEX:FVM_error", "Weighted lapack dgels() failed");
 				}
 
 				// aggiorna p_weno con una versione pesata del p che abbiamo appena trovato

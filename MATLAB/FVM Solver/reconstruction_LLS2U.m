@@ -1,7 +1,7 @@
-function [up, um] = reconstruction_linear(vertices,edges,cells)
-%RECONSTRUCTION_LINEAR Ricostruzione lineare dei valori di u sui punti di
-% quadratura in ogni spigolo a partire dalle medie integrali su ogni cella.
-% La ricostruzione viene effettuata componente per componente,
+function [up, um] = reconstruction_LLS2U(vertices,edges,cells)
+%RECONSTRUCTION_LLS2U Ricostruzione lineare dei valori di u sui
+% punti di quadratura in ogni spigolo a partire dalle medie integrali su
+% ogni cella. La ricostruzione viene effettuata componente per componente,
 % senza decomposizione caratteristica.
     up = zeros(edges.ne,cells.nu,edges.nq);
     um = zeros(edges.ne,cells.nu,edges.nq);
@@ -26,19 +26,18 @@ function [up, um] = reconstruction_linear(vertices,edges,cells)
         end
         stencil = stencil(1:n);
         
-        % ricostruzione lineare ai minimi quadrati (solo sulla
-        % parte lineare del polinomio per questioni di stabilità)
+        % ricostruzione lineare ai minimi quadrati (instabile)
         V = ones(n,3);
         x0 = cells.cx(stencil(1));
         y0 = cells.cy(stencil(1));
         h0 = cells.h(stencil(1));
         V(:,2) = (cells.cx(stencil)-x0)./h0;
         V(:,3) = (cells.cy(stencil)-y0)./h0;
-        V_reduced = V(2:end,2:end) - V(1,2:end);
+        % V(1,:) = V(1,:) * 4;
         for l = 1:cells.nu
             u = cells.u(stencil,l);
-            u_reduced = u(2:end)-u(1);
-            p = V_reduced \ u_reduced;
+            % u(1) = u(1) * 4;
+            p = V\u;
             for j = 1:cells.ne(i)
                 e = cells.e(i,j);
                 if e > 0
@@ -46,14 +45,14 @@ function [up, um] = reconstruction_linear(vertices,edges,cells)
                         [x,y] = edge_lerp(edges.qx(k),vertices,edges,e);
                         csi = (x-x0)/h0;
                         eta = (y-y0)/h0;
-                        up(e,l,k) = u(1) + p(1)*csi + p(2)*eta;
+                        up(e,l,k) = p(1) + p(2)*csi + p(3)*eta;
                     end
                 elseif e < 0
                     for k = 1:edges.nq
                         [x,y] = edge_lerp(edges.qx(k),vertices,edges,-e);
                         csi = (x-x0)/h0;
                         eta = (y-y0)/h0;
-                        um(-e,l,k) = u(1) + p(1)*csi + p(2)*eta;
+                        um(-e,l,k) = p(1) + p(2)*csi + p(3)*eta;
                     end
                 end
             end

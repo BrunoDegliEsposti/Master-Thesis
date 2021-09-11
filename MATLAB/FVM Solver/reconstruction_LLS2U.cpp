@@ -13,7 +13,8 @@
 #include "reconstruction.h"
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
-// function [up, um] = reconstruction_LLS2(vertices, edges, cells)
+// function [up, um] = reconstruction_LLS2U(vertices, edges, cells)
+// ricostruzione Linear Least-Squares di grado 2 Unconstrained, ma anche Unstable
 {
 	VerticesFVM vertices(prhs[0]);
 	EdgesFVM edges(prhs[1]);
@@ -31,13 +32,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	{
 
 	// variabili di lavoro private di ogni thread
-	std::vector<uint32_t> stencil;
+	Stencil stencil;
 	std::queue<uint32_t> q;
 	std::vector<double> V(3*16);
-	std::vector<double> e1(3);
 	std::vector<double> ubar(16);
 	std::vector<double> p(3);
-	
+
 	#pragma omp for
 	for (uint32_t i_center = 1; i_center <= cells.nc; i_center++) {
 
@@ -46,7 +46,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 		double h = cells.h[i_center-1];
 
 		// costruisci lo stencil intorno a i_center
-		build_stencil(i_center, 3, stencil, q, edges, cells);
+		bool success;
+		success = build_centered_stencil(i_center, 3, stencil, q, edges, cells);
+		if (!success) {
+			mexErrMsgIdAndTxt("MEX:FVM_error", "Can't build a large enough stencil");
+		}
 		size_t m = stencil.size();
 
 		// per ogni variabile fisica
@@ -55,29 +59,23 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 			// riempi V una riga alla volta
 			V.reserve(m*3);
 			for (size_t j = 0; j < m; j++) {
-				uint32_t i = stencil[j];
+				uint32_t i = stencil[j].idx;
 				V[    j] = 1.0;
 				V[  m+j] = (cells.cx[i-1]-x0)/h;
 				V[2*m+j] = (cells.cy[i-1]-y0)/h;
 			}
 
-			// riempi e1
-			e1[0] = 1.0;
-			for (size_t j = 1; j < 3; j++) {
-				e1[j] = 0.0;
-			}
-
 			// riempi ubar
 			ubar.reserve(m);
 			for (size_t j = 0; j < m; j++) {
-				uint32_t i = stencil[j];
+				uint32_t i = stencil[j].idx;
 				ubar[j] = cells.u[i-1 + l*cells.nc];
 			}
 
-			// risolvi il sistema ai minimi quadrati V * p = ubar con vincolo p[0] = ubar[0]
-			// il contenuto di V, e1 e ubar viene sovrascritto da lapack
+			// risolvi il sistema ai minimi quadrati V * p = ubar.
+			// il contenuto di V e di ubar viene sovrascritto da lapack
 			lapack_int info;
-			info = least_squares_constrained(V, e1, ubar, p, m, 3);
+			info = least_squares(V, ubar, p, m, 3);
 			if (info != 0) {
 				mexErrMsgIdAndTxt("MEX:FVM_error", "Lapack dgels() failed");
 			}

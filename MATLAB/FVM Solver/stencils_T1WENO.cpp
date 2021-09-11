@@ -11,22 +11,28 @@
 #include "reconstruction.h"
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
-// function [stencils] = stencils_T1WENO(vertices, edges, cells, i_center)
+// function [stencils] = stencils_T1WENO(vertices, edges, cells, i_center, min_stencil_size)
 {
 	VerticesFVM vertices(prhs[0]);
 	EdgesFVM edges(prhs[1]);
 	CellsFVM cells(prhs[2]);
 	uint32_t i_center = (uint32_t)mxGetScalar(prhs[3]);
+	uint32_t min_stencil_size = (uint32_t)mxGetScalar(prhs[4]);
 
 	double x0 = cells.cx[i_center-1];
 	double y0 = cells.cy[i_center-1];
 	uint32_t ne = cells.ne[i_center-1];
 
+	std::vector<Stencil> stencils;
 	std::queue<uint32_t> q;
-	StencilsVector stencils;
+
 	Stencil stencil_centered;
-	build_stencil(i_center, 3, stencil_centered, q, edges, cells);
+	bool success = build_centered_stencil(i_center, min_stencil_size, stencil_centered, q, edges, cells);
+	if (!success) {
+		mexErrMsgIdAndTxt("MEX:FVM_error", "Can't build a large enough centered stencil");
+	}
 	stencils.push_back(stencil_centered);
+
 	for (uint32_t j = 0; j < ne; j++) {
 		// indice della cella a sinistra rispetto a (x0,y0)
 		uint32_t jnext = (j+1) % ne;
@@ -57,10 +63,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 		Cone cone(x0, y0, lx, ly, rx, ry);
 		cone.widen(1e-8);
 
-		// costruzione dello stencil
-		auto stencil = build_stencil_from_cone(i_center, 3, cone, q, vertices, edges, cells);
-		if (stencil.size() >= 3) {
-			stencils.push_back(stencil);
+		// costruzione dello stencil nella direzione del cono
+		Stencil stencil_biased;
+		bool success = build_biased_stencil(i_center, min_stencil_size, stencil_biased, cone, q, vertices, edges, cells);
+		if (success) {
+			stencils.push_back(stencil_biased);
 		}
 	}
 
@@ -77,8 +84,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
 	for (uint32_t j = 0; j < n; j++) {
 		for (uint32_t i = 0; i < m; i++) {
-			if (stencils[j].size() > i) {
-				stencils_matrix[i+j*m] = stencils[j][i];
+			if (i < stencils[j].size()) {
+				stencils_matrix[i+j*m] = stencils[j][i].idx;
 			}
 		}
 	}
