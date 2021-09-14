@@ -1,5 +1,3 @@
-% Test a pagina 9 di Mengaldo et al.
-
 addpath('../Euler Equation');
 addpath('../FVM Solver');
 addpath('../Geometry');
@@ -25,14 +23,14 @@ bc = {};
 bc{1} = 'wall';
 
 % Scelta dei metodi numerici
-edges.nq = 2;
+edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-cells = reconstruction_LLS3_initialize(vertices,edges,cells);
-method.reconstruction_strategy = @reconstruction_T1WENO3;
+%cells = reconstruction_LLS3_initialize(vertices,edges,cells);
+method.reconstruction_strategy = @reconstruction_LLS2P;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK33;
+method.ODE_solver = @SSPRK22;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica

@@ -26,7 +26,7 @@ u0 = @(x,y) entropy_waves(x,y,t0,rho_freestream,...
     vx_freestream,vy_freestream,p_freestream,amplitude);
 
 % Definizione del dominio discreto e dell'IVBP
-[vertices,edges,cells] = polymesh_load('regular_square_50x50.mat');
+[vertices,edges,cells] = polymesh_load('regular_square_400x400.mat');
 cells.nu = 4;
 cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
 bc = {};
@@ -36,7 +36,7 @@ bc{1} = u_exact;
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
 %cells = reconstruction_LLS3_initialize(vertices,edges,cells);
-method.reconstruction_strategy = @reconstruction_LLS2;
+method.reconstruction_strategy = @reconstruction_LLS2P;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
@@ -49,7 +49,7 @@ tsnapshots = linspace(t0,T,11);
 [vertices,edges,cells,niter] = solver(...
     t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 
-% Stima degli errori L1 e Linf
+% Stima degli errori L1, L2 e Linf
 uT = @(x,y) u_exact(x,y,T);
 errL1 = cell_norm_L1(...
     cells.u - cell_integral_mean(uT,cells.nu,vertices,edges,cells), cells);

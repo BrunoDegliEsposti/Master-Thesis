@@ -19,7 +19,7 @@ u0 = @(x,y) [1,   0, 0,   1/(adiabatic_index-1)].*(x<0.5) + ...
             [1/8, 0, 0, 0.1/(adiabatic_index-1)].*(x>=0.5);
 
 % Definizione del dominio discreto e dell'IVBP
-polysoup = polysoup_from_grid(1024,3,0,0,1,3/1024);
+polysoup = polysoup_from_grid(512,11,0,0,1,11/512);
 [vertices,edges,cells] = polymesh_from_polysoup(polysoup);
 cells.nu = 4;
 cells.u = cell_integral(u0,cells.nu,vertices,edges,cells)./cells.area;
@@ -27,18 +27,19 @@ bc = {};
 bc{1} = 'absorbing';
 
 % Scelta dei metodi numerici
-edges.nq = 1;
+edges.nq = 2;
 edges = initialize_edge_quadrature(edges);
-method.reconstruction_strategy = @reconstruction_LLS2;
+cells = reconstruction_LLS3_initialize(vertices,edges,cells);
+method.reconstruction_strategy = @reconstruction_T1WENO3;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK22;
+method.ODE_solver = @SSPRK33;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica
 prefix = 'shock-tube';
-tsnapshots = linspace(t0,T,11);
+tsnapshots = linspace(t0,T,101);
 [vertices,edges,cells,niter] = solver(...
     t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 

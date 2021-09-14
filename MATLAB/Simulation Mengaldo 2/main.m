@@ -10,7 +10,7 @@ flux = @euler_flux2D;
 t0 = 0;
 freestream_u = u_from_rhovMp([1.225,1,0,0.1,101325]);
 mws = max_wave_speed2D(freestream_u);
-T = 5/mws;
+T = 10/mws;
 u0 = @(x,y) freestream_u;
 
 % Definizione del dominio discreto e dell'IVBP
@@ -27,16 +27,16 @@ bc{2} = 'wall';
 % Scelta dei metodi numerici
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
-method.reconstruction_strategy = @reconstruction_LLS1;
+method.reconstruction_strategy = @reconstruction_LLS2P;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK11;
+method.ODE_solver = @SSPRK22;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica
 prefix = 'mengaldo2';
-tsnapshots = linspace(t0,T,61);
+tsnapshots = linspace(t0,T,101);
 [vertices,edges,cells,niter] = solver(...
     t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 

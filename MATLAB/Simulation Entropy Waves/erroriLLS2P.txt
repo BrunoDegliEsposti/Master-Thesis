@@ -1,0 +1,25 @@
+t0 = 0; T = 1; courant_number = 1;
+rho_freestream = 1; vx_freestream = 1; vy_freestream = 1;
+p_freestream = 1; amplitude = 0.01;
+Metodo Linear Least-Squares di ordine 2
+11 catture
+
+Regular Grid Nx = Ny = 50
+L1:     2.1920e-03   2.1920e-03   2.1920e-03   2.1920e-03
+L2:     2.4589e-03   2.4589e-03   2.4589e-03   2.4589e-03
+Linf:   4.1387e-03   4.1387e-03   4.1387e-03   4.1387e-03
+
+Regular Grid Nx = Ny = 100
+L1:     4.6125e-04   4.6125e-04   4.6125e-04   4.6125e-04
+L2:     5.1899e-04   5.1899e-04   5.1899e-04   5.1899e-04
+Linf:   9.0732e-04   9.0732e-04   9.0732e-04   9.0732e-04
+
+Regular Grid Nx = Ny = 200
+L1:     9.7352e-05   9.7352e-05   9.7352e-05   9.7352e-05
+L2:     1.0914e-04   1.0914e-04   1.0914e-04   1.0914e-04
+Linf:   2.1693e-04   2.1693e-04   2.1693e-04   2.1693e-04
+
+Regular Grid Nx = Ny = 400
+L1:     2.2842e-05   2.2842e-05   2.2842e-05   2.2842e-05
+L2:     2.5519e-05   2.5519e-05   2.5519e-05   2.5519e-05
+Linf:   5.0824e-05   5.0824e-05   5.0824e-05   5.0824e-05

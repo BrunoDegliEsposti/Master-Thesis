@@ -24,7 +24,7 @@ u_exact = @(x,y,t) vortex(x,y,t,cx0,cy0,cvx,cvy,beta);
 u0 = @(x,y) u_exact(x,y,t0);
 
 % Definizione del dominio discreto e dell'IVBP
-[vertices,edges,cells] = polymesh_load('regular_square_50x50.mat');
+[vertices,edges,cells] = polymesh_load('regular_square_100x100.mat');
 cells.nu = 4;
 cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
 bc = {};
@@ -34,11 +34,11 @@ bc{1} = u_exact;
 edges.nq = 1;
 edges = initialize_edge_quadrature(edges);
 %cells = reconstruction_LLS3_initialize(vertices,edges,cells);
-method.reconstruction_strategy = @reconstruction_LLS1;
+method.reconstruction_strategy = @reconstruction_LLS2P;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK11;
+method.ODE_solver = @SSPRK22;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica
@@ -47,7 +47,7 @@ tsnapshots = linspace(t0,T,11);
 [vertices,edges,cells,niter] = solver(...
     t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 
-% Stima degli errori L1 e Linf
+% Stima degli errori L1, L2 e Linf
 uT = @(x,y) u_exact(x,y,T);
 errL1 = cell_norm_L1(...
     cells.u - cell_integral_mean(uT,cells.nu,vertices,edges,cells), cells);
