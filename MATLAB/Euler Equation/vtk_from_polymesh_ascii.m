@@ -63,12 +63,10 @@ function [] = vtk_from_polymesh_ascii(filename,vertices,edges,cells)
     fprintf(fileID,'LOOKUP_TABLE default\n');
     fprintf(fileID,'%.12e\n',mach_number2D(cells.u));
     
+    % Entropia specifica
+    fprintf(fileID,'SCALARS SpecificEntropy double 1\n');
+    fprintf(fileID,'LOOKUP_TABLE default\n');
+    fprintf(fileID,'%.12e\n',entropy2D(cells.u));
+    
     fclose(fileID);
 end
-
-
-
-
-
-
-

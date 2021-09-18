@@ -75,5 +75,11 @@ function [] = vtk_from_polymesh_bin(filename,vertices,edges,cells)
     fwrite(fileID, mach_number2D(cells.u), 'double', 0, 'b');
     fprintf(fileID,'\n');
     
+    % Entropia Specifica
+    fprintf(fileID,'SCALARS SpecificEntropy double 1\n');
+    fprintf(fileID,'LOOKUP_TABLE default\n');
+    fwrite(fileID, entropy2D(cells.u), 'double', 0, 'b');
+    fprintf(fileID,'\n');
+    
     fclose(fileID);
 end
