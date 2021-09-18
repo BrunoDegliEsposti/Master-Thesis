@@ -130,7 +130,7 @@ $\vec{X} = \psi(\vec{x},t)$, we get that
 \begin{equation} \label{eq:phi-psi-funzione-inversa}
 \psi_{\vec{x}}(\vec{x},t) \, \varphi_t(\psi(\vec{x},t),t) + \psi_t(\vec{x},t) = 0.
 \end{equation}
-This identity will soon be useful. Let us now see how kinematic quantities
+This identity will be useful later. Let us now see how kinematic quantities
 of the continuum can be expressed through the functions $\varphi$ and $\psi$.
 
 We define the velocity $\vec{v}(\vec{x},t)$ of the continuum as the
@@ -170,7 +170,7 @@ we can prove that
 \end{align}
 The term $\vec{v}_{\vec{x}}(\vec{x},t) \vec{v}(\vec{x},t)$ denotes the
 product between the Jacobian matrix of $\vec{v}$ with respect to
-spatial variables only and the column vector $\vec{v}$ itself.
+its spatial variables and the vector $\vec{v}$ itself.
 Crucially, this term is nonlinear.
 
 Looking at identity~\eqref{eq:derivata-euleriana-u}, it feels natural
@@ -183,7 +183,7 @@ D_t \vec{v}(\vec{x},t) \deq \vec{v}_t(\vec{x},t)
 \]
 The fact that acceleration in a continuum can be expressed
 as the Lagrangian derivative of velocity, without any
-reference to $\varphi$ and $\psi$, is a simple yet deep result.
+reference to $\varphi$ and $\psi$, is a simple yet remarkable result.
 More generally, we can define the Lagrangian derivative of
 any tensor field $\tns{g}(x,t)$ as
 \begin{equation} \label{eq:derivata-lagrangiana}
@@ -199,6 +199,7 @@ also known in this context as \emph{Eulerian derivative}, can be understood
 as the variation of the quantity~$\tns{g}$ as measured by a stationary
 observer in $\R^n$.
 For a short introduction to tensors and their notation,
+including the Einstein summation convention,
 we refer to Appendix \ref{ch:appendix-tensors}.
 
 \subsection*{Cauchy stress tensor}
@@ -226,7 +227,7 @@ Without loss of generality, we can suppose that the normal $\vec{\nu}$
 is pointing away from $W_1$ and into $W_2$. We denote by $\vec{F}(W_1,W_2)$
 the contact force that $W_2$ exerts on $W_1$ at time $t$ through the
 separating hypersurface $S$. Let $A(R)$ be the surface measure
-of a given hypersurface $R$, and let $B(\vec{x},h)$ be the open ball centered
+of any given hypersurface $R$, and let $B(\vec{x},h)$ be the open ball centered
 at $\vec{x}$ with radius $h > 0$.
 If for each $t \geq t_0$, $\vec{x} \in \Omega_t$, $\vec{\nu} \in S^{n-1}$
 the limit
@@ -236,7 +237,7 @@ the limit
 	\frac{\vec{F}\bigl(W_1 \cap B(\vec{x},h), \, W_2 \cap B(\vec{x},h)\bigr)}
 	     {A\bigl(S \cap B(\vec{x},h)\bigr)}
 \end{equation}
-exists, is finite and doesn't depend on the choice of $S$, $W_1$ and $W_2$,
+exists, is finite, and doesn't depend on the choice of $S$, $W_1$, $W_2$,
 then the \emph{Cauchy stress vector}
 \[
 \tns{\tau}(\vec{x},t,\vec{\nu})
@@ -245,13 +246,14 @@ then the \emph{Cauchy stress vector}
 is well-defined.
 The importance of this force density $\tns{\tau}$ is that,
 once known, it can be integrated on any hypersurface $S$ in $\Omega_t$
-in order to compute the macroscopic force of contact between two
+to compute the macroscopic force of contact between two
 portions of continuum separated by $S$.
 
-Throughout its motion, a continuum is subject to both external volume
-forces and external surface forces. An example of the former is gravity,
-while an example of the latter is the force that the walls of a container
-exert on a fluid in order to contain it (like those of a gas bottle).
+Throughout its motion, a continuum is subject to two kinds of external forces:
+volume forces and surface forces. An example of volume force is gravity,
+which acts on all infinitesimal portions of the continuum;
+an example of surface force is the one exerted by the walls
+of a container on a fluid to prevent its expansion (like in a gas bottle).
 As long as they are smooth functions of $\vec{x}$ and $t$,
 external volume forces don't affect the stress tensor in any way,
 because their contribution to limit \eqref{eq:limite-sforzi}
@@ -289,174 +291,170 @@ known as \emph{Cauchy stress tensor}, such that
 \noindent The proof of this theorem is classical, and can be found
 in any introductory book on continuum mechanics.
 The key insight is to apply Euler's first and second law of motion
-(better known as \emph{equazioni cardinali della dinamica} in Italian)
+(better known as \emph{equazioni cardinali della dinamica} in Italy)
 to an infinitesimal portion of the continuum shaped like a tetrahedron.
 
-\subsection*{Proprietà intensive ed estensive di un sistema continuo}
+\subsection*{Intensive and extensive properties of a continuum}
 
-Le proprietà fisiche di un sistema continuo si dividono in \emph{intensive}
-ed \emph{estensive}. Le prime sono locali e non dipendono dalla dimensione
-del sistema o dalla quantità di materia in esso contenuta, quindi
-possono essere descritte da un campo tensoriale $g(x,t)$
-e di conseguenza la loro variazione nel tempo,
-misurata su ogni porzione infinitesima di $\Omega$ durante il moto,
-è data dalla derivata lagrangiana \eqref{eq:derivata-lagrangiana}.
-Alcuni esempi di proprietà intensive sono la densità di massa,
-la pressione e la temperatura.
+Physical properties of a continuum can often be categorized as being
+either \emph{intensive} or \emph{extensive}. The former are local
+properties that don't depend on the size of the continuum or on
+the amount of matter that it contains, so they can be described
+by some tensor field $\tns{g}(\vec{x},t)$. The variation of an intensive
+property as measured along the trajectories of the particles of a continuum
+is given by the Lagrangian derivative \eqref{eq:derivata-lagrangiana}.
+Examples of intensive properties are mass density, pressure, velocity,
+and temperature.
 
-Le proprietà estensive, d'altro canto, sono globali e additive,
-quindi la loro descrizione matematica prevede l'uso di un integrale
-su una porzione $W$ di $\Omega$ di misura positiva:
+Extensive properties are global and additive, so their mathematical
+description requires an integral over a portion of continuum
+$W \subseteq \Omega$:
 \begin{equation} \label{eq:definizione-estensiva}
-G(t) = \int_{W_t} g(x,t) \dx.
+\tns{G}(t) = \int_{W_t} \tns{g}(\vec{x},t) \dx.
 \end{equation}
-In questa formula, $W_t$ indica il sottoinsieme di $\Omega_t$
-occupato dalle particelle di $W$ all'istante di tempo $t$.
-Il campo tensoriale $g$ è detto \emph{densità} della grandezza
-estensiva $G$.
-La variazione nel tempo di una grandezza estensiva misurata
-su $W_t$ durante il moto è data dal seguente teorema:
+In this formula, $W_t$ denotes the subset of $\Omega_t$ given by
+the particles of $W$ at time $t$. The tensor field $\tns{g}$ that defines
+the extensive property $\tns{G}$ is known as its \emph{density}.
+The time derivative of an extensive property is given by the following theorem:
 
-\begin{teor}[Teorema del trasporto di Reynolds] \label{teor:reynolds}
-Se $W_t = \varphi(W_{t_0},t)$ è un insieme di $\R^n$ sufficientemente
-regolare, allora
+\begin{teor}[Reynolds transport theorem] \label{teor:reynolds}
+Let $W_t = \varphi(W_{t_0},t)$ be a sufficiently regular subset of $\R^n$.
+Then,
 \begin{align*}
-\frac{d}{dt} G(t)
-&= \int_{W_t} D_t g + g \diver(v) \dx & \text{(forma lagrangiana)} \\
-&= \int_{W_t} \partial_t g + \diver_i(g \otimes v^i) \dx & \text{(forma euleriana)}
+\frac{d}{dt} \tns{G}(t)
+&= \int_{W_t} D_t \tns{g} + \tns{g} \diver(\vec{v}) \dx
+	& \text{(Lagrangian form)} \\
+&= \int_{W_t} \partial_t \tns{g} + \diver_i(\tns{g} \otimes \vec{v}^i) \dx
+	& \text{(Eulerian form)}
 \end{align*}
-La notazione $\diver_i(g \otimes v^i)$ serve a rendere esplicito
-l'indice rispetto al quale viene calcolata la divergenza del tensore
-$g \otimes v$. Per semplicità, lasciamo muti gli indici del tensore $g$.
-% indica che la divergenza del tensore $g \otimes v$ è calcolata
-% rispetto all'indice di $v$.
+% We omit the indices of the tensor field $\tns{g}$ for the sake of
+% notational convenience.
+% La notazione $\diver_i(g \otimes v^i)$ serve a rendere esplicito
+% l'indice rispetto al quale viene calcolata la divergenza del tensore
+% $g \otimes v$.
 \end{teor}
 
-\begin{proof}[Dimostrazione (traccia)]
-Passiamo alle variabili lagrangiane $X = \psi(x,t)$, al fine di rimuovere
-la dipendenza temporale dal dominio di integrazione $W_t$.
-Dopodiché, deriviamo sotto segno di integrale e usiamo la formula di Jacobi
-per calcolare la derivata del determinante jacobiano.
-Infine, torniamo alle variabili originali per ottenere la tesi
-in forma lagrangiana. La tesi in forma euleriana si ottiene
-immediatamente da quest'ultima sfruttando l'identità tensoriale
+\begin{proof}[Proof (sketch)]
+First, we remove the time dependence from the domain of integration $W_t$
+by switching to Lagrangian variables $\vec{X} = \psi(\vec{x},t)$.
+Then, we differentiate under the integral sign and use Jacobi's formula
+to evaluate the time derivative of the determinant of the Jacobian matrix
+which is now part of the integrand.
+Finally, we obtain the result in Lagrangian form by switching back to
+the original variables. The result in Eulerian form follows easily
+from the product rule:
 \[
-\diver_i(g \otimes v^i)
-= \partial_i (g v^i)
-= (\partial_i g) v^i + g (\partial_i v^i)
-= D_t g - \partial_t g + g \diver(v). \qedhere
+\diver_i(\tns{g} \otimes \vec{v}^i)
+= \partial_i (\tns{g} \vec{v}^i)
+= (\partial_i \tns{g}) \vec{v}^i + \tns{g} (\partial_i \vec{v}^i)
+= D_t \tns{g} - \partial_t \tns{g} + \tns{g} \diver(\vec{v}). \qedhere
 \]
 \end{proof}
+\noindent Examples of extensive properties are volume, mass, energy, and entropy.
 
-\noindent Alcuni esempi di grandezze estensive sono il volume, la massa e l'energia.
+\subsection*{Thermodynamics of perfect gases}
 
-\subsection*{Termodinamica di un gas perfetto}
+The classical thermodynamic state of a system is described
+at every instant in time by a vector of $N$ macroscopic
+physical quantities known as \emph{thermodynamic coordinates},
+or \emph{state variables}.
+Some of these quantities are intensive physical properties of the system,
+whereas others are extensive properties.
+In principle, the value of an intensive physical property doesn't have to
+be constant throughout the whole system. This means that,
+for a state variable to be globally well-defined, we need to restrict
+our attention to quasistatic processes, that is, transformations
+under which all state variables remain uniform throughout
+the system at each instant of time.
 
-Lo stato termodinamico classico di un sistema 
-è descritto in ogni istante da un vettore di~$N$
-grandezze fisiche macroscopiche %direttamente osservabili
-dette \emph{coordinate termodinamiche} o \emph{variabili di stato}.
-Affiché il valore di tali coordinate sia globalmente definito in modo
-univoco, supponiamo per il momento che tutte le grandezze fisiche
-intensive (per esempio, la pressione) siano in ogni istante uniformi
-all'interno del sistema.
-Più avanti, quando andremo a descrivere la dinamica di un fluido,
-tale ipotesi sarà soddisfatta localmente.
-Supponiamo inoltre di avere a che fare con un sistema omogeneo,
-cioè composto da una sola specie chimica e una sola fase.
-Per la \emph{regola delle fasi di Gibbs}, un tale sistema ha solamente
-due gradi di libertà termodinamici, il che significa che è sempre possibile
-dedurre il valore di tutte le variabili di stato a partire solamente
-dal valore di due di esse.
-Affinché ciò sia possibile, dovranno necessariamente esistere $N-2$
-equazioni, dette \emph{equazioni di stato}, che legano in modo
-implicito e tipicamente non lineare tutte le $N$ variabili termodinamiche del sistema.
+For a macroscopic system, this uniformity assumption is only acceptable
+if the timescale required by the system to reach thermodynamic equilibrium
+after small perturbations is negligible compared to the timescale over which
+the transformation happens. However, since the former timescale is proportional
+to the size of the system, while the latter is size-invariant, the quasistatic
+assumption is always valid for an infinitesimal portion of continuum.
 
-Consideriamo un sistema composto da $n$ moli di gas
-e scegliamo come variabili di stato la pressione $p$,
-il volume $V$, la temperatura $T$ e l'energia interna $U$.
-%cioè l'energia contenuta nel gas sotto forma di energia microscopica
-%sia cinetica che potenziale.
-Per i nostri scopi, sarà più che sufficiente il modello di \emph{gas perfetto},
-per il quale valgono le equazioni di stato 
+Suppose that the thermodynamic system is made of a single chemical species
+in a single phase. By \emph{Gibbs' phase rule}, such a system has only
+two thermodynamic degrees of freedom: the values of all state variables
+can be computed as soon as any two of them are known. To make this possible,
+there must exist $N-2$ equations, known as \emph{equations of state},
+that constrain the values that the $N$ thermodynamic coordinates can take.
+
+Let us consider a thermodynamic system made of $n$ moles of \emph{perfect gas},
+and fix pressure $p$, volume $V$, temperature $T$ and internal energy $U$
+as state variables. A perfect gas is subject to the following equations of state:
 \begin{equation} \label{eq:equazione-stato-gas-perfetti-pVT}
-pV = nRT, \qquad U = n C_v T.
+pV = nRT, \quad U = n C_v T.
 \end{equation}
-Una definizione formale di gas perfetto richiederebbe l'introduzione
-di modelli microscopici
-%TODO
-che esulano dallo scopo di questo lavoro.%
-\footnote{L'energia interna, per esempio, è definita come la somma
-delle energie cinetiche e potenziali (microscopiche)
-di tutte le particelle del gas. Si rende quindi necessario un approccio
-di tipo statistico.}
-La costante $R$ è detta \emph{costante universale dei gas}
-e vale circa \SI{8,3145}{\joule\per\mol\per\kelvin}.
-La quantità $C_v$ è detta \emph{calore molare a volume costante}
-ed è definita dal rapporto
+A formal definition of perfect gas would require microscopic models whose
+introduction is beyond the scope of this work. Internal energy, for example,
+is a concept that can only be fully understood in the context of
+statistical mechanics, as it is defined as the sum of all microscopic
+kinetic and potential energies of all molecules that make up the gas.
+The constant $R$ is known as \emph{universal gas constant},
+and its value is approximately \SI{8,3145}{\joule\per\mol\per\kelvin}.
+The quantity $C_v$ is known as \emph{molar heat capacity at constant volume}
+and is defined by the ratio
 \[
 C_v = \frac{1}{n} \left(\frac{\delta Q}{dT}\right)_{dV = 0}
 \]
-tra la quantità infinitesima $\delta Q$ di calore assorbito dal gas
-durante una qualsiasi%
-\footnote{Purché la trasformazione sia \emph{quasistatica},
-cioè preservi la definizione globale e univoca di tutte
-le coordinate termodinamiche in ogni istante delle trasformazione.}
-trasformazione a volume costante
-e il suo incremento di temperatura $dT$.
-In linea di principio, $C_v$ dovrebbe essere una funzione di $V$ e
-di $T$, ma si può dimostrare che per un gas perfetto tale quantità
-è costante e il suo valore dipende unicamente dal numero $d$ di
-gradi di libertà associati al moto delle molecole del gas:
+between the infinitesimal amount of heat $\delta Q$ absorbed by a gas
+during any quasistatic transformation at constant volume
+and the corresponding increase in temperature $dT$.
+Likewise, molar heat capacity at constant \emph{pressure} is defined as
 \[
-C_v = \frac{d}{2}R.
+C_p = \frac{1}{n} \left(\frac{\delta Q}{dT}\right)_{dp = 0.}
 \]
-Nel caso di un gas monoatomico, $d = 3$, mentre per un gas
-diatomico (come l'aria, approssimativamente) si ha $d = 5$.
-Con lo stesso principio con cui abbiamo definito il calore molare
-a volume costante, è possibile definire anche il calore
-molare a \emph{pressione} costante:
+In theory, $C_v$ and $C_p$ should be functions of the state variables,
+like $(V,T)$ or $(p,T)$. However, for a perfect gas it is possible
+to prove using microscopic models that $C_v$ and $C_p$ are constants
+whose value depends only on the number of degrees of freedom $d$ associated
+to the motion of the gas molecules:
 \[
-C_p = \frac{1}{n} \left(\frac{\delta Q}{dT}\right)_{dp = 0}
+C_v = \frac{d}{2}R, \quad C_p = \frac{d+2}{2}R.
 \]
-Nel caso di un gas perfetto è possibile dimostrare la \emph{relazione di Mayer}
-tra i due calori molari
-\[
-C_p = C_v + R,
-\]
-da cui segue
-\[
-C_p = \frac{d}{2}R + R = \frac{d+2}{2}R.
-\]
-Il rapporto
+In the case of monoatomic gases, $d = 3$, whereas for diatomic gases
+(like air, approximately) we have $d = 5$. The identity $C_p = C_v + R$
+is known as \emph{Mayer's relation}, and the ratio
 \[
 \gamma = \frac{C_p}{C_v} = \frac{d+2}{d} > 1
 \]
-è una quantità adimensionale importante,
-detta \emph{coefficiente di dilatazione adiabatica}.
+is an important adimensional constant known as \emph{adiabatic index}.
 
-Indichiamo ora con $m$ la massa del gas, con $\rho$ la sua densità
-$m/V$ e con $u$ la sua energia interna specifica $U/m$.
-Dalle due equazioni di stato \eqref{eq:equazione-stato-gas-perfetti-pVT}
-e dalla relazione di Mayer possiamo dedurre che
+Let $m$ denote the mass of the gas, $\rho$ its mass density $m/V$,
+and $u$ its specific internal energy~$U/m$. By the two equations of
+state \eqref{eq:equazione-stato-gas-perfetti-pVT} and Mayer's relation,
+we can deduce that
 \begin{equation} \label{eq:equazione-stato-gas-perfetti-p-rho-u}
 \frac{pV}{m} = \frac{nRT}{m} \qquad
 \frac{p}{\rho} = \frac{RU}{C_v m} \qquad
 p = \frac{R}{C_v} \rho u = \frac{C_p - C_v}{C_v} \rho u = (\gamma-1) \rho u.
 \end{equation}
-Questa nuova equazione di stato, espessa mediante le coordinate termodinamiche
-$p$, $\rho$ e $u$, sarà molto utile in seguito, quando andremo a scrivere
-il sistema delle equazioni di Eulero per i fluidi.
+This new equation of state, featuring $p$, $\rho$ and $u$ as state variables,
+will be useful at the end of the next section to close
+Euler's system of equations for the motion of a compressible fluid.
 
-% In questo modo, queste ultime funzioni non compariranno esplicitamente
-% nelle equazioni del moto
-
-% \footnote{Per semplicità, evitiamo il formalismo degli spazi affini
-% e lavoriamo direttamente in R3xR+.}
-
-% In assenza di forze esterne, tali equazioni sono autonome
-% e quindi, senza perdita di generalità, possiamo
-% eliminare da phi la dipendenza da t_0 supponendo d'ora in poi che t_0 = 0.
+Another important state variable is \emph{entropy}. Suppose that a perfect
+gas undergoes a transformation from an initial state identified by the
+state variables $(p_i,\rho_i)$ to a final state identified by $(p_f,\rho_f)$.
+The corresponding change in entropy is
+\[
+\Delta S = n C_v \log\left( \frac{p_f \rho_f^{-\gamma}}{p_i \rho_i^{-\gamma}} \right).
+\]
+%For our mathematical purposes, this formula will suffice to define
+%entropy up to a constant that will be fixed on a case-by-case basis.
+This formula is enough to define the entropy of a perfect gas up to a constant;
+this is not the way entropy is usually defined in physics, as it is lacking
+in both generality and motivation, however for our mathematical purposes
+there is no need to make things more complicated (e.g.\ by
+introducing statistical mechanics and the third law of thermodynamics).
+The constant in the definition of entropy is fixed as soon as the value
+of $S$ is assigned to a reference state (like air at a
+standard condition for temperature and pressure).
+Entropy is an extensive property of a thermodynamic system and
+obeys the second law of thermodynamics: entropy of an isolated system
+undergoing an arbitrary transformation is a non-decreasing function of time.
 
 \section{Derivation of the compressible Euler equations}
 
@@ -471,7 +469,7 @@ volume forces. In order to make it simpler to later reference all the
 various working assumptions, we list them here once and for all:
 \begin{description}
 \item[(H1)] The flow is adiabatic: each portion of fluid exchanges
-	no heat with the surrounding fluid while moving.
+	no heat with the surrounding fluid while moving ($\delta Q = 0$).
 \item[(H2)] The flow is inviscid: all contact forces in the interior
 	of the fluid are due to pressure and not to internal friction
 	between the layers of the fluid which are in relative motion.
@@ -699,34 +697,32 @@ This identity is in integral form; the corresponding differential form is
 \partial_t e + \diver(e \vec{v} + p \vec{v}) = 0.
 \end{equation}
 
-\subsection*{Equazioni di Eulero in forma conservativa}
+\subsection*{Euler equations in conservation form}
 
-Possiamo ora combinare le equazioni
-\eqref{eq:continuita-forma-differenziale},
-\eqref{eq:bilancio-quantita-di-moto} e \eqref{eq:bilancio-energia}
-in un unico sistema di equazioni alle derivate parziali,
-detto \emph{sistema delle equazioni di Eulero in forma conservativa}:
+We can now combine equations \eqref{eq:continuita-forma-differenziale},
+\eqref{eq:bilancio-quantita-di-moto} and \eqref{eq:bilancio-energia}
+in a single system of partial differential equations known as
+\emph{compressible Euler equations in conservation form}:
 \begin{equation} \label{eq:sistema-eulero}
 \begin{cases}
-\partial_t \rho + \diver(\rho v) = 0 \\
-\partial_t (\rho v^i) + \partial_j (\rho v^i v^j + p\delta^{ij}) = 0 \\
-\partial_t e + \diver(ev+pv) = 0
+\partial_t \rho + \diver(\rho \vec{v}) = 0 \\
+\partial_t (\rho \vec{v}^i)
+	+ \partial_j (\rho \vec{v}^i \vec{v}^j + p\tns{\delta}^{ij})
+	= 0 \quad \text{for all $i = 1,\dots,n$} \\
+\partial_t e + \diver(e \vec{v} + p \vec{v}) = 0.
 \end{cases}
 \end{equation}
-Per chiudere questo sistema di cinque equazioni scalari nelle sei incognite
-\[
-\rho, \rho v^1, \rho v^2, \rho v^3, e, p
-\]
-è necessario esprimere la pressione in funzione delle altre cinque variabili.
-Questo è possibile grazie all'ipotesi~\textbf{(H3)}, secondo cui possiamo
-applicare l'equazione di stato dei gas perfetti
-\eqref{eq:equazione-stato-gas-perfetti-p-rho-u}
-a ogni porzione infinitesima di fluido:
+This is a system of $n+2$ equations in $n+3$ variables, so we need
+to express pressure as a function of $(\rho,\rho\vec{v},e)$ in order to close it.
+This is possible thanks to hypotesis \textbf{(H3)}, according to which
+we can apply the state equation for perfect gases
+\eqref{eq:equazione-stato-gas-perfetti-p-rho-u} to every infinitesimal
+portion of fluid:
 \[
 p
 = (\gamma-1) \rho u
-= (\gamma-1) \left( e - \frac{1}{2} \rho \norm{v}^2 \right)
-= (\gamma-1) \left( e - \frac{\norm{\rho v}^2}{2\rho} \right)
+= (\gamma-1) \left( e - \frac{1}{2} \rho \norm{\vec{v}}^2 \right)
+= (\gamma-1) \left( e - \frac{\norm{\rho \vec{v}}^2}{2\rho} \right)
 \]
 Operiamo ora un cambio di notazione, così da poter
 scrivere il sistema \eqref{eq:sistema-eulero} in forma vettoriale e

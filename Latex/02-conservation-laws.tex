@@ -125,23 +125,23 @@ assumption of \emph{hyperbolicity}:
 \begin{defi}[Hyperbolic system]
 The quasilinear system \eqref{eq:hscl-quasilinear-vectorial},
 and by extension system \eqref{eq:hscl-vectorial} in divergence form,
-are \emph{hyperbolic} if, for all versors $\nu$ in $\R^n$ and all state
+are \emph{hyperbolic} if, for all versors $\vec{\nu}$ in $\R^n$ and all state
 vectors $\vec{u}$ in $\mathcal{U}$, the matrix
 \[
-d\mat{F}(\nu,\vec{u}) \deq \sum_{j=1}^n \nu^j d\mat{F}^j(\vec{u})
+d\mat{F}(\vec{\nu},\vec{u}) \deq \sum_{j=1}^n \vec{\nu}^j d\mat{F}^j(\vec{u})
 \]
-known as \emph{Jacobian of the flux in the direction of $\nu$},
+known as \emph{Jacobian of the flux in the direction of $\vec{\nu}$},
 is diagonalizable with real eigenvalues
 \[
-\lambda_1(\nu,\vec{u}) \leq \dots \leq \lambda_m (\nu,\vec{u}).
+\lambda_1(\vec{\nu},\vec{u}) \leq \dots \leq \lambda_m (\vec{\nu},\vec{u}).
 \]
-If the eigenvalues are always distinct, an assumption known as
-\emph{strong hyperbolicity}, or if their multiplicities are at least
-constant across all values of $\nu$ and $\vec{u}$, an assumption
-known as \emph{constant hyperbolicity}, then there exist (at least,
-locally) smooth right-eigenvector fields
+If the eigenvalues are distinct for all values of $\vec{\nu}$ and $\vec{u}$,
+an assumption known as \emph{strong hyperbolicity},
+or if their multiplicities are at least constant, an assumption
+known as \emph{constant hyperbolicity}, then it is possible to
+prove the local existence of smooth right-eigenvector fields
 \[
-R_1(\nu,\vec{u}), \dots, R_m (\nu,\vec{u}).
+R_1(\vec{\nu},\vec{u}), \dots, R_m (\vec{\nu},\vec{u}).
 \]
 \end{defi}
 
