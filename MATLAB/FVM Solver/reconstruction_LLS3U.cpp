@@ -47,7 +47,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
 		// costruisci lo stencil intorno a i_center
 		bool success;
-		success = build_centered_stencil(i_center, 6, stencil, q, edges, cells);
+		uint32_t min_stencil_size = 6;
+		if (cells.dfb[i_center-1] == 0) {
+			// La dimensione minima dello stencil sulle celle di bordo
+			// viene incrementata per questioni di stabilità
+			min_stencil_size = 7;
+		}
+		success = build_centered_stencil(i_center, min_stencil_size, stencil, q, edges, cells);
 		if (!success) {
 			mexErrMsgIdAndTxt("MEX:FVM_error", "Can't build a large enough stencil");
 		}
