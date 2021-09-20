@@ -66,4 +66,7 @@ function [vertices,edges,cells] = polymesh_from_polysoup(polysoup,tol)
             end
         end
     end
+    
+    % Calcola la distanza di ogni cella dal bordo (numero di vicini)
+    cells.dfb = polymesh_dfb(vertices,edges,cells);
 end

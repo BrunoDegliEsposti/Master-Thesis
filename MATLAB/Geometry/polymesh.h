@@ -60,6 +60,7 @@ struct Cells {
     double *area;
     double *perimeter;
     double *h;
+    uint32_t *dfb;
     uint32_t mne;
     uint32_t *ne;
     int32_t *e;
@@ -73,6 +74,7 @@ struct Cells {
     	area = mxGetDoubles(mxGetField(in,0,"area"));
     	perimeter = mxGetDoubles(mxGetField(in,0,"perimeter"));
     	h = mxGetDoubles(mxGetField(in,0,"h"));
+    	dfb = mxGetUint32s(mxGetField(in,0,"dfb"));
     	mne = (uint32_t)mxGetScalar(mxGetField(in,0,"mne"));
     	ne = mxGetUint32s(mxGetField(in,0,"ne"));
     	e = mxGetInt32s(mxGetField(in,0,"e"));
@@ -83,6 +85,7 @@ struct Cells {
     	if (area == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells.area = NULL");
     	if (perimeter == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells.perimeter = NULL");
     	if (h == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells.h = NULL");
+    	if (dfb == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells.dfb = NULL");
     	if (ne == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells.ne = NULL");
     	if (e == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells.e = NULL");
     	if (nac == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells.nac = NULL");

@@ -25,9 +25,10 @@ struct edges {
     nx, ny: vettori delle normali a ogni spigolo. Con il palmo della mano
         sul foglio centrato in v2 e il pollice che punta verso v1,
         la normale ha lo stesso verso dell'indice.
+        Su ogni cella di bordo, la normale è entrante.
     cp: vettore degli indici delle celle dal lato "+" di ogni spigolo.
-        Le celle inesistenti sono rappresentate dall'indice 0 (questo caso
-        si verifica ogni volta che uno spigolo appartiene al bordo).
+        Le celle inesistenti sono rappresentate dall'indice 0,
+        ma questo caso non dovrebbe mai verificarsi.
     cm: vettore degli indici delle celle dal lato "-" di ogni spigolo.
         Le celle inesistenti sono rappresentate dall'indice 0 (questo caso
         si verifica ogni volta che uno spigolo appartiene al bordo).
@@ -40,6 +41,10 @@ struct cells {
     perimeter: vettore dei perimetri di ogni cella.
     h: vettore delle approssimazioni del diametro delle circonferenze
         inscritte in ogni cella (4*cells.area./cells.perimeter).
+    dfb: distance from border, cioè vettore delle distanze discrete
+        tra ogni cella e il bordo della mesh. La distanza è definita
+        come in teoria dei grafi, cioè dipende solo dall'adiacenza tra celle,
+        non dalla distanza euclidea.
     mne: maximum number of edges, cioè il massimo numero di spigoli
         che costituiscono ciascuna cella (per esempio, se le celle
         sono triangoli, mne=3).
