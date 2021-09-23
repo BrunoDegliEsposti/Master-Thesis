@@ -49,9 +49,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 		for (uint32_t i_center = 1; i_center <= cells.nc; i_center++) {
 			uint32_t dfb = cells.dfb[i_center-1];
 			if (method.order >= 3 && dfb >= 2) {
-				reconstruction_T1WENO3(i_center, vertices, edges, cells, up, um, stencils, q, V, ubar, p, tau);
+				reconstruction_T1WENO3(i_center, vertices, edges, cells, method, up, um, stencils, q, V, ubar, p, tau);
 			} else if (method.order >= 2 && dfb >= 1) {
-				reconstruction_T1WENO2(i_center, vertices, edges, cells, up, um, stencils, q, V, ubar, p);
+				reconstruction_T1WENO2(i_center, vertices, edges, cells, method, up, um, stencils, q, V, ubar, p);
 			} else {
 				reconstruction_LLS1(i_center, vertices, edges, cells, up, um);
 			}

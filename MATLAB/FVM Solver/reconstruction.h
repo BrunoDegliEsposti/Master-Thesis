@@ -10,6 +10,7 @@
 #include "matrix.h"
 #include "lapacke.h"
 #include "polymesh_FVM.h"
+#include "method.h"
 #include "../Geometry/computational_geometry.h"
 
 // https://en.cppreference.com/w/cpp/container/vector
@@ -256,7 +257,7 @@ void reconstruction_LLS1(uint32_t i_center, VerticesFVM &vertices,
 
 void reconstruction_T1WENO2(
 	// variabili in ingresso
-	uint32_t i_center, VerticesFVM &vertices, EdgesFVM &edges, CellsFVM &cells,
+	uint32_t i_center, VerticesFVM &vertices, EdgesFVM &edges, CellsFVM &cells, Method &method,
 	// variabili in uscita
 	double *up, double *um,
 	// variabili di lavoro
@@ -362,7 +363,7 @@ void reconstruction_T1WENO2(
 
 			// aggiorna p_weno con una versione pesata del p che abbiamo appena trovato
 			double si = smoothness_indicator_WENO2(p, i_center, cells);
-			double omega_tilde = pow(1e-5 + si, -4.0);
+			double omega_tilde = pow(method.WENO_epsilon + si, -method.WENO_power);
 			sum_of_omega_tilde += omega_tilde;
 			for (uint32_t j = 0; j < 3; j++) {
 				p_weno[j] += omega_tilde * p[j];
@@ -406,7 +407,7 @@ void reconstruction_T1WENO2(
 
 void reconstruction_T1WENO3(
 	// variabili in ingresso
-	uint32_t i_center, VerticesFVM &vertices, EdgesFVM &edges, CellsFVM &cells,
+	uint32_t i_center, VerticesFVM &vertices, EdgesFVM &edges, CellsFVM &cells, Method &method,
 	// variabili in uscita
 	double *up, double *um,
 	// variabili di lavoro
@@ -523,7 +524,7 @@ void reconstruction_T1WENO3(
 
 			// aggiorna p_weno con una versione pesata del p che abbiamo appena trovato
 			double si = smoothness_indicator_WENO3(p, i_center, cells);
-			double omega_tilde = pow(1e-6*h*h + si, -4.0);
+			double omega_tilde = pow(method.WENO_epsilon + si, -method.WENO_power);
 			sum_of_omega_tilde += omega_tilde;
 			for (uint32_t j = 0; j < 6; j++) {
 				p_weno[j] += omega_tilde * p[j];

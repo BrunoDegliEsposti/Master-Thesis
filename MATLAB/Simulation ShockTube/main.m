@@ -30,13 +30,13 @@ bc{1} = 'wall';
 method.nq = 2;
 method.order = 3;
 method.reconstruction_strategy = @reconstruction_T1WENO;
-% method.WENO_epsilon = 1e-6 * cells.h^2;
-% method.WENO_power = 4;
+method.WENO_epsilon = 1e-6 * median(cells.h)^2;
+method.WENO_power = 4;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK33;
-% method.ODE_solver = @SSPRK33_periodic;
+% method.ODE_solver = @SSPRK33;
+method.ODE_solver = @SSPRK33_periodic;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica
