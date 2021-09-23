@@ -1,7 +1,7 @@
 \documentclass[a4paper,11pt]{report}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[italian]{babel}
+\usepackage[italian,english]{babel}
 \usepackage{geometry}
 	\geometry{a4paper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,heightrounded}
 \usepackage{amsmath, amsthm, amssymb, mathtools}
@@ -12,7 +12,7 @@
 \usepackage{caption, subcaption}
 	\captionsetup{tableposition=top,figureposition=bottom}
 	\captionsetup{justification=centering,font=small,labelfont=bf}
-%\usepackage[autostyle,italian=guillemets]{csquotes}
+\usepackage[autostyle,italian=guillemets,english=american]{csquotes}
 \usepackage{quoting}
 	\quotingsetup{font=small}
 \usepackage[backend=biber,style=numeric,hyperref]{biblatex}
@@ -50,21 +50,22 @@
 \DeclareMathOperator{\tr}{tr}
 
 \theoremstyle{definition}
-\newtheorem*{defi}{Definizione}
-\newtheorem*{esem}{Esempio}
-\newtheorem*{prob}{Problema}
+\newtheorem*{defi}{Definition}
+\newtheorem*{exam}{Example}
+\newtheorem*{prob}{Problem}
 
 \theoremstyle{plain}
-\newtheorem{teor}{Teorema}[chapter]
-\newtheorem{lemm}[teor]{Lemma}
-\newtheorem{prop}[teor]{Proposizione}
-\newtheorem{coro}[teor]{Corollario}
-\newtheorem{dimo}{Dimostrazione}
+\newtheorem{theo}{Theorem}[chapter]
+\newtheorem{lemm}[theo]{Lemma}
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{coro}[theo]{Corollary}
 
 \theoremstyle{remark}
-\newtheorem*{osse}{Osservazione}
+\newtheorem*{rema}{Remark}
 
 \begin{document}
+
+\input{titlepage.tex}
 
 \tableofcontents
 

@@ -1,28 +1,6 @@
-Numerical approximation of hyperbolic systems of conservation laws
-using WENO reconstructions on polygonal meshes of Voronoi type.
-The case of 2D Euler's equations.
-
-Approssimazione numerica di sistemi iperbolici di leggi di conservazione
-mediante ricostruzioni WENO su meshes poligonali di tipo Voronoi.
-Il caso delle equazioni di Eulero 2D.
-
-Alternative: includere higher-order, oppure high-resolution, togliere Voronoi,
-mettere Eulero al posto di hyperbolic systems of conservation laws.
-
-
-
-Numerical approximation of 2D compressible Euler's equations
-using WENO reconstructions on polygonal meshes.
-
-Approssimazione numerica delle equazioni di Eulero 2D
-mediante ricostruzioni WENO su mesh poligonali.
-
-
-
-
-
 Numerical solution of the 2D compressible Euler equations
-using WENO reconstructions on polygonal meshes.
+using WENO reconstructions on polygonal meshes
 
-Soluzione numerica delle equazioni di Eulero 2D
-mediante ricostruzioni WENO su meshes poligonali.
+Soluzione numerica delle equazioni di Eulero
+per fluidi comprimibili in due dimensioni
+mediante ricostruzioni WENO su mesh poligonali

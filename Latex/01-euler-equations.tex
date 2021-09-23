@@ -62,7 +62,7 @@ Sotto tali ipotesi, le equazioni di Eulero formano un sistema di
 cinque equazioni scalari che può essere scritto come
 \emph{sistema iperbolico di leggi di conservazione}
 \begin{equation} \label{eq:sistema-iperbolico-di-leggi-di-conservazione}
-\partial_t u + \diver(F(u)) = 0,
+\partial_t \vec{u} + \diver(\tns{F}(\vec{u})) = 0,
 \end{equation}
 la cui particolare forma esprime in modo esplicito
 la conservazione di quantità fisiche rilevanti,
@@ -275,7 +275,7 @@ time $t$ by $\vec{f}_s^{\text{ext}}(\vec{x},t)$, we get that
 
 \noindent The following theorem, due to Cauchy, describes the dependence
 of $\tns{\tau}$ on the direction $\vec{\nu}$:
-\begin{teor}[Cauchy’s stress theorem]
+\begin{theo}[Cauchy’s stress theorem]
 Suppose that the Cauchy stress vector is well-defined and sufficiently
 smooth in each point of its domain. Then, there exists a type $(2,0)$
 tensor field $\tns{\tau}^{ij}(\vec{x},t)$,
@@ -286,7 +286,7 @@ known as \emph{Cauchy stress tensor}, such that
 \item The tensor $\tns{\tau}$ is symmetric,
 	i.e.\ $\tns{\tau}^{ij}(\vec{x},t) = \tns{\tau}^{ji}(\vec{x},t)$.
 \end{enumerate}
-\end{teor}
+\end{theo}
 
 \noindent The proof of this theorem is classical, and can be found
 in any introductory book on continuum mechanics.
@@ -317,7 +317,7 @@ the particles of $W$ at time $t$. The tensor field $\tns{g}$ that defines
 the extensive property $\tns{G}$ is known as its \emph{density}.
 The time derivative of an extensive property is given by the following theorem:
 
-\begin{teor}[Reynolds transport theorem] \label{teor:reynolds}
+\begin{theo}[Reynolds transport theorem] \label{teor:reynolds}
 Let $W_t = \varphi(W_{t_0},t)$ be a sufficiently regular subset of $\R^n$.
 Then,
 \begin{align*}
@@ -332,7 +332,7 @@ Then,
 % La notazione $\diver_i(g \otimes v^i)$ serve a rendere esplicito
 % l'indice rispetto al quale viene calcolata la divergenza del tensore
 % $g \otimes v$.
-\end{teor}
+\end{theo}
 
 \begin{proof}[Proof (sketch)]
 First, we remove the time dependence from the domain of integration $W_t$
@@ -525,7 +525,7 @@ integrand implies a stronger, local version of the identity, known as
 \end{equation}
 The continuity equation for mass allows us to prove the following variant
 of the Reynolds transport theorem:
-\begin{teor}[Reynolds transport theorem,
+\begin{theo}[Reynolds transport theorem,
 	density per unit mass] \label{teor:reynolds-per-unita-di-massa}
 If the extensive physical property $\tns{G}$ is defined as
 \[
@@ -536,7 +536,7 @@ subset of $\R^n$, then
 \[
 \frac{d}{dt} \tns{G}(t) = \int_{W_t} \rho \, D_t \tns{g} \dx.
 \]
-\end{teor}
+\end{theo}
 
 \noindent In the light of this theorem, it is often convenient
 to choose the density of an extensive physical property
@@ -722,7 +722,7 @@ portion of fluid:
 p
 = (\gamma-1) \rho u
 = (\gamma-1) \left( e - \frac{1}{2} \rho \norm{\vec{v}}^2 \right)
-= (\gamma-1) \left( e - \frac{\norm{\rho \vec{v}}^2}{2\rho} \right)
+= (\gamma-1) \left( e - \frac{\norm{\rho \vec{v}}^2}{2\rho} \right).
 \]
 Operiamo ora un cambio di notazione, così da poter
 scrivere il sistema \eqref{eq:sistema-eulero} in forma vettoriale e
