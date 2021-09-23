@@ -24,17 +24,19 @@ polysoup = polysoup_from_grid(512,11,0,0,1,11/512);
 cells.nu = 4;
 cells.u = cell_integral(u0,cells.nu,vertices,edges,cells)./cells.area;
 bc = {};
-bc{1} = 'absorbing';
+bc{1} = 'wall';
 
 % Scelta dei metodi numerici
-edges.nq = 2;
-edges = initialize_edge_quadrature(edges);
-cells = reconstruction_LLS3_initialize(vertices,edges,cells);
+method.nq = 2;
+method.order = 3;
 method.reconstruction_strategy = @reconstruction_T1WENO3;
+% method.WENO_epsilon = 1e-6 * cells.h^2;
+% method.WENO_power = 4;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
 method.ODE_solver = @SSPRK33;
+% method.ODE_solver = @SSPRK33_periodic;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica

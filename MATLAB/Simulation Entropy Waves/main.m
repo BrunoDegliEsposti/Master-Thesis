@@ -33,9 +33,8 @@ bc = {};
 bc{1} = u_exact;
 
 % Scelta dei metodi numerici
-edges.nq = 1;
-edges = initialize_edge_quadrature(edges);
-%cells = reconstruction_LLS3_initialize(vertices,edges,cells);
+method.nq = 1;
+method.order = 2;
 method.reconstruction_strategy = @reconstruction_LLS2P;
 method.bc = bc;
 method.flux = flux;

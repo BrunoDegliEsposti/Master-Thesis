@@ -8,6 +8,9 @@ function [vertices,edges,cells,niter] = ...
 % nella cartella "results" con nome "prefix-number.vtk",
 % insieme a un file di tipo vtk.series che può essere letto da ParaView.
     
+    % Inizializza il metodo dei volumi finiti
+    [vertices,edges,cells] = FVM_initialize(vertices,edges,cells,method);
+    
     % Crea la cartella di output. Il file .deja-dup-ignore serve a evitare
     % che il mio computer faccia il backup automatico di questa cartella,
     % che è molto grande e viene cambiata spesso.

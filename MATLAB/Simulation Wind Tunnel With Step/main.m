@@ -25,8 +25,8 @@ bc{2} = freestream_u;
 bc{3} = 'absorbing';
 
 % Scelta dei metodi numerici
-edges.nq = 1;
-edges = initialize_edge_quadrature(edges);
+method.nq = 1;
+method.order = 1;
 method.reconstruction_strategy = @reconstruction_LLS1;
 method.bc = bc;
 method.flux = flux;

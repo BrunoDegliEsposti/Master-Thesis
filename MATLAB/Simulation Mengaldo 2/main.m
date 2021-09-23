@@ -25,8 +25,8 @@ bc{1} = freestream_u;
 bc{2} = 'wall';
 
 % Scelta dei metodi numerici
-edges.nq = 1;
-edges = initialize_edge_quadrature(edges);
+method.nq = 1;
+method.order = 2;
 method.reconstruction_strategy = @reconstruction_LLS2P;
 method.bc = bc;
 method.flux = flux;
