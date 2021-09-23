@@ -82,7 +82,7 @@ bool build_centered_stencil(uint32_t i_center, uint32_t min_stencil_size,
 	return true;
 }
 
-bool build_biased_stencil(uint32_t i_center, uint32_t min_stencil_size,
+bool build_onesided_stencil(uint32_t i_center, uint32_t min_stencil_size,
 	Stencil &stencil, Cone &cone, std::queue<uint32_t> &q,
 	Vertices &vertices, Edges &edges, Cells &cells)
 // Crea uno stencil nella direzione di cone a partire dalla cella con indice i_center.
@@ -312,10 +312,10 @@ void reconstruction_T1WENO2(
 			cone.widen(1e-8);
 
 			// costruzione dello stencil nella direzione del cono
-			Stencil stencil_biased;
-			bool success = build_biased_stencil(i_center, 3, stencil_biased, cone, q, vertices, edges, cells);
+			Stencil stencil_onesided;
+			bool success = build_onesided_stencil(i_center, 3, stencil_onesided, cone, q, vertices, edges, cells);
 			if (success) {
-				stencils.push_back(stencil_biased);
+				stencils.push_back(stencil_onesided);
 			}
 		}
 
@@ -462,10 +462,10 @@ void reconstruction_T1WENO3(
 			cone.widen(1e-8);
 
 			// costruzione dello stencil nella direzione del cono
-			Stencil stencil_biased;
-			bool success = build_biased_stencil(i_center, 6, stencil_biased, cone, q, vertices, edges, cells);
+			Stencil stencil_onesided;
+			bool success = build_onesided_stencil(i_center, 6, stencil_onesided, cone, q, vertices, edges, cells);
 			if (success) {
-				stencils.push_back(stencil_biased);
+				stencils.push_back(stencil_onesided);
 			}
 		}
 

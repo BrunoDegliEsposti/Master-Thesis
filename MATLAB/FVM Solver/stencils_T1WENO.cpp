@@ -64,10 +64,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 		cone.widen(1e-8);
 
 		// costruzione dello stencil nella direzione del cono
-		Stencil stencil_biased;
-		bool success = build_biased_stencil(i_center, min_stencil_size, stencil_biased, cone, q, vertices, edges, cells);
+		Stencil stencil_onesided;
+		bool success = build_onesided_stencil(i_center, min_stencil_size, stencil_onesided, cone, q, vertices, edges, cells);
 		if (success) {
-			stencils.push_back(stencil_biased);
+			stencils.push_back(stencil_onesided);
 		}
 	}
 
