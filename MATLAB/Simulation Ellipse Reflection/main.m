@@ -25,7 +25,7 @@ bc{1} = 'wall';
 % Scelta dei metodi numerici
 method.nq = 2;
 method.order = 3;
-method.reconstruction_strategy = @reconstruction_T1WENO3;
+method.reconstruction_strategy = @reconstruction_T1WENO;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;

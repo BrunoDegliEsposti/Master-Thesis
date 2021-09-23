@@ -29,7 +29,7 @@ bc{1} = 'wall';
 % Scelta dei metodi numerici
 method.nq = 2;
 method.order = 3;
-method.reconstruction_strategy = @reconstruction_T1WENO3;
+method.reconstruction_strategy = @reconstruction_T1WENO;
 % method.WENO_epsilon = 1e-6 * cells.h^2;
 % method.WENO_power = 4;
 method.bc = bc;
