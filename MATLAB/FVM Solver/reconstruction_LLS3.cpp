@@ -10,15 +10,17 @@
 #include "lapacke.h"
 #include "omp.h"
 #include "polymesh_FVM.h"
+#include "method.h"
 #include "reconstruction.h"
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
-// function [up, um] = reconstruction_LLS3U(vertices, edges, cells)
-// ricostruzione Linear Least-Squares di grado 3 Unconstrained, ma anche Unstable
+// function [up, um] = reconstruction_LLS3(vertices, edges, cells, method)
+// ricostruzione Linear Least-Squares di grado 3
 {
 	VerticesFVM vertices(prhs[0]);
 	EdgesFVM edges(prhs[1]);
 	CellsFVM cells(prhs[2]);
+	Method method(prhs[3]);
 
 	const mwSize up_dims[] = {edges.ne, cells.nu, edges.nq};
 	plhs[0] = mxCreateNumericArray(3, up_dims, mxDOUBLE_CLASS, mxREAL);
@@ -28,6 +30,15 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	plhs[1] = mxCreateNumericArray(3, um_dims, mxDOUBLE_CLASS, mxREAL);
 	double *um = mxGetDoubles(plhs[1]);
 
+	if (method.order != 3) {
+		mexErrMsgIdAndTxt("MEX:FVM_error", "Method.order must be set to 3");
+	}
+
+	char lst = method.least_squares_type;
+	if (lst != 'U' && lst != 'C' && lst != 'P') {
+		mexErrMsgIdAndTxt("MEX:FVM_error", "Method.least_squares_type must be U/C/P");
+	}
+
 	#pragma omp parallel num_threads(8)
 	{
 
@@ -35,6 +46,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	Stencil stencil;
 	std::queue<uint32_t> q;
 	std::vector<double> V(6*32);
+	std::vector<double> V_first_row(6);
 	std::vector<double> ubar(32);
 	std::vector<double> p(6);
 
@@ -74,6 +86,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 				V[5*m+j] = (cells.camb[i-1 + 2*cells.nc] - 2*cells.cy[i-1]*y0 + y0*y0) / (h*h);
 			}
 
+			// riempi V_first_row (utile solo se least_squares_type == 'C')
+			for (size_t j = 0; j < 6; j++) {
+				V_first_row[j] = V[j*m];
+			}
+
 			// riempi ubar
 			ubar.reserve(m);
 			for (size_t j = 0; j < m; j++) {
@@ -81,12 +98,45 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 				ubar[j] = cells.u[i-1 + l*cells.nc];
 			}
 
-			// risolvi il sistema ai minimi quadrati V * p = ubar.
-			// il contenuto di V e di ubar viene sovrascritto da lapack
-			lapack_int info;
-			info = least_squares(V, ubar, p, m, 6);
-			if (info != 0) {
-				mexErrMsgIdAndTxt("MEX:FVM_error", "Lapack dgels() failed");
+			// ricostruzione ai minimi quadrati
+			if (method.least_squares_type == 'U') {
+				// Unconstrained least squares polynomial reconstruction.
+				// Risolvi il sistema ai minimi quadrati V * p = ubar.
+				// Il contenuto di V e di ubar viene sovrascritto da lapack.
+				lapack_int info;
+				info = least_squares(V, ubar, p, m, 6);
+				if (info != 0) {
+					mexErrMsgIdAndTxt("MEX:FVM_error", "Lapack dgels() failed");
+				}
+			} else if (method.least_squares_type == 'C') {
+				// Constrained least squares polynomial reconstruction.
+				// Risolvi il sistema ai minimi quadrati V * p = ubar con il
+				// vincolo di stabilità V_first_row * p = ubar[0]. Il contenuto
+				// di V, V_first_row e ubar viene sovrascritto da lapack.
+				lapack_int info;
+				info = least_squares_constrained(V, V_first_row, ubar, p, m, 6);
+				if (info != 0) {
+					mexErrMsgIdAndTxt("MEX:FVM_error", "Lapack dgglse() failed");
+				}
+			} else {
+				// Penalized least squares polynomial reconstruction.
+				// Assegna pesi diversi alle varie equazioni che compongono il sistema
+				// ai minimi quadrati in base alla distanza dal centro dello stencil.
+				for (size_t i = 0; i < m; i++) {
+					uint32_t d = stencil[i].distance;
+					double weight = pow(10,-(double)d);
+					for (size_t j = 0; j < 6; j++) {
+						V[i+j*m] *= weight;
+					}
+					ubar[i] *= weight;
+				}
+				// Risolvi il sistema ai minimi quadrati V * p = ubar.
+				// Il contenuto di V e di ubar viene sovrascritto da lapack.
+				lapack_int info;
+				info = least_squares(V, ubar, p, m, 6);
+				if (info != 0) {
+					mexErrMsgIdAndTxt("MEX:FVM_error", "Weighted lapack dgels() failed");
+				}
 			}
 
 			// per ogni spigolo della cella al centro dello stencil

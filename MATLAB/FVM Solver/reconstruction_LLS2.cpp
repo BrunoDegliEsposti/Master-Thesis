@@ -7,18 +7,20 @@
 #include <algorithm>
 #include "mex.h"
 #include "matrix.h"
-#include "lapacke.h"
 #include "omp.h"
+#include "lapacke.h"
 #include "polymesh_FVM.h"
+#include "method.h"
 #include "reconstruction.h"
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
-// function [up, um] = reconstruction_LLS3P(vertices, edges, cells)
-// ricostruzione Linear Least-Squares di grado 3 Penalized
+// function [up, um] = reconstruction_LLS2(vertices, edges, cells, method)
+// ricostruzione Linear Least-Squares di grado 2
 {
 	VerticesFVM vertices(prhs[0]);
 	EdgesFVM edges(prhs[1]);
 	CellsFVM cells(prhs[2]);
+	Method method(prhs[3]);
 
 	const mwSize up_dims[] = {edges.ne, cells.nu, edges.nq};
 	plhs[0] = mxCreateNumericArray(3, up_dims, mxDOUBLE_CLASS, mxREAL);
@@ -28,15 +30,25 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	plhs[1] = mxCreateNumericArray(3, um_dims, mxDOUBLE_CLASS, mxREAL);
 	double *um = mxGetDoubles(plhs[1]);
 
+	if (method.order != 2) {
+		mexErrMsgIdAndTxt("MEX:FVM_error", "Method.order must be set to 2");
+	}
+
+	char lst = method.least_squares_type;
+	if (lst != 'U' && lst != 'C' && lst != 'P') {
+		mexErrMsgIdAndTxt("MEX:FVM_error", "Method.least_squares_type must be U/C/P");
+	}
+
 	#pragma omp parallel num_threads(8)
 	{
 
 	// variabili di lavoro private di ogni thread
 	Stencil stencil;
 	std::queue<uint32_t> q;
-	std::vector<double> V(6*32);
-	std::vector<double> ubar(32);
-	std::vector<double> p(6);
+	std::vector<double> V(3*16);
+	std::vector<double> V_first_row(3);
+	std::vector<double> ubar(16);
+	std::vector<double> p(3);
 
 	#pragma omp for
 	for (uint32_t i_center = 1; i_center <= cells.nc; i_center++) {
@@ -47,13 +59,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
 		// costruisci lo stencil intorno a i_center
 		bool success;
-		uint32_t min_stencil_size = 6;
-		if (cells.dfb[i_center-1] == 0) {
-			// La dimensione minima dello stencil sulle celle di bordo
-			// viene incrementata per questioni di stabilità
-			min_stencil_size = 7;
-		}
-		success = build_centered_stencil(i_center, min_stencil_size, stencil, q, edges, cells);
+		success = build_centered_stencil(i_center, 3, stencil, q, edges, cells);
 		if (!success) {
 			mexErrMsgIdAndTxt("MEX:FVM_error", "Can't build a large enough stencil");
 		}
@@ -63,15 +69,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 		for (uint32_t l = 0; l < cells.nu; l++)	{
 
 			// riempi V una riga alla volta
-			V.reserve(m*6);
+			V.reserve(m*3);
 			for (size_t j = 0; j < m; j++) {
 				uint32_t i = stencil[j].idx;
 				V[    j] = 1.0;
 				V[  m+j] = (cells.cx[i-1]-x0)/h;
 				V[2*m+j] = (cells.cy[i-1]-y0)/h;
-				V[3*m+j] = (cells.camb[i-1 + 0*cells.nc] - 2*cells.cx[i-1]*x0 + x0*x0) / (h*h);
-				V[4*m+j] = (cells.camb[i-1 + 1*cells.nc] - cells.cx[i-1]*y0 - cells.cy[i-1]*x0 + x0*y0) / (h*h);
-				V[5*m+j] = (cells.camb[i-1 + 2*cells.nc] - 2*cells.cy[i-1]*y0 + y0*y0) / (h*h);
+			}
+
+			// riempi V_first_row (utile solo se least_squares_type == 'C')
+			for (size_t j = 0; j < 3; j++) {
+				V_first_row[j] = V[j*m];
 			}
 
 			// riempi ubar
@@ -81,23 +89,45 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 				ubar[j] = cells.u[i-1 + l*cells.nc];
 			}
 
-			// assegna pesi diversi alle varie equazioni che compongono il sistema
-			// ai minimi quadrati in base alla distanza dal centro dello stencil.
-			for (size_t i = 0; i < m; i++) {
-				uint32_t d = stencil[i].distance;
-				double weight = pow(10,-(double)d);
-				for (size_t j = 0; j < 6; j++) {
-					V[i+j*m] *= weight;
+			// ricostruzione ai minimi quadrati
+			if (method.least_squares_type == 'U') {
+				// Unconstrained least squares polynomial reconstruction.
+				// Risolvi il sistema ai minimi quadrati V * p = ubar.
+				// Il contenuto di V e di ubar viene sovrascritto da lapack.
+				lapack_int info;
+				info = least_squares(V, ubar, p, m, 3);
+				if (info != 0) {
+					mexErrMsgIdAndTxt("MEX:FVM_error", "Lapack dgels() failed");
 				}
-				ubar[i] *= weight;
-			}
-
-			// risolvi il sistema ai minimi quadrati V * p = ubar.
-			// il contenuto di V e di ubar viene sovrascritto da lapack
-			lapack_int info;
-			info = least_squares(V, ubar, p, m, 6);
-			if (info != 0) {
-				mexErrMsgIdAndTxt("MEX:FVM_error", "Weighted lapack dgels() failed");
+			} else if (method.least_squares_type == 'C') {
+				// Constrained least squares polynomial reconstruction.
+				// Risolvi il sistema ai minimi quadrati V * p = ubar con il
+				// vincolo di stabilità V_first_row * p = ubar[0]. Il contenuto
+				// di V, V_first_row e ubar viene sovrascritto da lapack.
+				lapack_int info;
+				info = least_squares_constrained(V, V_first_row, ubar, p, m, 3);
+				if (info != 0) {
+					mexErrMsgIdAndTxt("MEX:FVM_error", "Lapack dgglse() failed");
+				}
+			} else {
+				// Penalized least squares polynomial reconstruction.
+				// Assegna pesi diversi alle varie equazioni che compongono il sistema
+				// ai minimi quadrati in base alla distanza dal centro dello stencil.
+				for (size_t i = 0; i < m; i++) {
+					uint32_t d = stencil[i].distance;
+					double weight = pow(10,-(double)d);
+					for (size_t j = 0; j < 3; j++) {
+						V[i+j*m] *= weight;
+					}
+					ubar[i] *= weight;
+				}
+				// Risolvi il sistema ai minimi quadrati V * p = ubar.
+				// Il contenuto di V e di ubar viene sovrascritto da lapack.
+				lapack_int info;
+				info = least_squares(V, ubar, p, m, 3);
+				if (info != 0) {
+					mexErrMsgIdAndTxt("MEX:FVM_error", "Weighted lapack dgels() failed");
+				}
 			}
 
 			// per ogni spigolo della cella al centro dello stencil
@@ -113,7 +143,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 						double csi = (node.x - x0) / h;
 						double eta = (node.y - y0) / h;
 						size_t idx = e-1 + l*edges.ne + k*edges.ne*cells.nu;
-						up[idx] = p[0] + p[1]*csi + p[2]*eta + p[3]*csi*csi + p[4]*csi*eta + p[5]*eta*eta;
+						up[idx] = p[0] + p[1]*csi + p[2]*eta;
 					}
 				} else if (e < 0) {
 					// per ogni nodo di quadratura
@@ -124,13 +154,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 						double csi = (node.x - x0) / h;
 						double eta = (node.y - y0) / h;
 						size_t idx = -e-1 + l*edges.ne + k*edges.ne*cells.nu;
-						um[idx] = p[0] + p[1]*csi + p[2]*eta + p[3]*csi*csi + p[4]*csi*eta + p[5]*eta*eta;
+						um[idx] = p[0] + p[1]*csi + p[2]*eta;
 					}
 				}
 			}
 		}
 	}
-	
+
 	// fine del blocco omp parallel
 	}
 }

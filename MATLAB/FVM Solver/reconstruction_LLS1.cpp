@@ -6,13 +6,15 @@
 #include "matrix.h"
 #include "omp.h"
 #include "polymesh_FVM.h"
+#include "method.h"
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
-// function [up, um] = reconstruction_LLS1(vertices, edges, cells)
+// function [up, um] = reconstruction_LLS1(vertices, edges, cells, method)
 {
 	VerticesFVM vertices(prhs[0]);
 	EdgesFVM edges(prhs[1]);
 	CellsFVM cells(prhs[2]);
+	Method method(prhs[3]);
 
 	const mwSize up_dims[] = {edges.ne, cells.nu, edges.nq};
 	plhs[0] = mxCreateNumericArray(3, up_dims, mxDOUBLE_CLASS, mxREAL);
@@ -21,6 +23,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	const mwSize um_dims[] = {edges.ne, cells.nu, edges.nq};
 	plhs[1] = mxCreateNumericArray(3, um_dims, mxDOUBLE_CLASS, mxREAL);
 	double *um = mxGetDoubles(plhs[1]);
+
+	if (method.order != 1) {
+		mexErrMsgIdAndTxt("MEX:FVM_error", "Method.order must be set to 1");
+	}
 
 	#pragma omp parallel num_threads(8)
 	{

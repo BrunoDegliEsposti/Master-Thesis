@@ -21,19 +21,17 @@ struct EdgesFVM: Edges {
 
 	EdgesFVM(const mxArray *in): Edges(in)
 	{
-		nq = (uint32_t)mxGetScalar(mxGetField(in,0,"nq"));
+		mxArray *nq_field = mxGetField(in,0,"nq");
+		if (nq_field == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges has no field nq");
+		nq = (uint32_t)mxGetScalar(nq_field);
 		qx = mxGetDoubles(mxGetField(in,0,"qx"));
+		if (qx == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges.qx is NULL");
 		qw = mxGetDoubles(mxGetField(in,0,"qw"));
+		if (qw == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges.qw is NULL");
 		up = mxGetDoubles(mxGetField(in,0,"up"));
 		um = mxGetDoubles(mxGetField(in,0,"um"));
 		tnf = mxGetDoubles(mxGetField(in,0,"tnf"));
 		mws = mxGetDoubles(mxGetField(in,0,"mws"));
-		if (qx == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges.qx is NULL");
-		if (qw == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges.qw is NULL");
-		// if (up == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges.up is NULL");
-		// if (um == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges.um is NULL");
-		// if (tnf == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges.tnf is NULL");
-		// if (mws == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "edges.mws is NULL");
 	}
 };
 
@@ -47,8 +45,11 @@ struct CellsFVM: Cells {
 
     CellsFVM(const mxArray *in): Cells(in)
     {
-    	nu = (uint32_t)mxGetScalar(mxGetField(in,0,"nu"));
+    	mxArray *nu_field = mxGetField(in,0,"nu");
+    	if (nu_field == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells has no field nu");
+    	nu = (uint32_t)mxGetScalar(nu_field);
     	u = mxGetDoubles(mxGetField(in,0,"u"));
+    	if (u == nullptr) mexErrMsgIdAndTxt("MEX:nullptr", "cells.u is NULL");
     	mws = mxGetDoubles(mxGetField(in,0,"mws"));
     	camb = mxGetDoubles(mxGetField(in,0,"camb"));
     }

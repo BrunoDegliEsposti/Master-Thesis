@@ -32,7 +32,8 @@ bc{1} = 'absorbing';
 % Scelta dei metodi numerici
 method.nq = 1;
 method.order = 2;
-method.reconstruction_strategy = @reconstruction_LLS2P;
+method.reconstruction_strategy = @reconstruction_LLS2;
+method.least_squares_type = 'P';
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;

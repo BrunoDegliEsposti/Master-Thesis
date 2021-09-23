@@ -15,7 +15,8 @@ function [vertices,edges,cells,Lu,dt] = FVM(vertices,edges,cells,method,t)
 
     % Ricostruzione di u_plus e u_minus sui due lati di ogni spigolo,
     % tranne i lati esterni degli spigoli di bordo
-    [edges.up, edges.um] = method.reconstruction_strategy(vertices,edges,cells);
+    [edges.up, edges.um] = method.reconstruction_strategy(...
+        vertices,edges,cells,method);
 
     % Condizioni al bordo al tempo t con approccio weak-riemann:
     % calcolo di u_minus sul lato esterno di ogni spigolo di bordo
