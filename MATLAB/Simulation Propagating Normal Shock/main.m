@@ -10,6 +10,7 @@ addpath('../Euler Equation');
 addpath('../FVM Solver');
 addpath('../Geometry');
 addpath('../Meshes');
+addpath('../Simulation ShockTube');
 
 % Definizione dell'equazione differenziale
 flux = @euler_flux2D;
@@ -27,7 +28,7 @@ u_right = u_from_rhovp([1,0,0,1/adiabatic_index]);
 u0 = @(x,y) u_left.*(x<0) + u_right.*(x>=0);
 
 % Definizione del dominio discreto e dell'IVBP
-polysoup = polysoup_from_grid(128,64,-1,-0.5,2,1);
+polysoup = polysoup_from_grid(512,11,-1,-11/512,2,22/512);
 [vertices,edges,cells] = polymesh_from_polysoup(polysoup);
 j = edge_select_on_boundary(vertices,edges, @(x,y) x < -1+1e-8);
 edges.type(j) = 2;
@@ -45,10 +46,12 @@ bc{3} = u_right;
 method.nq = 1;
 method.order = 1;
 method.reconstruction_strategy = @reconstruction_LLS1;
+%method.WENO_epsilon = 1e-6 * median(cells.h)^2;
+%method.WENO_power = 4;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK11;
+method.ODE_solver = @SSPRK11_periodic;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica
