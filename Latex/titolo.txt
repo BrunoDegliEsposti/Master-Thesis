@@ -16,3 +16,13 @@ using WENO reconstructions on polygonal meshes.
 
 Approssimazione numerica delle equazioni di Eulero 2D
 mediante ricostruzioni WENO su mesh poligonali.
+
+
+
+
+
+Numerical solution of the 2D compressible Euler equations
+using WENO reconstructions on polygonal meshes.
+
+Soluzione numerica delle equazioni di Eulero 2D
+mediante ricostruzioni WENO su meshes poligonali.

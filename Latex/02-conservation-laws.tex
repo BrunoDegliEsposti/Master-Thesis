@@ -1,0 +1,197 @@
+\chapter{Systems of conservation laws}  \label{ch:conservation-laws}
+
+%Compressible Euler equations are better understood in the more general framework
+%of \emph{hyperbolic systems of conservation laws}. The same framework
+%is also one of the most general ones to which the numerical methods
+%of Chapters 3 and 4 can be applied without substantial changes,
+%hence it deserves an adequate introduction. In the next chapter,
+%the basic results of the theory of hyperbolic systems of conservation laws
+%will be presented.
+
+The theory of \emph{hyperbolic systems of conservation laws}
+is the branch of mathematical analysis that investigates
+partial differential equations of the form
+\begin{equation} \label{eq:hscl-vectorial}
+\partial_t \vec{u}(\vec{x},t) + \diver(\tns{F}(\vec{u}(\vec{x},t))) = 0,
+\end{equation}
+or generalizations thereof,
+with $\vec{x} \in \Omega \subseteq \R^n$, $t \geq 0$ and
+$\vec{u} \in \mathcal{U} \subseteq \R^m$.
+$\tns{F}(\vec{u})$ is a (possibly) nonlinear function
+known as \emph{flux}, which fully characterizes the equation and,
+crucially, only depends on $\vec{u}$, and not any of its higher order
+% derivatives $\nabla\vec{u}$, $\nabla^2\vec{u}$, etc.
+derivatives: this means that equation
+\eqref{eq:hscl-vectorial} is a first-order system.
+
+The theory dates back to the works of Euler, who in the 1750s
+first used the principle of conservation of mass and momentum
+to describe the motion of an ideal fluid.
+Since thermodynamics was still in its infancy at the time,
+Euler and other scholars worked under the assumption of incompressible
+flows; it was only later that the first system of conservation laws was
+obtained, by working under the assumption of barotropic flow
+(i.e.\ that pressure in a gas is a function of its density only).
+By the mid-19th century, the latter assumption was generalized to
+a principle of conservation of energy, and the full compressible Euler
+equations of Chapter 1 were obtained.
+
+It is fair to say that, throughout the 19th century, the field
+of hyperbolic systems of conservation laws (which at the time was just
+analytical gas dynamics) and the field of thermodynamics evolved together.
+By the end of the century, the study of conservation laws
+had already found numerous applications in the mathematical modelling
+of combustion, detonation, and aerodynamics, which are still
+relevant to this day.
+In the 1940s, all the existing theory was summarized and consolidated
+in a highly influential book by Courant and Friedrichs
+\cite{courant-friedrichs}; after that, works by Hopf and Lax~\cite{hopf,lax}
+in the 1950s layed the foundations for the present state of the art
+in the theory of hyperbolic systems of conservation laws,
+using modern analytical techniques.
+
+In the following 70 years, groundbreaking results were obtained
+by authors such as Glimm, Kruzhkov, Bressan, just to name a few.
+Nevertheless, the theory of hyperbolic systems of conservation laws is still
+very far from being complete, as many fundamental open problems remain
+unsolved: among them, the problem of global existence of weak
+solutions in the $m,n > 1$ case and the problem of uniqueness of weak solutions.
+%using some sort of generalization of the second principle of thermodynamics.
+In the words of Constantine Dafermos, whose excellent monograph \cite{dafermos}
+was used as a reference to write this chapter,
+\begin{quoting}
+\textit{The Cauchy problem in the large [\dots]
+%may be considered only in the context of weak solutions. This
+is still terra incognita for systems of more
+than one equation in several space dimensions, as the analysis is at
+present facing seemingly insurmountable obstacles. It may turn out that
+the Cauchy problem is not generally well-posed, either because of
+catastrophic failure of uniqueness, or because distributional solutions
+fail to exist. In the latter case one would have to resort to the class
+of weaker, measure-valued solutions. It is even conceivable that
+hyperbolic systems should be perceived as mere shadows, in the Platonic sense,
+of diffusive systems with minute viscosity or dispersion.}
+\end{quoting}
+In this chapter, we provide a brief overview of the theory of hyperbolic
+systems of conservation laws, with a focus on the qualitative properties
+of the solutions, the local well-posedness theory in the smooth~$m,n > 1$ case,
+and everything else we consider relevant as a background for the development
+of effective numerical schemes.
+%Other books that proved useful were the ones by \dots
+
+\section{Definitions and technical assumptions}
+
+First of all, we shall make it clear how the divergence operator
+is used in equation \eqref{eq:hscl-vectorial}.
+To do so, we switch to tensorial notation and make everything explicit:
+\begin{equation} \label{eq:hscl-tensorial}
+\partial_t \vec{u}^i(\vec{x},t) + \partial_j (\tns{F}^{ij}(\vec{u}(\vec{x},t))) = 0
+\quad \text{for each $i = 1, \dots, m$.}
+\end{equation}
+As a remainder, $\vec{x} \in \Omega \subseteq \R^n$, $t \geq 0$ and
+$\vec{u} \in \mathcal{U} \subseteq \R^m$.
+Once again, we refer to Appendix A for a brief introduction
+to tensors and their notation.
+Each of the $m$ unknowns $\vec{u}^i(\vec{x},t)$ is known as
+\emph{conserved variable}, for reasons which will be explained shortly;
+the whole vector $\vec{u}(\vec{x},t)$ at each point in space and time must belong
+to an open set of admissible values $\mathcal{U}$.
+The flux function $\tns{F}(\vec{u})$, whose domain is $\mathcal{U}$,
+is a smooth tensor field with values in $\R^m \otimes \R^n$,
+and the divergence operator is applied with respect
+to its $j$ index, which is the one associated to the number
+of spatial dimensions $n$ (whereas $i$ is associated to the number of
+scalar conservation laws $m$).
+
+By the chain rule, equation \eqref{eq:hscl-tensorial} is equivalent
+for regular solutions to the quasilinear system
+\begin{equation} \label{eq:hscl-quasilinear-tensorial}
+\partial_t \vec{u}^i(\vec{x},t)
++  \partial_k \tns{F}^{ij} (\vec{u}(\vec{x},t))
+\, \partial_j \vec{u}^k (\vec{x},t) = 0
+\quad \text{for each $i = 1, \dots, m$.}
+\end{equation}
+If, for any fixed $j$, we denote the $m \times m$ Jacobian matrix
+$\partial_k \tns{F}^{ij}$ by $d\tns{F}^j$, then the quasilinear system
+can be expressed in the more readable vectorial notation as
+\begin{equation} \label{eq:hscl-quasilinear-vectorial}
+\partial_t \vec{u}(\vec{x},t)
++ \sum_{j=1}^n d\tns{F}^j(\vec{u}(\vec{x},t))
+\, \partial_j \vec{u}(\vec{x},t) = 0.
+\end{equation}
+New we are ready to introduce the fundamental, albeit technical,
+assumption of \emph{hyperbolicity}:
+
+\begin{defi}[Hyperbolic system]
+The quasilinear system \eqref{eq:hscl-quasilinear-vectorial},
+and by extension system \eqref{eq:hscl-vectorial} in divergence form,
+are \emph{hyperbolic} if, for all versors $\vec{\nu}$ in $\R^n$ and all state
+vectors $\vec{u}$ in $\mathcal{U}$, the matrix
+\[
+d\mat{F}(\vec{\nu},\vec{u}) \deq \sum_{j=1}^n \vec{\nu}^j d\mat{F}^j(\vec{u})
+\]
+known as \emph{Jacobian of the flux in the direction of $\vec{\nu}$},
+is diagonalizable with real eigenvalues
+\[
+\lambda_1(\vec{\nu},\vec{u}) \leq \dots \leq \lambda_m (\vec{\nu},\vec{u}).
+\]
+If the eigenvalues are distinct for all values of $\vec{\nu}$ and $\vec{u}$,
+an assumption known as \emph{strong hyperbolicity},
+or if their multiplicities are at least constant, an assumption
+known as \emph{constant hyperbolicity}, then it is possible to
+prove the local existence of smooth right-eigenvector fields
+\[
+R_1(\vec{\nu},\vec{u}), \dots, R_m (\vec{\nu},\vec{u}).
+\]
+\end{defi}
+
+
+
+\clearpage
+
+% definition of hyperbolicity
+% uniform qualitative properties (elliptic have instantaneous propagation etc)
+% motivation using well-posedness of linear problem
+% motivation using plane waves
+% simmetrizable
+% convex entropy
+% chain of implications
+
+\subsection*{The case of 2D compressible Euler equations}
+
+In the case of the 2D compressible Euler equations, we require that
+mass density $\rho(\vec{x},t)$ and total energy density $e(\vec{x},t)$
+are strictly positive, hence
+$\mathcal{U} = (0,+\infty) \times \R^2 \times (0,+\infty)$.
+These assumptions on the conserved variables also imply that
+other physical quantities like temperature and pressure are strictly
+positive.
+% euler equations in quasilinear form
+% eigenstructure of Euler equations (page 104 Toro)
+% entropy / entropy flux pair, convexity
+
+\section{Qualitative properties of the solutions}
+% conservation
+% plane waves + information propagates at a finite speed (theorem 4.1.1)
+% breakdown of classical solutions (burgers)
+
+\section{Weak solutions}
+% definition of weak solution
+% rankine-hugoniot
+% weak solutions are not unique
+% different kinds of discontinuities; definition of shocks
+% no proof of convergence for numerical schemes
+
+\section{Boundary conditions}
+% eh allora, praticamente
+
+
+
+
+
+
+
+
+
+
+

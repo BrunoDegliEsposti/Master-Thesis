@@ -1,0 +1,308 @@
+\chapter{Tensor calculus}  \label{ch:appendix-tensors}
+
+A matrix is more than just a 2D array of numbers: a matrix represents
+a linear transformation between vector spaces.
+If we choose different basis for the vector spaces, then the entries of the matrix
+must change accordingly, so that the underlying transformation remains
+the same: in some sense, the two changes must cancel out.
+
+Likewise, a tensor is more than just an $n$-dimensional array of numbers:
+a tensor represents an element of the tensorial product of two or more
+vector spaces with respect to a (tensorial) basis.
+Once again, the key difference is that the entries of a tensor must
+change in a well-defined way every time a different basis is chosen
+for the vector spaces. This is why it is quite common in physics and other sciences
+to define tensors as \emph{anything that transforms like a tensor},
+without getting into the details of how the tensor product is really defined
+or how tensors could be introduced in a coordinate-free way.
+
+It should be clear already that the same word, \emph{tensor},
+has two slightly different meanings: a tensor can be the element
+of the tensor product of two or more vector spaces (i.e.\ an intrinsic object),
+but also its representation with respect to a fixed tensorial basis
+(i.e.\ an array of real numbers).
+As a rule of thumb, the first definition is better suited for proofs,
+whereas the second one is better suited for calculations.
+In the following, we will switch back and forth between the two
+definitions; in Chapter 2, however, the word \emph{tensor} always has
+the latter meaning.
+Sometimes, a \emph{tensor field} (that is, a map which assigns
+a tensor to each point of a domain) will also be referred to as a tensor.
+This is why we speak of \emph{stress tensor} in a continuum instead of
+\emph{stress tensor field}, for example.
+
+%The rest of the appendix is organized as follows.
+%First, the tensor product of two vector spaces is defined in the case in
+%which a basis is fixed on both spaces (a coordinate-free definition
+%would be too abstract for our purposes).
+%Second, the standard notation of tensorial calculus is introduced,
+%including the Einstein summation convention.
+%Lastly, we explain how the entries of a tensor change when
+%a different basis is chosen for the vector spaces on which the
+%tensor is defined.
+
+\subsection*{Definition of tensor product}
+
+Let $U,V$ be finite dimensional real vector spaces with basis
+$\{\vec{u}_i\}_{i = 1,\dots,m}$ and $\{\vec{v}_j\}_{j = 1,\dots,n}$, respectively.
+We define the vectorial space $U \otimes V$ as the space of formal
+linear combinations of the elements $\vec{u}_i \otimes \vec{v}_j$,
+which by definition will then form a basis of $U \otimes V$.
+Moreover, we endow the space $U \otimes V$ with a map
+\[
+\varphi \colon U \times V \to U \otimes V
+\qquad
+\varphi(\vec{u}_i,\vec{v}_j) = \vec{u}_i \otimes \vec{v}_j
+\]
+extended by bilinearity on the whole domain,
+which allows us to give meaning to the expression $\vec{u} \otimes \vec{v}$
+for all $\vec{u}$ in $U$ and all $\vec{v}$ in $V$: $\vec{u} \otimes \vec{v}$
+is simply $\varphi(\vec{u},\vec{v})$.
+
+It is a universal property of the tensor product that every bilinear map
+$h \colon U \times V \to \R$ can be factored uniquely as the composition of
+$\varphi$ and a linear map $\tilde{h} \colon U \otimes V \to \R$.
+The vector space $U \otimes V$ has dimension $mn$, so it is trivially isomorphic
+to the space $V \otimes U$. However, by using the coordinate-free definition
+of tensor product, it is possible to prove that this isomorphism is canonical,
+i.e.\ it can be defined without fixing any base on $U$ and $V$.
+Likewise, it is also possible to prove that the space $(U \otimes V) \otimes W$
+is canonically isomorphic to $U \otimes (V \otimes W)$: this means that the tensor
+product is both commutative and associative.
+
+\subsection*{Type $(r,s)$ tensors}
+
+Let $V^*$ be the dual space of $V$, and let $\{\vec{v}^j\}$ be the dual basis
+on $V^*$ (that is, the basis of functionals such that
+$\vec{v}^j(\vec{v}_k) = \delta_{jk}$).
+Commutativity and associativity of the tensor product together imply that,
+in the definition of the following space, there is no loss of generality
+given by the order of the factors involved:
+\[
+T^r_s(V) = \underbrace{V \otimes \dots \otimes V}_{\text{$r$ times}}
+\otimes
+\underbrace{V^* \otimes \dots \otimes V^*}_{\text{$s$ times}}
+\]
+An element of the space $T_s^r(V)$ is known as \emph{type $(r,s)$ tensor}
+on the space $V$. By definition, a type $(0,0)$ tensor is a scalar,
+a type $(1,0)$ tensor is a vector, and a type $(0,1)$ tensor is a covector.
+Tensor fields in differential geometry, continuum mechanics,
+etc, are usually type $(r,s)$ tensors on the tangent space of some manifold.
+
+Let $\tns{T}$ be an element of the space $T_s^r(V)$.
+The representation of the tensor $\tns{T}$ with respect to the
+tensorial basis
+\[
+\vec{v}_{i_1} \otimes \dots \otimes \vec{v}_{i_r}
+\otimes
+\vec{v}^{j_1} \otimes \dots \otimes \vec{v}^{j_s}
+\]
+is given by the $n^{r+s}$ scalars $\tns{T}^{i_1 \dots i_r}_{j_1 \dots j_s}$
+such that
+\[
+\tns{T} = \sum_{i_1=1}^n \dots \sum_{i_r=1}^n \;\;
+\sum_{j_1=1}^n \dots \sum_{j_s=1}^n \;\;
+\tns{T}^{i_1 \dots i_r}_{j_1 \dots j_s} \;\;
+\vec{v}_{i_1} \otimes \dots \otimes \vec{v}_{i_r}
+\otimes
+\vec{v}^{j_1} \otimes \dots \otimes \vec{v}^{j_s}.
+\]
+The indices $i_1, \dots, i_r$ are known as \emph{contravariant indices},
+and are always written as superscripts, whereas the indices $j_1, \dots, j_s$
+are known as \emph{covariant indices}, and are always written as subscripts.
+Hence, the type of a tensor can be deduced by counting the number
+of superscripts and subscripts. Sometimes, uppercase multi-indices are
+used in order to group indices and simplify notation:
+\[
+\tns{T} = \sum_{I \in [1,n]^r} \; \sum_{J \in [1,n]^s}
+\tns{T}^I_J \;\; \vec{v}_I \otimes \vec{v}^J
+\]
+
+\subsection*{Contraction of tensors}
+
+The most important operation involving tensors is \emph{contraction}.
+Let $\tns{T}$ be a tensor of type $(r,s)$ with $r,s \geq 1$, let
+$i$ be one of its contravariant indices and let $j$ be one of its
+covariant indices.
+The contraction of $\tns{T}$ with respect to $i$ and $j$ is the tensor
+of type $(r-1,s-1)$ obtained by substituting $i$ and $j$ with
+a common index (say, $k$) and then summing over it:
+\begin{equation} \label{eq:def-contraction}
+\tns{T}^{\dots i \dots}_{\dots j \dots}
+\quad \longrightarrow \quad
+\tns{T}^{\dots k \dots}_{\dots k \dots}
+\quad \longrightarrow \quad
+\sum_{k=1}^n \tns{T}^{\dots k \dots}_{\dots k \dots}
+\end{equation}
+The fact that contraction produces a tensor and not just any multidimensional
+array of numbers is a remarkable property. The most elegant way to prove
+it would be to define contraction in an intrinsic way, using the
+natural pairing of a vector space with its dual, and then to show
+that this abstract definition corresponds to \eqref{eq:def-contraction}
+as soon as a basis is fixed on $V$. For the sake of brevity, however,
+we shall skip this proof.
+
+Whenever two tensors of type $(p,q)$ and $(r,s)$ are written
+one next to the other with no indices in common, they can be thought
+of as a single tensor of type $(p+r,q+s)$, whose elements are
+the product of the elements of the two tensors with corresponding indices:
+\[
+\tns{A} \in T^p_q(V), \; \tns{B} \in T^r_s(V) \qquad
+(\tns{AB})^{IK}_{JL} = \tns{A}^I_J \tns{B}^K_L
+\]
+This operation is known as \emph{outer product}, and sometimes
+it is written explicitely using the tensor product symbol $\otimes$.
+If one contravariant index of a tensor is labeled with the same letter
+as one covariant index of the other tensor, however,
+contraction is implied and a tensor of type $(p+r-1,q+s-1)$ is produced.
+This is known as \emph{Einstein summation convention}, and allows us
+to drastically reduce the number of summation symbols required
+to write most tensorial identities. For example, the contraction
+$\sum_{j=1}^n \tns{A}^i_j \tns{v}^j$
+can be written more succintly as $\tns{A}^i_j \tns{v}^j$.
+This contraction of a type $(1,1)$ tensor with a type $(1,0)$ tensor
+(which, by definition, is just a vector) is particularly meaningful:
+the result is again a type $(1,0)$ tensor, so we have shown that a type
+$(1,1)$ tensor can be naturally though of as a linear application from $V$
+to itself. Following this idea, it is possible to prove that the space
+$T^1_1(V)$ is canonically isomorphic to the space of linear operators on $V$,
+and that, once a basis is fixed on $V$, a type $(1,1)$ tensor is just a matrix.
+It is in this sense that contravariant indices and covariant indices
+of tensors can be understood as generalizations of column indices
+and row indices of matrices, respectively.
+
+\subsection*{Change of basis formula}
+
+Let $\{\tilde{\vec{v}}_j\}_{j = 1,\dots,n}$ be another basis on $V$,
+and let $\mat{M}$ be the change of basis matrix from $\{\vec{v}_j\}$
+to $\{\tilde{\vec{v}}_j\}$, i.e.\ the matrix such that
+\[
+\tilde{\vec{v}}_j = \sum_{k=1}^n \mat{M}^k_j \vec{v}_k.
+\]
+Let $\tns{T}^{i_1 \dots i_r}_{j_1 \dots j_s}$ be the representation
+of a type $(r,s)$ tensor $\tns{T}$ with respect to the basis $\{\vec{v}_j\}$.
+Then, it can be proved that the representation of the same tensor $\tns{T}$
+with respect to the new basis $\{\tilde{\vec{v}}_j\}$ is given by
+\begin{equation} \label{eq:tensor-change-of-basis}
+\tilde{\tns{T}}^{k_1 \dots k_r}_{\ell_1 \dots \ell_s}
+= \tns{T}^{i_1 \dots i_r}_{j_1 \dots j_s} \,
+(\tns{M}^{-1})_{i_1}^{k_1} \dots (\tns{M}^{-1})_{i_r}^{k_r} \,
+\tns{M}^{j_1}_{\ell_1} \dots \, \tns{M}^{j_s}_{\ell_s}.
+\end{equation}
+The converse is also true: if a multidimensional array of numbers
+satisfies this change of basis formula, then the array is a tensor
+(that is, there exists an \emph{intrinsic} tensor in $T^r_s(V)$ whose
+representation is given by the array). This gives us another way of proving
+that contraction, as defined above, is a well-defined operation.
+On the other hand, it's easy to see that contraction with respect
+to a pair of contravariant indices or a pair of covariant indices would be
+ill-defined, because the result wouldn't transform like a type $(r-2,s)$
+tensor or type $(r,s-2)$ tensor, respectively.
+
+\subsection*{Metric tensor}
+
+The contraction $\tns{A}_{ij} \tns{v}^i \tns{w}^j$, which produces
+a real number, is also of great importance, because it shows
+that the space $T^0_2(V)$ is canonically isomorphic to
+the space of bilinear forms on $V$. Working with coordinates, this means
+that a type $(0,2)$ tensor like $\tns{A}_{ij}$ is just a Gram matrix.
+
+Let $\langle \cdot, \cdot \rangle$ be a positive-definite scalar product
+on $V$, and let $\mat{G}$ be its Gram matrix with respect to the same
+basis on $V$ that was used to define the tensorial basis on the spaces $T^r_s(V)$.
+Let $\tns{g}_{ij}$ be the type $(0,2)$ tensor associated to $\mat{G}$.
+Then, $\tns{g}_{ij}$ is known as \emph{metric tensor}, and $\tns{g}_{ij}$
+can be used to calculate the scalar product between any two vectors
+$\vec{v}$ and $\vec{w}$:
+\[
+\langle \vec{v}, \vec{w} \rangle = \tns{g}_{ij} \tns{v}^i \tns{w}^j.
+\]
+If the basis on $V$ is orthonormal with respect to the chosen scalar
+product, then the metric tensor is given by Knonecker's delta:
+$\tns{g}_{ij} = \delta_{ij}$. The metric tensor can also be used
+to \emph{lower} an index of a tensor. Let $\tns{A}^{Ik}_J$ be
+any type $(r+1,s)$ tensor with at least one contravariant index,
+in this case~$k$. Then, if we contract $\tns{A}$ with $\tns{g}$ we
+say that we are \emph{lowering} the index $k$, as a new tensor $\tns{B}$
+of type $(r,s+1)$ is produced:
+\[
+\tns{B}^I_{J \ell} = \tns{A}^{Ik}_J \tns{g}_{k \ell}.
+\]
+The name of this operation comes from the fact that, in the common case in which
+the metric tensor is equal to Knonecker's delta, the result is obtained by
+literally lowering the index $k$. However, in the general case, the
+presence of the metric tensor is required to ensure that the result
+satisfies the change of basis formula \eqref{eq:tensor-change-of-basis}
+(in other words, that the operation is intrinsic).
+
+The metric tensor $\tns{g}_{ij}$ has an inverse, namely $\tns{g}^{jk}$,
+that satisfies the identity $\tns{g}_{ij} \tns{g}^{jk} = \delta_{ik}$
+and that is given by the inverse of the Gram matrix $\mat{G}$
+(this is always possible, because $\mat{G}$ is positive definite).
+The inverse of the metric tensor can be used to \emph{raise} indices
+in the same way that the metric tensor can be used to lower indices.
+
+We've seen that contraction of a tensor is only well-defined when
+a contravariant index is paired with a covariant one.
+However, by lowering or raising indices appropriately first, contraction
+can also be done with respect to a pair of contravariant indices
+or covariant ones: the presence of the metric tensor or its inverse
+makes the change of basis formula hold this time.
+
+\subsection*{Differential operators}
+
+Let $\tns{T}^I_J(\vec{x})$ be a type $(r,s)$ tensor field on an open subset
+of $\R^n$ (the more general case of a differential manifold
+is not needed for our purposes), let $V = \R^n$ and
+let $\{\vec{e}_k\}_{k = 1,\dots,n}$ be the canonical basis of $\R^n$.
+Just like with scalar and vector fields, the $k$-th partial derivative
+$\partial_k \tns{T}^I_J$ of the tensor field $\tns{T}^I_J$ in $\vec{x}$
+can be defined as the limit
+\[
+\partial_k \tns{T}^I_J(\vec{x})
+= \lim_{h \to 0} \frac{
+	\tns{T}^I_J(\vec{x}+h\vec{e}_k) - \tns{T}^I_J(\vec{x})
+	}{h},
+\]
+provided that such a limit exists (i.e.\ the tensor field is sufficiently
+regular). Partial derivatives are linear operators and satisfy the product
+rule and the chain rule. The fact that $k$ is written as a subscript
+is not by chance: it can be proved that $\partial_k \tns{T}^I_J(\vec{x})$
+is a type $(r,s+1)$ tensor field, called \emph{total derivative}
+of $\tns{T}^I_J(\vec{x})$. The \emph{gradient} of a tensor field is
+defined by raising the covariant index $k$ using the metric tensor:
+\[
+\nabla \tns{T}^I_J(\vec{x}) = \partial^k \tns{T}^I_J(\vec{x}).
+\]
+In this way, we generalize to tensors the fact that the gradient of
+a scalar field is a column vector, whereas the total derivative
+(or \emph{total differential}) of a scalar field is a row vector.
+
+The divergence of a tensor field can be defined by pointwise
+contraction of a contravariant index of the tensor field with
+the covariant index of $\partial_k$. For example, given a vector
+field $\vec{v}^j(\vec{x})$, its divergence $\diver(\vec{v})$
+is the scalar field $\partial_k \vec{v}^k(\vec{x})$.
+When the tensor field has more than one contravariant index, then
+a subscript can be added to $\diver(\cdot)$ for additional clarity:
+compare $\diver_i(\tns{T}^{ij})$ with $\diver_j(\tns{T}^{ij})$.
+
+% div, divergence theorem with dot product
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

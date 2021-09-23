@@ -1,0 +1,1085 @@
+\chapter{Equazioni di Eulero} \label{ch:euler-equations}
+
+Questa è una prima stesura del capitolo sulle equazioni di Eulero.
+L'introduzione e il paragrafo 1.3 sono un po' da rivedere,
+anche in funzione di quello che verrà scritto in futuro,
+mentre il resto mi sembra abbastanza completo.
+\vspace{1em}
+
+%	La fluidodinamica moderna, 
+%	
+%	nacque alle ...
+%	con l'introduzione da parte di Eulero delle equazioni
+%	che ancora oggi portano il suo nome.
+%	Le equazioni di Eulero, inizialmente formulate soltanto
+%	per fluidi incomprimibili o gas barotropici,
+%	furono poi estese al caso di 
+%	
+%	L?introduzione delle equazioni di Eulero alla fine del ...
+%	segna l'inizio della fluidodinamica moderna,
+%	basata su un approccio differenziale locale,
+%	fondata sulla matematica delle equazioni alle derivate perziali.
+%	
+%	
+%	
+%	Ancora oggi le equazioni di Eulero mantengono grande importanza
+%	sia nelle 
+%	
+%	Le equazioni di Eulero sono un sistema di equazioni
+%	alle derivate parziali introdotto per la prima volta da Eulero
+%	...
+%	e in seguito generalizzato a qualunque flusso adiabatico e non viscoso,
+%	cioè flusso in cui si possono trascurare le in assenza di scambio di calore
+%	e di forze di attrito interne al fluido.
+
+In fluidodinamica, le \emph{equazioni di Eulero per fluidi compressibili}
+sono un sistema di equazioni alle derivate parziali
+adatto a descrivere il moto di un fluido di densità variabile nelle ipotesi
+semplificative di flusso non viscoso e adiabatico, vale a dire
+in assenza di forze d'attrito interne al fluido o trasmissione di calore.
+Rispetto ad altri modelli fluidodinamici più completi,
+% vedi paragrafo 2.3.2 di "un approccio libero ecc"
+% e la pagina wikipedia sull'inviscid flow.
+come le equazioni di Navier-Stokes, queste ipotesi rendono
+le equazioni di Eulero totalmente prive di termini diffusivi,
+cosicché la loro dinamica è governata interamente da termini del primo ordine
+di tipo convettivo non lineare. Quest'ultimi
+conferiscono alle equazioni di Eulero un carattere puramente iperbolico
+e permettono la formazione e la propagazione di discontinuità durante il moto.
+(qui probabilmente commento sul fatto che la ricerca di metodi numerici in grado di
+preservare al meglio tali discontinuità sia un argomento chiave
+di questo lavoro \dots)
+
+In letteratura esistono più versioni delle equazioni di Eulero.
+A distinguerle sono diversi aspetti:
+il numero di dimensioni spaziali lungo le quali avviene il moto,
+le particolari grandezze fisiche associate alle incognite dell'equazione,
+le proprietà termodinamiche del fluido
+e il tipo di interazioni con l'ambiente esterno.
+In questo lavoro ci occuperemo nello specifico delle
+equazioni di Eulero per gas perfetti in $\R^3$ in assenza di forze esterne.
+Sotto tali ipotesi, le equazioni di Eulero formano un sistema di
+cinque equazioni scalari che può essere scritto come
+\emph{sistema iperbolico di leggi di conservazione}
+\begin{equation} \label{eq:sistema-iperbolico-di-leggi-di-conservazione}
+\partial_t u + \diver(F(u)) = 0,
+\end{equation}
+la cui particolare forma esprime in modo esplicito
+la conservazione di quantità fisiche rilevanti,
+quali la massa, la quantità di moto o l'energia.
+È senz'altro notevole che la conservazione di tali quantità
+non sia solo condizione necessaria alla scrittura delle equazioni
+di Eulero (perché è noto che massa, quantità di moto
+ed energia si conservano in un sistema isolato),
+ma sia anche condizione sufficiente: queste leggi
+di conservazione vincolano a tal punto il moto del fluido
+da determinarlo univocamente, perché ne esauriscono tutti i gradi
+di libertà.
+Pertanto, quando più avanti esprimeremo le leggi di conservazione
+in forma differenziale, otterremo un sistema \emph{chiuso} di equazioni
+alle derivate parziali.
+
+Il primo paragrafo di questo capitolo è dedicato a delle nozioni di base
+di meccanica dei continui e di termodinamica.
+Il secondo paragrafo è dedicato all'espressione in forma differenziale
+delle leggi di conservazione della massa, della quantità di moto e
+dell'energia, le quali ci permetteranno di scrivere le equazioni di Eulero
+nella forma \eqref{eq:sistema-iperbolico-di-leggi-di-conservazione}.
+Il terzo paragrafo è in lavorazione \dots
+
+\section{Elements of continuum mechanics and thermodynamics}
+
+\subsection*{Kinematics of a continuum}
+
+The whole field of continuum mechanics is built on the fundamental idea that
+the motion and the deformations of a domain $\Omega$ in $\R^n$
+can be described by applying the principles of mechanics (for our purposes,
+\emph{classical} mechanics) to each of its infinitesimal portions of matter.
+Suppose that in the first instant of motion $t_0$ the continuum is
+in a reference configuration $\Omega_{t_0}$, and that starting from
+$t_0$ each of its infinitesimal portions of matter, which from
+now on we will refer to as \emph{particles}, is moving in $\R^n$
+in a regular and reversible way along a curve. Then, it is well-defined
+and regular (we shall need at least $C^2$ regularity)
+the \emph{trajectory} function
+\[
+\varphi(\vec{X},t) \colon \Omega_{t_0} \times [t_0,+\infty) \to \R^n,
+\]
+which describes the position at time $t \geq t_0$ of the particle which
+was in $\vec{X}$ at time $t_0$. We denote by $\Omega_t$ the portion
+of space that the domain $\Omega$ occupies at time $t$,
+i.e.\ the set $\varphi(\Omega_{t_0},t)$.
+By the assumption that the motion of each particle must be reversible,
+it is also well-defined and regular the \emph{inverse trajectory} function
+\[
+\psi(\vec{x},t) \colon \Omega_t \times [t_0,+\infty) \to \Omega_{t_0},
+\]
+which takes a particle passing through $\vec{x}$ at time $t$ back
+to its starting position in $\Omega_{t_0}$.
+
+Looking at the definitions of $\varphi$ and $\psi$, it is clear that
+\begin{gather*}
+\varphi(\psi(\vec{x},t),t) = \vec{x}
+\quad \text{for each $\vec{x} \in \Omega_t$ and for each $t \geq t_0$,} \\
+\psi(\varphi(\vec{X},t),t) = \vec{X}
+\quad \text{for each $\vec{X} \in \Omega_{t_0}$ and for each $t \geq t_0$.}
+\end{gather*}
+By taking the derivative with respect to $t$ on both sides
+of the second equation and then operating the change of variable
+$\vec{X} = \psi(\vec{x},t)$, we get that
+\begin{equation} \label{eq:phi-psi-funzione-inversa}
+\psi_{\vec{x}}(\vec{x},t) \, \varphi_t(\psi(\vec{x},t),t) + \psi_t(\vec{x},t) = 0.
+\end{equation}
+This identity will be useful later. Let us now see how kinematic quantities
+of the continuum can be expressed through the functions $\varphi$ and $\psi$.
+
+We define the velocity $\vec{v}(\vec{x},t)$ of the continuum as the
+velocity of the particle that passes through $\vec{x}$ at time $t$,
+provided that such a particle exists:
+\[
+\vec{v} \colon \Omega_t \times [t_0,+\infty) \to \R^n
+\qquad \vec{v}(\vec{x},t) = \varphi_t(\psi(\vec{x},t),t).
+\]
+Velocity is therefore the time derivative of the trajectory function $\varphi$
+evaluated at $\vec{X} = \psi(\vec{x},t)$: all trajectories described by $\varphi$
+start from $\Omega_{t_0}$, so we need to trace $\vec{x}$ back to the reference
+configuration $\Omega_{t_0}$ first. This operation is known in the literature as
+the conversion from \emph{Eulerian coordinates} to \emph{Lagrangian coordinates}.
+In this work we have preferred to always keep this conversion explicit
+for additional clarity, however it is a well-established convention in continuum
+mechanics to do it implicitly by treating $\vec{X}$ as a function of $\vec{x}$
+(or vice versa) at every fixed instant in time.
+
+Similarly, we define the acceleration $\vec{a}(\vec{x},t)$ of the continuum as
+\[
+\vec{a} \colon \Omega_t \times [t_0,+\infty) \to \R^n
+\qquad \vec{a}(\vec{x},t) = \varphi_{tt}(\psi(\vec{x},t),t).
+\]
+The function $\psi$ in the definitions of velocity and acceleration
+makes it so that, unlike the motion of a point particle in an inertial
+frame of reference, $\vec{a}$ is not just the time derivative of $\vec{v}$.
+However, by the chain rule and identity \eqref{eq:phi-psi-funzione-inversa},
+we can prove that
+\begin{align} \label{eq:derivata-euleriana-u}
+\vec{v}_t(\vec{x},t)
+&= \varphi_{t\vec{x}}(\psi(\vec{x},t),t) \, \psi_t(\vec{x},t)
+ + \varphi_{tt}(\psi(\vec{x},t),t) \nonumber \\
+&= - \varphi_{t\vec{x}}(\psi(\vec{x},t),t) \, \psi_{\vec{x}}(\vec{x},t)
+\, \varphi_t(\psi(\vec{x},t),t) + \vec{a}(\vec{x},t) \nonumber \\
+&= -\vec{v}_{\vec{x}}(\vec{x},t) \vec{v}(\vec{x},t) + \vec{a}(\vec{x},t).
+\end{align}
+The term $\vec{v}_{\vec{x}}(\vec{x},t) \vec{v}(\vec{x},t)$ denotes the
+product between the Jacobian matrix of $\vec{v}$ with respect to
+its spatial variables and the vector $\vec{v}$ itself.
+Crucially, this term is nonlinear.
+
+Looking at identity~\eqref{eq:derivata-euleriana-u}, it feels natural
+to define a new differential operator $D_t$, known as
+\emph{Lagrangian derivative}, such that
+\[
+D_t \vec{v}(\vec{x},t) \deq \vec{v}_t(\vec{x},t)
++ \vec{v}_{\vec{x}}(\vec{x},t) \vec{v}(\vec{x},t)
+= \vec{a}(\vec{x},t).
+\]
+The fact that acceleration in a continuum can be expressed
+as the Lagrangian derivative of velocity, without any
+reference to $\varphi$ and $\psi$, is a simple yet remarkable result.
+More generally, we can define the Lagrangian derivative of
+any tensor field $\tns{g}(x,t)$ as
+\begin{equation} \label{eq:derivata-lagrangiana}
+D_t \tns{g}(\vec{x},t)
+= \partial_t \tns{g}(\vec{x},t)
++ \partial_i \tns{g}(\vec{x},t) \, \vec{v}^i(\vec{x},t).
+\end{equation}
+From a physical point of view, the Lagrangian derivative $D_t$
+can be understood as the variation of the quantity~$\tns{g}$ as
+measured by an observer who is moving along the trajectory
+of a particle of the continuum, whereas the usual time derivative $\partial_t$,
+also known in this context as \emph{Eulerian derivative}, can be understood
+as the variation of the quantity~$\tns{g}$ as measured by a stationary
+observer in $\R^n$.
+For a short introduction to tensors and their notation,
+including the Einstein summation convention,
+we refer to Appendix \ref{ch:appendix-tensors}.
+
+\subsection*{Cauchy stress tensor}
+
+The deformations of a continuum throughout its motion are caused by
+the forces that each infinitesimal portion of matter exerts on
+its surroundings. Therefore, the description of such forces is
+a topic of utmost importance in continuum mechanics.
+Let us fix an instant in time $t \geq t_0$, a point $\vec{x}$ belonging to
+the continuum $\Omega_t$ in $\R^n$, and a versor $\vec{\nu} \in \R^n$.
+Since $\vec{\nu}$ has norm 1, we can write $\vec{\nu} \in S^{n-1}$,
+with $S^{n-1}$ being the unit sphere in $\R^n$.
+Let $S$ be an oriented smooth hypersurface in $\Omega_t$ such that
+$\vec{x}$ belongs to $S$ and the normal vector
+to $S$ in $\vec{x}$ is equal to $\vec{\nu}$.
+Furthermore, let $W_1$ and $W_2$ be two portions of continuum of positive
+measure such that
+\[
+W_1 \subset \Omega_t,
+\qquad W_2 \subset \Omega_t,
+\qquad W_1 \cap W_2 = \emptyset,
+\qquad \partial W_1 \cap \partial W_2 = S.
+\]
+Without loss of generality, we can suppose that the normal $\vec{\nu}$
+is pointing away from $W_1$ and into $W_2$. We denote by $\vec{F}(W_1,W_2)$
+the contact force that $W_2$ exerts on $W_1$ at time $t$ through the
+separating hypersurface $S$. Let $A(R)$ be the surface measure
+of any given hypersurface $R$, and let $B(\vec{x},h)$ be the open ball centered
+at $\vec{x}$ with radius $h > 0$.
+If for each $t \geq t_0$, $\vec{x} \in \Omega_t$, $\vec{\nu} \in S^{n-1}$
+the limit
+\begin{equation} \label{eq:limite-sforzi}
+\tns{\tau} =
+\lim_{h \to 0}
+	\frac{\vec{F}\bigl(W_1 \cap B(\vec{x},h), \, W_2 \cap B(\vec{x},h)\bigr)}
+	     {A\bigl(S \cap B(\vec{x},h)\bigr)}
+\end{equation}
+exists, is finite, and doesn't depend on the choice of $S$, $W_1$, $W_2$,
+then the \emph{Cauchy stress vector}
+\[
+\tns{\tau}(\vec{x},t,\vec{\nu})
+\colon \Omega_t \times [t_0,+\infty) \times S^{n-1} \to \R^n
+\]
+is well-defined.
+The importance of this force density $\tns{\tau}$ is that,
+once known, it can be integrated on any hypersurface $S$ in $\Omega_t$
+to compute the macroscopic force of contact between two
+portions of continuum separated by $S$.
+
+Throughout its motion, a continuum is subject to two kinds of external forces:
+volume forces and surface forces. An example of volume force is gravity,
+which acts on all infinitesimal portions of the continuum;
+an example of surface force is the one exerted by the walls
+of a container on a fluid to prevent its expansion (like in a gas bottle).
+As long as they are smooth functions of $\vec{x}$ and $t$,
+external volume forces don't affect the stress tensor in any way,
+because their contribution to limit \eqref{eq:limite-sforzi}
+is an additional term in the numerator which goes to zero like $h^n$,
+whereas the denominator goes to zero like $h^{n-1}$.
+We can therefore ignore external volume forces for the time being.
+
+External surface forces, on the other hand, allow us to define
+the stress vector $\tns{\tau}$ on the boundary of $\Omega_t$.
+Formally, let $\vec{x} \in \partial \Omega_t$ and let $\vec{\nu}(\vec{x})$
+be the normal to $\partial \Omega_t$ in $\vec{x}$ pointing away from $\Omega_t$.
+Then, if we denote the external surface force density in $\vec{x}$ at
+time $t$ by $\vec{f}_s^{\text{ext}}(\vec{x},t)$, we get that
+\begin{equation} \label{eq:sforzo-sul-bordo}
+\tns{\tau}(\vec{x},t,\vec{\nu}(\vec{x}))
+\deq \vec{f}_s^{\text{ext}}(\vec{x},t)
+\quad \text{for all $\vec{x} \in \partial \Omega_t$}.
+\end{equation}
+
+\noindent The following theorem, due to Cauchy, describes the dependence
+of $\tns{\tau}$ on the direction $\vec{\nu}$:
+\begin{teor}[Cauchy’s stress theorem]
+Suppose that the Cauchy stress vector is well-defined and sufficiently
+smooth in each point of its domain. Then, there exists a type $(2,0)$
+tensor field $\tns{\tau}^{ij}(\vec{x},t)$,
+known as \emph{Cauchy stress tensor}, such that
+\begin{enumerate}
+\item $\tns{\tau}^{ij}(\vec{x},t) \vec{\nu}_j = \tns{\tau}(\vec{x},t,\vec{\nu})$
+	for each $\vec{\nu} \in S^{n-1}$.
+\item The tensor $\tns{\tau}$ is symmetric,
+	i.e.\ $\tns{\tau}^{ij}(\vec{x},t) = \tns{\tau}^{ji}(\vec{x},t)$.
+\end{enumerate}
+\end{teor}
+
+\noindent The proof of this theorem is classical, and can be found
+in any introductory book on continuum mechanics.
+The key insight is to apply Euler's first and second law of motion
+(better known as \emph{equazioni cardinali della dinamica} in Italy)
+to an infinitesimal portion of the continuum shaped like a tetrahedron.
+
+\subsection*{Intensive and extensive properties of a continuum}
+
+Physical properties of a continuum can often be categorized as being
+either \emph{intensive} or \emph{extensive}. The former are local
+properties that don't depend on the size of the continuum or on
+the amount of matter that it contains, so they can be described
+by some tensor field $\tns{g}(\vec{x},t)$. The variation of an intensive
+property as measured along the trajectories of the particles of a continuum
+is given by the Lagrangian derivative \eqref{eq:derivata-lagrangiana}.
+Examples of intensive properties are mass density, pressure, velocity,
+and temperature.
+
+Extensive properties are global and additive, so their mathematical
+description requires an integral over a portion of continuum
+$W \subseteq \Omega$:
+\begin{equation} \label{eq:definizione-estensiva}
+\tns{G}(t) = \int_{W_t} \tns{g}(\vec{x},t) \dx.
+\end{equation}
+In this formula, $W_t$ denotes the subset of $\Omega_t$ given by
+the particles of $W$ at time $t$. The tensor field $\tns{g}$ that defines
+the extensive property $\tns{G}$ is known as its \emph{density}.
+The time derivative of an extensive property is given by the following theorem:
+
+\begin{teor}[Reynolds transport theorem] \label{teor:reynolds}
+Let $W_t = \varphi(W_{t_0},t)$ be a sufficiently regular subset of $\R^n$.
+Then,
+\begin{align*}
+\frac{d}{dt} \tns{G}(t)
+&= \int_{W_t} D_t \tns{g} + \tns{g} \diver(\vec{v}) \dx
+	& \text{(Lagrangian form)} \\
+&= \int_{W_t} \partial_t \tns{g} + \diver_i(\tns{g} \otimes \vec{v}^i) \dx
+	& \text{(Eulerian form)}
+\end{align*}
+% We omit the indices of the tensor field $\tns{g}$ for the sake of
+% notational convenience.
+% La notazione $\diver_i(g \otimes v^i)$ serve a rendere esplicito
+% l'indice rispetto al quale viene calcolata la divergenza del tensore
+% $g \otimes v$.
+\end{teor}
+
+\begin{proof}[Proof (sketch)]
+First, we remove the time dependence from the domain of integration $W_t$
+by switching to Lagrangian variables $\vec{X} = \psi(\vec{x},t)$.
+Then, we differentiate under the integral sign and use Jacobi's formula
+to evaluate the time derivative of the determinant of the Jacobian matrix
+which is now part of the integrand.
+Finally, we obtain the result in Lagrangian form by switching back to
+the original variables. The result in Eulerian form follows easily
+from the product rule:
+\[
+\diver_i(\tns{g} \otimes \vec{v}^i)
+= \partial_i (\tns{g} \vec{v}^i)
+= (\partial_i \tns{g}) \vec{v}^i + \tns{g} (\partial_i \vec{v}^i)
+= D_t \tns{g} - \partial_t \tns{g} + \tns{g} \diver(\vec{v}). \qedhere
+\]
+\end{proof}
+\noindent Examples of extensive properties are volume, mass, energy, and entropy.
+
+\subsection*{Thermodynamics of perfect gases}
+
+The classical thermodynamic state of a system is described
+at every instant in time by a vector of $N$ macroscopic
+physical quantities known as \emph{thermodynamic coordinates},
+or \emph{state variables}.
+Some of these quantities are intensive physical properties of the system,
+whereas others are extensive properties.
+In principle, the value of an intensive physical property doesn't have to
+be constant throughout the whole system. This means that,
+for a state variable to be globally well-defined, we need to restrict
+our attention to quasistatic processes, that is, transformations
+under which all state variables remain uniform throughout
+the system at each instant of time.
+
+For a macroscopic system, this uniformity assumption is only acceptable
+if the timescale required by the system to reach thermodynamic equilibrium
+after small perturbations is negligible compared to the timescale over which
+the transformation happens. However, since the former timescale is proportional
+to the size of the system, while the latter is size-invariant, the quasistatic
+assumption is always valid for an infinitesimal portion of continuum.
+
+Suppose that the thermodynamic system is made of a single chemical species
+in a single phase. By \emph{Gibbs' phase rule}, such a system has only
+two thermodynamic degrees of freedom: the values of all state variables
+can be computed as soon as any two of them are known. To make this possible,
+there must exist $N-2$ equations, known as \emph{equations of state},
+that constrain the values that the $N$ thermodynamic coordinates can take.
+
+Let us consider a thermodynamic system made of $n$ moles of \emph{perfect gas},
+and fix pressure $p$, volume $V$, temperature $T$ and internal energy $U$
+as state variables. A perfect gas is subject to the following equations of state:
+\begin{equation} \label{eq:equazione-stato-gas-perfetti-pVT}
+pV = nRT, \quad U = n C_v T.
+\end{equation}
+A formal definition of perfect gas would require microscopic models whose
+introduction is beyond the scope of this work. Internal energy, for example,
+is a concept that can only be fully understood in the context of
+statistical mechanics, as it is defined as the sum of all microscopic
+kinetic and potential energies of all molecules that make up the gas.
+The constant $R$ is known as \emph{universal gas constant},
+and its value is approximately \SI{8,3145}{\joule\per\mol\per\kelvin}.
+The quantity $C_v$ is known as \emph{molar heat capacity at constant volume}
+and is defined by the ratio
+\[
+C_v = \frac{1}{n} \left(\frac{\delta Q}{dT}\right)_{dV = 0}
+\]
+between the infinitesimal amount of heat $\delta Q$ absorbed by a gas
+during any quasistatic transformation at constant volume
+and the corresponding increase in temperature $dT$.
+Likewise, molar heat capacity at constant \emph{pressure} is defined as
+\[
+C_p = \frac{1}{n} \left(\frac{\delta Q}{dT}\right)_{dp = 0.}
+\]
+In theory, $C_v$ and $C_p$ should be functions of the state variables,
+like $(V,T)$ or $(p,T)$. However, for a perfect gas it is possible
+to prove using microscopic models that $C_v$ and $C_p$ are constants
+whose value depends only on the number of degrees of freedom $d$ associated
+to the motion of the gas molecules:
+\[
+C_v = \frac{d}{2}R, \quad C_p = \frac{d+2}{2}R.
+\]
+In the case of monoatomic gases, $d = 3$, whereas for diatomic gases
+(like air, approximately) we have $d = 5$. The identity $C_p = C_v + R$
+is known as \emph{Mayer's relation}, and the ratio
+\[
+\gamma = \frac{C_p}{C_v} = \frac{d+2}{d} > 1
+\]
+is an important adimensional constant known as \emph{adiabatic index}.
+
+Let $m$ denote the mass of the gas, $\rho$ its mass density $m/V$,
+and $u$ its specific internal energy~$U/m$. By the two equations of
+state \eqref{eq:equazione-stato-gas-perfetti-pVT} and Mayer's relation,
+we can deduce that
+\begin{equation} \label{eq:equazione-stato-gas-perfetti-p-rho-u}
+\frac{pV}{m} = \frac{nRT}{m} \qquad
+\frac{p}{\rho} = \frac{RU}{C_v m} \qquad
+p = \frac{R}{C_v} \rho u = \frac{C_p - C_v}{C_v} \rho u = (\gamma-1) \rho u.
+\end{equation}
+This new equation of state, featuring $p$, $\rho$ and $u$ as state variables,
+will be useful at the end of the next section to close
+Euler's system of equations for the motion of a compressible fluid.
+
+Another important state variable is \emph{entropy}. Suppose that a perfect
+gas undergoes a transformation from an initial state identified by the
+state variables $(p_i,\rho_i)$ to a final state identified by $(p_f,\rho_f)$.
+The corresponding change in entropy is
+\[
+\Delta S = n C_v \log\left( \frac{p_f \rho_f^{-\gamma}}{p_i \rho_i^{-\gamma}} \right).
+\]
+%For our mathematical purposes, this formula will suffice to define
+%entropy up to a constant that will be fixed on a case-by-case basis.
+This formula is enough to define the entropy of a perfect gas up to a constant;
+this is not the way entropy is usually defined in physics, as it is lacking
+in both generality and motivation, however for our mathematical purposes
+there is no need to make things more complicated (e.g.\ by
+introducing statistical mechanics and the third law of thermodynamics).
+The constant in the definition of entropy is fixed as soon as the value
+of $S$ is assigned to a reference state (like air at a
+standard condition for temperature and pressure).
+Entropy is an extensive property of a thermodynamic system and
+obeys the second law of thermodynamics: entropy of an isolated system
+undergoing an arbitrary transformation is a non-decreasing function of time.
+
+\section{Derivation of the compressible Euler equations}
+
+As we have pointed out in the introduction to this chapter,
+the term \emph{Euler equations} is slightly ambiguous: all equations
+governing inviscid and adiabatic flow fall under this name,
+regardless of the choice of physical variables for the unknowns,
+of the equation of state, of the Eulerian/Lagrangian framework, etc.
+In this chapter we shall derive the Euler equations pertaining
+to perfect diatomic gases in $\R^n$ that are not subject to external
+volume forces. In order to make it simpler to later reference all the
+various working assumptions, we list them here once and for all:
+\begin{description}
+\item[(H1)] The flow is adiabatic: each portion of fluid exchanges
+	no heat with the surrounding fluid while moving ($\delta Q = 0$).
+\item[(H2)] The flow is inviscid: all contact forces in the interior
+	of the fluid are due to pressure and not to internal friction
+	between the layers of the fluid which are in relative motion.
+	Therefore, the stress tensor has the form
+	\[
+	\tns{\tau}^{ij}(\vec{x},t) = -p(\vec{x},t) \tns{\delta}^{ij}.
+	\]
+	The choice of the Knonecker tensor $\tns{\delta}^{ij}$ is essentially forced
+	by the fact that pressure gives rise to normal and isotropic stresses.
+\item[(H3)] The thermodynamic coordinates of the fluid are constrained
+	at every point and at all times by the equations of state
+	of a perfect gas \eqref{eq:equazione-stato-gas-perfetti-pVT},
+	or by their reformulation \eqref{eq:equazione-stato-gas-perfetti-p-rho-u}.
+	The molecules of the gas are diatomic, so the adiabatic index
+	$\gamma$ is equal to $7/5$.
+\item[(H4)] There are no external volume forces.
+\end{description}
+
+\subsection*{Balance law of mass}
+
+The mass $m$ of a portion of fluid $W \subseteq \Omega$ is an
+extensive physical property that is conserved throughout the motion of the fluid:
+\[
+\frac{d}{dt} m(t) = 0.
+\]
+Its density, known as \emph{mass density}, is a scalar field
+denoted by $\rho(\vec{x},t)$:
+\[
+m(t) = \int_{W_t} \rho(\vec{x},t) \dx.
+\]
+Throughout this work, we always assume that $\rho(\vec{x},t)$ is strictly
+positive for all $\vec{x}$ in $\Omega_t$ and all $t \geq t_0$.
+Without this assumption, we would have to allow vacuum states
+and employ ad-hoc techniques to handle them in a satisfactory way.
+In any case, fluid states with negative mass density, like those
+produced by unstable numerical methods (see Section \dots), %TODO
+are always unacceptable, as they have no physical meaning whatsoever.
+
+By the Reynolds transport theorem in Eulerian form, it follows that
+\begin{equation} \label{eq:continuita-forma-integrale}
+0
+= \frac{d}{dt} m(t)
+= \frac{d}{dt} \int_{W_t} \rho \dx
+= \int_{W_t} \partial_t \rho + \diver(\rho \vec{v}) \dx.
+\end{equation}
+This identity is known as \emph{continuity equation for mass in integral form}.
+Since the domain $W_t$ is arbitrary in $\Omega_t$, the continuity of the
+integrand implies a stronger, local version of the identity, known as
+\emph{continuity equation for mass in differential form}:
+\begin{equation} \label{eq:continuita-forma-differenziale}
+\partial_t \rho + \diver(\rho \vec{v}) = 0
+\quad \text{for each $(\vec{x},t) \in \Omega_t \times [t_0,+\infty)$.}
+\end{equation}
+The continuity equation for mass allows us to prove the following variant
+of the Reynolds transport theorem:
+\begin{teor}[Reynolds transport theorem,
+	density per unit mass] \label{teor:reynolds-per-unita-di-massa}
+If the extensive physical property $\tns{G}$ is defined as
+\[
+\tns{G}(t) = \int_{W_t} \rho(\vec{x},t) \tns{g}(\vec{x},t) \dx
+\]
+and $W_t = \varphi(W_{t_0},t)$ is a sufficiently regular
+subset of $\R^n$, then
+\[
+\frac{d}{dt} \tns{G}(t) = \int_{W_t} \rho \, D_t \tns{g} \dx.
+\]
+\end{teor}
+
+\noindent In the light of this theorem, it is often convenient
+to choose the density of an extensive physical property
+\emph{per unit mass}, that is, a density of the form $\rho \:\! \tns{g}$
+instead of just $\tns{g}$ as in \eqref{eq:definizione-estensiva}.
+
+\subsection*{Balance law of linear momentum}
+
+The linear momentum $\vec{P}$ of a portion of fluid $W \subseteq \Omega$
+is the following extensive property:
+\[
+\vec{P}(t) = \int_{W_t} \rho(\vec{x},t) \vec{v}(\vec{x},t) \dx.
+\]
+Euler's first law of motion states that the rate of change of
+linear momentum in a system of masses is equal to the resultant
+of all the external forces acting on the system:
+\[
+\frac{d}{dt} \vec{P}(t) = \vec{F}^{\text{ext}}(t).
+\]
+In the case of a continuum, it is useful to make a distinction
+between two kinds of external forces: volume forces $\vec{F}_v^{\text{ext}}$
+and surface forces $\vec{F}_s^{\text{ext}}$. External volume forces are
+given by the integral of a volume force density per unit mass
+$\vec{f}_v^{\text{ext}}$, whereas external surface forces are given
+by the integral of a surface force density $\vec{f}_s^{\text{ext}}$:
+\[
+\vec{F}_v^{\text{ext}}(t)
+= \int_{W_t} \rho(\vec{x},t) \vec{f}_v^{\text{ext}}(\vec{x},t) \dx
+\qquad \vec{F}_s^{\text{ext}}(t)
+= \int_{\partial W_t} \vec{f}_s^{\text{ext}}(\vec{x},t) \dsigma.
+\]
+We observe that the same surface force $\vec{F}_s$ can be
+considered both external and internal, depending on the point of
+view (that of $W_t$, or that of $\Omega_t$).
+On the contrary, a volume force $\vec{F}_v$ that is external to
+$W_t$ will always be external to $\Omega_t$ as well.
+In our case, $\vec{F}_s^{\text{ext}}$ is by definition external
+to~$W_t$, so equation \eqref{eq:sforzo-sul-bordo} allows us
+to express $\vec{F}_s^{\text{ext}}$ through the stress tensor $\tns{\tau}$:
+\[
+\vec{F}_s^{\text{ext}}(t)
+= \int_{\partial W_t} \tns{\tau}(\vec{x},t) \cdot \vec{\nu}(\vec{x}) \dsigma.
+\]
+As before, the function $\vec{\nu}(\vec{x})$ denotes the normal to
+$\partial W_t$ in $\vec{x}$ pointing away from $W_t$.
+It is not necessary to specify the index of $\tns{\tau}^{ij}$ against
+which the scalar product is computed (the second one),
+because the stress tensor is symmetric.
+The four equations that we have seen so far, together with
+Reynolds transport theorem and the divergence theorem, imply that
+\begin{gather*}
+\frac{d}{dt} \vec{P}(t) = \vec{F}_v^{\text{ext}}(t) + \vec{F}_s^{\text{ext}}(t) \\
+\frac{d}{dt} \int_{W_t} \rho(\vec{x},t) \vec{v}(\vec{x},t) \dx
+	= \int_{W_t} \rho(\vec{x},t) \vec{f}_v^{\text{ext}}(\vec{x},t) \dx
+	+ \int_{\partial W_t} \tns{\tau}(\vec{x},t) \cdot \vec{\nu}(\vec{x}) \dsigma \\
+\int_{W_t} \partial_t (\rho \vec{v}^i)
+	+ \diver_j(\rho \vec{v}^i \otimes \vec{v}^j) \dx
+	= \int_{W_t} \rho \, (\vec{f}_v^{\text{ext}})^i \dx
+	+ \int_{W_t} \diver_j(\tns{\tau}^{ij}) \dx
+	\quad \text{for each $i = 1,\dots,n$}.
+\end{gather*}
+Now, by assumptions \textbf{(H2)} and \textbf{(H4)} on the flow,
+we get that
+\[
+\int_{W_t} \partial_t (\rho \vec{v}^i)
+	+ \partial_j (\rho \vec{v}^i \vec{v}^j + p \tns{\delta}^{ij}) \dx
+	= 0 \quad \text{for each $i = 1,\dots,n$}.
+\]
+As before, we can get a differential version of this identity
+by exploiting the fact that $W_t$ is an arbitrary subset of $\Omega_t$
+(continuity of the integrand remains a key technical assumption):
+\begin{equation} \label{eq:bilancio-quantita-di-moto}
+\partial_t (\rho v^i) + \partial_j (\rho v^i v^j + p\delta^{ij}) = 0.
+\end{equation}
+
+\subsection*{Balance law of energy}
+
+The total energy $E$ of a portion of fluid $W \subseteq \Omega$
+is given by the sum of three terms:
+\begin{itemize}
+\item The macroscopic kinetic energy $E_k$, whose
+	density is $(1/2) \rho \!\!\: \norm{\vec{v}}^2$.
+\item The macroscopic potential energy $E_p$, which in our case
+	is always 0 by assumption \textbf{(H4)}.
+\item The internal energy $U$, whose density per unit mass
+	$u(x,t)$ is called \emph{specific internal energy}.
+\end{itemize}
+If we denote by $e(\vec{x},t)$ the density of total energy,
+we can then write
+\[
+E(t)
+= E_k(t) + E_p(t) + U(t)
+= \int_{W_t} \frac{1}{2} \rho \norm{\vec{v}}^2 \dx
++ 0
++ \int_{W_t} \rho u \dx.
+\]
+Hence, the density of total energy $e$ is equal to
+$(1/2) \rho \norm{\vec{v}}^2 + \rho u$.
+The variation of total energy $E(t)$ in the time interval $[t,t+h]$
+follows the first law of thermodynamics:
+\[
+E(t+h) - E(t) = Q + L.
+\]
+%We remark that the differential form of this law, namely
+%$dE = \delta Q + \delta L$, cannot be used here because $W$
+%is not subject to quasistatic transformations.
+%Precisiamo che in questo caso non sarebbe lecito usare la versione
+%differenziale di tale legge, cioè $dE = \delta Q + \delta L$,
+%perché $W$ non subisce trasformazioni quasistatiche.
+%Per aggirare l'ostacolo, abbiamo quindi considerato la variazione di
+%$E$ sull'intervallo $[t,t+h]$.
+The assumption of adiabatic flow \textbf{(H1)} assures us that
+the heat $Q$ absorbed by $W$ in this time interval is zero.
+We can then split the work $L$ done to $W$ by its surroundings
+in two terms: one due to external volume forces, and the other due to
+external surface forces:
+\[
+L = L_v + L_s
+  = \int_{W_{[t,t+h]}} \hspace{-1em}
+	\rho \, \vec{f}_v^{\text{ext}} \!\cdot \vec{v} \, \dx \hspace{-1.5pt} \dt \,
+  + \int_{\partial W_{[t,t+h]}} \hspace{-1em}
+  	\vec{f}_s^{\text{ext}} \!\cdot \vec{v} \, \dsigma \hspace{-2pt} \dt.
+\]
+On the one hand, it follows from the definition of time derivative,
+assumption \textbf{(H4)} and the absolute continuity of the Lebesgue
+integral that
+\[
+\frac{d}{dt} E(t)
+	= \lim_{h \to 0} \frac{E(t+h)-E(t)}{h}
+	= \lim_{h \to 0} \frac{Q+L}{h}
+	= \lim_{h \to 0} \frac{1}{h} \int_{\partial W_{[t,t+h]}} \hspace{-1em}
+  		\vec{f}_s^{\text{ext}} \!\cdot \vec{v} \, \dsigma \hspace{-2pt} \dt
+	= \int_{\partial W_t} \vec{f}_s^{\text{ext}} \!\cdot \vec{v} \, \dsigma
+\]
+On the other hand, it follows from the definition of $e(\vec{x},t)$ and
+from the Reynolds transport theorem that
+\[
+\frac{d}{dt} E(t)
+	= \frac{d}{dt} \int_{W_t} e(\vec{x},t) \dx
+	= \int_{W_t} \partial_t e + \diver(e \vec{v}) \dx
+\]
+Thus, if we combine these two equations, recall definition 
+\eqref{eq:sforzo-sul-bordo} and apply the divergence theorem, we get that
+\begin{gather*}
+\int_{W_t} \partial_t e + \diver(e \vec{v}) \dx
+	= \int_{\partial W_t} \vec{f}_s^{\text{ext}} \!\cdot \vec{v} \, \dsigma
+	= \int_{\partial W_t} \tns{\tau}^{ij} \vec{v}_i \vec{\nu}_j \dsigma
+	= \int_{W_t} \partial_j (\tns{\tau}^{ij} \vec{v}_i) \dx \\
+0
+	= \int_{W_t} \partial_t e + \diver(e \vec{v})
+	- \diver_j(\tns{\tau}^{ij} \vec{v}_i) \dx
+	= \int_{W_t} \partial_t e + \diver(e \vec{v})
+	- \diver_j(-p \tns{\delta}^{ij} \vec{v}_i) \dx \\
+\int_{W_t} \partial_t e + \diver(e \vec{v} + p \vec{v}) \dx = 0
+\end{gather*}
+This identity is in integral form; the corresponding differential form is
+\begin{equation} \label{eq:bilancio-energia}
+\partial_t e + \diver(e \vec{v} + p \vec{v}) = 0.
+\end{equation}
+
+\subsection*{Euler equations in conservation form}
+
+We can now combine equations \eqref{eq:continuita-forma-differenziale},
+\eqref{eq:bilancio-quantita-di-moto} and \eqref{eq:bilancio-energia}
+in a single system of partial differential equations known as
+\emph{compressible Euler equations in conservation form}:
+\begin{equation} \label{eq:sistema-eulero}
+\begin{cases}
+\partial_t \rho + \diver(\rho \vec{v}) = 0 \\
+\partial_t (\rho \vec{v}^i)
+	+ \partial_j (\rho \vec{v}^i \vec{v}^j + p\tns{\delta}^{ij})
+	= 0 \quad \text{for all $i = 1,\dots,n$} \\
+\partial_t e + \diver(e \vec{v} + p \vec{v}) = 0.
+\end{cases}
+\end{equation}
+This is a system of $n+2$ equations in $n+3$ variables, so we need
+to express pressure as a function of $(\rho,\rho\vec{v},e)$ in order to close it.
+This is possible thanks to hypotesis \textbf{(H3)}, according to which
+we can apply the state equation for perfect gases
+\eqref{eq:equazione-stato-gas-perfetti-p-rho-u} to every infinitesimal
+portion of fluid:
+\[
+p
+= (\gamma-1) \rho u
+= (\gamma-1) \left( e - \frac{1}{2} \rho \norm{\vec{v}}^2 \right)
+= (\gamma-1) \left( e - \frac{\norm{\rho \vec{v}}^2}{2\rho} \right)
+\]
+Operiamo ora un cambio di notazione, così da poter
+scrivere il sistema \eqref{eq:sistema-eulero} in forma vettoriale e
+con la notazione tipica delle equazioni alle derivate parziali.
+La variabile $u$ non indicherà più l'energia interna specifica,
+bensì il vettore delle incognite
+\[
+u(x,t) \colon \Omega_t \times [t_0,\infty) \to \R^5
+\qquad u(x,t) = \begin{pmatrix} \rho(x,t) \\ \rho(x,t) v(x,t) \\ e(x,t) \end{pmatrix}
+\]
+e la variabile $F$ non indicherà più una generica forza macroscopica,
+bensì la funzione \emph{flusso}
+\[
+F \colon \R^+ \! \times \R^3 \! \times \R \to \R^{5 \times 3}
+\qquad
+F(u) =
+\frac{1}{u_1}
+\begin{pmatrix*}[l]
+u_1 u_2            & u_1 u_3            & u_1 u_4            \\
+u_2 u_2 + u_1 p(u) & u_2 u_3            & u_2 u_4            \\
+u_3 u_2            & u_3 u_3 + u_1 p(u) & u_3 u_4            \\
+u_4 u_2            & u_4 u_3            & u_4 u_4 + u_1 p(u) \\
+u_5 u_2 + u_2 p(u) & u_5 u_3 + u_3 p(u) & u_5 u_4 + u_4 p(u)
+\end{pmatrix*}
+\]
+con
+\begin{equation*}
+p(u) = (\gamma-1) \left( u^5 - \frac{u_2^2+u_3^2+u_4^2}{2 u^1} \right)
+\qquad \gamma = \frac{7}{5}.
+\end{equation*}
+A questo punto si verifica facilmente che il sistema \eqref{eq:sistema-eulero}
+è equivalente a
+\[
+\partial_t u + \diver(F(u)) = 0.
+\]
+Per convenzione, la divergenza viene calcolata rispetto alle righe
+della matrice $F(u)$.
+Abbiamo quindi ottenuto le equazioni di Eulero sotto forma di
+\emph{sistema di leggi di conservazione}.
+
+%La funzione tensoriale \emph{flusso} $F \colon \R^5 \to \R^5 \otimes \R^3$,
+%che per comodità riportiamo sotto forma di matrice (basta abbassare
+%il secondo indice controvariante) e mettendo in evidenza $u_1^{-1}$:
+
+\section{Proprietà delle equazioni di Eulero}
+
+In questo capitolo provvisorio ho pensato di riassumere schematicamente
+i risultati più importanti sulle equazioni di Eulero per gas perfetti
+(da un punto di vista dell'analisi matematica).
+Ho fatto una ricerca in letteratura per capire cosa si sappia
+sulle loro soluzioni (molto poco, mi sono accorto).
+I testi più utili per il caso multidimensionale (quello di interesse)
+si sono rivelati~\cite{serre} e~\cite{benzoni-gavage-serre}.
+Le cose da dire sarebbero molte, ma ancora non so quali saranno
+utili successivamente per la trattazione numerica delle equazioni.
+Inoltre, potrebbe essere meglio non introdurre qui
+la teoria sui sistemi iperbolici di leggi di conservazione,
+bensì in un paragrafo o un capitolo precedente.
+Alcune idee su cosa includere in questo capitolo (forse troppe):
+
+\subsection*{Teoria quasilineare}
+
+\begin{itemize}
+% 3.1 serre
+\item Definizione di \emph{iperbolicità} di un sistema lineare
+	a coefficienti costanti del primo ordine
+	\[
+	\partial_t u + \sum_{i=1}^n A_i \partial_i u = 0,
+	\qquad A_i \in \R^{m \times m}
+	\]
+	Motivazione della definizione in quanto condizione necessaria e
+	sufficiente affinché il problema di Cauchy
+	sia ben posto in $L^2$ (oppure in $H^s$ spazio di Sobolev).
+	Sia
+	\[
+	A(\xi) = \sum_{i=1}^n \xi_i A_i
+	\quad 	\text{per ogni $\xi \in \R^n$.}
+	\]
+	Un sistema è iperbolico se e solo se gli autovalori di $A(\xi)$
+	sono reali per ogni $\xi \in \R^n$ e la matrice $A(\xi)$
+	è diagonalizzabile in modo uniforme.
+	Interpretazione degli autovalori di $A(\xi)$ come velocità
+	di propagazione delle onde piane nella direzione $\xi$.
+\item I sistemi simmetrizzabili sono iperbolici. Definizione di sistema
+	strettamente iperbolico (autovalori semplici) e costantemente iperbolico
+	(autospazi di dimensione costante).
+	I sistemi strettamente/costantemente iperbolici sono iperbolici.
+% 3.2 serre
+\item Definizione di \emph{iperbolicità} per il sistema quasilineare
+	\[
+	\partial_t u + \sum_{i=1}^n A_i(u) \partial_i u = 0,
+	\qquad A_i \colon \R^n \to \R^{m \times m}
+	\]
+	La diagonalizzabilità di $A(\xi,u)$ è richiesta in modo uniforme
+	anche rispetto a $u$.
+	Stavolta l'iperbolicità non è condizione sufficiente all'esistenza
+	di soluzioni del problema di Cauchy, servono ipotesi più forti
+	(ad esempio, simmetrizzabilità). Le equazioni di Eulero
+	formano un sistema quasilineare in ogni punto in cui
+	la soluzione $u$ è regolare.
+% 3.3 serre
+\item Definizione di campo caratteristico come applicazione da $(\xi,u)$
+	agli autovalori (detti velocità caratteristiche) e autospazi di $A(\xi,u)$.
+	Definizione di campi caratteristici linearmente degeneri e
+	genuinamente non lineari.
+% 13.2.2 benzoni-gavage
+\item Il sistema delle equazioni di Eulero è iperbolico, se $\rho > 0$.
+	Calcolo dei campi caratteristici. Il sistema è strettamente iperbolico
+	in 1D e costantemente iperbolico in 2D/3D.
+	Formula per la velocità di propagazione delle onde
+	(utile per la condizione numerica CFL in seguito).
+% proposizione 1.4 benzoni-gavage o la prima prop. di sideris84
+\item L'informazione si propaga dunque a velocità finita, limitata nella
+	direzione $\xi$ dal massimo autovalore di $A(\xi,u)$.
+	Definizione di dominio di dipendenza.
+	Principio di località (prima proposizione di \cite{sideris84}).
+	Un teorema analogo non può valere per le equazioni di Navier-Stokes
+	a causa del carattere parabolico dei processi di diffusione.
+% 13.2.3 benzoni-gavage
+\item Il sistema delle equazioni di Eulero è simmetrizzabile, se $\rho > 0$.
+	Questo risultato è alla base della teoria di esistenza locale di soluzioni
+	classiche.
+\end{itemize}
+
+\subsection*{Soluzioni classiche del problema di Cauchy}
+
+\begin{itemize}
+\item Esistenza e unicità locale di soluzioni $C^1$ a partire da
+	una condizione iniziale $H^s$ con $s > 5/2$.
+	Ho trovato molti riferimenti, ognuno con un enunciato leggermente
+	diverso: Teorema 3.6.1 in \cite{serre},
+	Teorema 2.1 in \cite{chen-wang},
+	Teorema 13.1 in \cite{benzoni-gavage-serre} e
+	Teorema 5.1.1 in \cite{dafermos}.
+	Quest'ultimo mi pare il più completo, perché è l'unico a occuparsi
+	di regolarità rispetto al tempo maggiore di $C^1$ (inclusione 5.1.5)
+	e a dimostrare anche la dipendenza continua dai dati iniziali
+	(Teorema 5.2.1). Tuttavia, per poter applicare questo risultato
+	alle equazioni di Eulero è richiesta una trasformazione affine,
+	dato che il flusso $F$ è definito solo sull'insieme $\{\rho > 0\}$
+	e invece la palla $\overline{\mathscr{B}_\rho}$ è centrata nell'origine.
+	La modifica richiesta è spiegata bene nel commento che segue immediatamente
+	il Teorema 10.1 in \cite{benzoni-gavage-serre}.
+\item Sarebbe utile, al fine di giustificare l'uso di metodi numerici
+	di ordine elevato, un risultato di regolarità $C^\infty$
+	anziché $C^1$ (per dati iniziali $C^\infty$, ovviamente).
+	Non ho trovato nessun riferimento in letteratura,
+	perché le soluzioni classiche sono in genere definite come
+	$C^1$ o localmente lipschitziane.
+	Mi pare però che il risultato di regolarità rispetto al
+	tempo menzionato nel punto precedente possa essere sfruttato
+	per ottenere questo tipo di regolarità (la regolarità spaziale segue
+	senza problemi dai teoremi di embedding di Sobolev).
+\item L'esistenza globale di soluzioni classiche $C^\infty$, ancora aperta
+	per Eulero incomprimibile o Navier-Stokes, qui è sicuramente falsa.
+	Le equazioni di Eulero possono sviluppare singolarità in tempo finito
+	anche in presenza di dati iniziali $C^\infty$.
+	I teoremi precedenti ci dicono che esistono tre possibili motivi
+	per cui una soluzione classica può smettere di esistere:
+	\begin{itemize}
+	\item $\rho \to 0$ in almeno un punto, cioè si viene a creare un vuoto nel fluido.
+	\item $\norm{u}_\infty \to \infty$, cioè almeno una delle variabili del fluido
+		sviluppa un asintoto verticale (fenomeno di blowup).
+	\item $\norm{\nabla u}_\infty \to \infty$, cioè almeno una delle variabili
+		del fluido sviluppa un flesso a tangente verticale (fenomeno di wave-breaking).
+		Fenomeni di compressione che portano i fronti d'onda
+		a diventare più ripidi al passare del tempo.
+		Analogia con l'intersezione di caratteristiche per
+		l'equazione di Burgers non viscosa $u_t + (u^2)_x = 0$.
+	\end{itemize}
+\item Ho trovato pochissimi risultati della forma: \emph{se la condizione iniziale
+	$u_0$ soddisfa la proprietà X, allora la soluzione classica $u(t)$
+	diventa singolare in tempo finito per il motivo Y}
+	(un risultato è \cite{yin}, ma sono 40 pagine di articolo!).
+	Comunque è fuori discussione che esistano dati $C^\infty$
+	niente affatto patologici che sviluppano singolarità in tempo finito:
+	in \cite{sideris85} l'autore dimostra che esistono condizioni iniziali (anche piccole)
+	che in un tempo finito $T$ rendono singolare la quantità di moto in almeno un punto,
+	nell'ipotesi che la soluzione $u(t)$ sia regolare fino a $T$.
+	Purtroppo questa dimostrazione di perdita di regolarità
+	non è costruttiva (il ragionamento è: supponiamo che la soluzione
+	classica esista per un tempo maggiore di $T$,
+	allora si verificherebbe un blowup, assurdo),
+	quindi nulla vieta che si sviluppi prima di $T$ un altro tipo di singolarità,
+	anzi, per come sono fatti i dati iniziali sembra più intuitivo
+	che si formi un'onda di shock piuttosto che un blowup della quantità di moto.
+	
+\item C'è da dire che, rispetto al caso 1D, il processo di formazione delle singolarità
+	non è ancora chiaro. Un'idea per dare esempi costruttivi di formazione
+	di certi tipi di singolarità (per esempio, onde di shock)
+	potrebbe essere quella di estendere esempi 1D al caso 3D in modo
+	costante lungo i piani ortogonali all'asse $x$.
+	In questo modo si potrebbe dedurre che tutte le singolarità che si possono
+	formare in 1D si possono anche formare in 3D.
+	Magari in 1D esistono esempi costruttivi ragionevolmente semplici.
+	Non sono però sicuro al 100\%
+	che l'estensione costante di una soluzione 1D sia una soluzione 3D,
+	dovrei fare due conti\dots
+
+\item Precisazione: in 3D i fenomeni di dispersione delle onde contrastano
+	i fenomeni di compressione a tal punto da rallentare o addirittura
+	impedire del tutto la formazione di singolarità.
+	Questo fa sì che esistano condizioni di tipo dispersivo sui dati iniziali
+	sufficienti a garantire l'esistenza di soluzioni classiche per tutti i tempi
+	\cite{grassin}.
+	Si può dimostrare che non possono esistere risultati analoghi in 1D
+	(paragrafo 7.8 di \cite{dafermos}).
+	Questa è quindi una differenza qualitativa importante tra la formazione
+	di shock in 3D e in 1D.
+	
+\item Alla luce di tutto questo, è necessario introdurre il concetto di soluzioni deboli.
+\end{itemize}
+
+\subsection*{Soluzioni deboli del problema di Cauchy}
+
+\begin{itemize}
+\item Definizione di soluzione debole in $L^\infty$ del problema di Cauchy
+	% paragrafo 3.5 serre
+\item In 1D, è stata dimostrato che esiste $\delta > 0$ tale che
+	il problema di Cauchy è ben posto
+	(esistenza \textbf{globale}, unicità, dipendenza continua dai dati iniziali)
+	se la condizione iniziale ha variazione totale minore di $\delta$,
+	più ipotesi su campi caratteristici genuinamente non lineari
+	oppure linearmente degeneri
+	(esistenza globale dovuta a Glimm, il resto a Bressan et al.
+	Un breve survey paper di Bressan è \cite{bressan}).
+	Dunque in 1D lo spazio di funzioni giusto in cui lavorare è BV.
+	Il problema per dati iniziali arbitrari è ancora aperto.
+\item L'esistenza di soluzioni deboli in 3D è un problema totalmente aperto.
+	Non è nemmeno chiaro in quale spazio di funzioni sia opportuno lavorare,
+	quindi la scelta di $L^\infty$ nella definizione di soluzione
+	debole non ha motivazioni profonde (mentre in altri contesti, più semplici,
+	è la scelta giusta; comunque qui rimane un'ipotesi fisica importante).
+\item La condizione di Rankine-Hugoniot è necessaria e sufficiente affinché
+	una soluzione regolare che presenta una superficie di discontinuità
+	sia una soluzione debole.
+\item Velocità di propagazione di una discontinuità.
+	Il caso delle equazioni di Eulero.
+% 13.4 bensoni-gavage
+\item Differenza tra una discontinuità dinamica (es.\ onda d'urto)
+	e una discontinuità di contatto (es.\ strati di un vortice).
+	Differenza tra una discontinuità dinamica compressiva e una espansiva
+	(es.\ onda di rarefazione).
+\item Altro problema: le soluzioni deboli, ammesso che esistano,
+	non sono in generale uniche.
+	Idea: escludiamo quelle che violano il secondo principio della termodinamica.
+\end{itemize}
+
+\subsection*{Soluzioni deboli di entropia del problema di Cauchy}
+
+\begin{itemize}
+% paragrago 10.2 benzoni-gavage
+\item Definizione di \emph{entropia matematica} e \emph{flusso di entropia}
+	per un sistema di leggi di conservazione.
+	Definizione di soluzione debole di entropia.
+	Le soluzioni deboli di entropia non sono invertibili rispetto al tempo.
+\item Nel caso dell'equazione di Eulero, l'entropia termodinamica
+	è un'entropia matematica concava (quindi $-S$ è convessa; in
+	matematica e in fisica si usano due convenzioni diverse).
+	% unicità di tale funzione?
+%\item L'esistenza di una funzione entropia strettamente convessa
+%	implica la simmetrizzabilità di un sistema quasilineare.
+\item Se un sistema di leggi di conservazione ammette un'entropia convessa,
+	allora ogni sua soluzione debole	di entropia coincide con la sua
+	soluzione classica per tutto il tempo in cui quest'ultima esiste.
+\item Disuguaglianza necessaria e sufficiente affinché una soluzione regolare
+	che presenta una superficie di discontinuità sia una soluzione debole di entropia.
+% 13.4 bensoni-gavage
+\item Non tutte le discontinuità sono fisicamente ammissibili.
+	Condizione di entropia: il salto di entropia dev'essere positivo.
+	Una discontinuità soddisfa la condizione di entropia se e solo se è compressiva.
+	Definizione di shock come Rankine-Hugoniot più condizione di entropia.
+% pagina 409 benzoni-gavage
+\item Condizione di ammissibilità di Lax per gli shock.
+	Shock sufficientemente piccoli soddisfano automaticamente questa
+	condizione. La condizione di Lax permette di dimostrare
+	risultati di stabilità degli shock (esistenza locale nel tempo
+	di una soluzione regolare a tratti in 3D) % teorema 21.11 benzoni-gavage
+	e risultati di unicità delle soluzioni deboli di entropia in 1D.
+\item L'unicità delle soluzioni deboli entropiche in 3D è un problema aperto,
+	ma ci sono buone ragioni per pensare che
+	la risposta sia negativa alla luce dei risultati ottenuti
+	per le equazioni di Eulero isoentropiche \cite{chiodaroli}.
+	In letteratura sono quindi state proposte nozioni più forti
+	di soluzioni deboli di entropia (per esempio, basate su
+	limiti singolari delle equazioni di Navier-Stokes),
+	ma ancora non esiste un criterio per estrarre una soluzione debole canonica.
+\end{itemize}
+
+\subsection*{Problema di Cauchy con condizioni al bordo}
+
+\begin{itemize}
+\item L'aggiunta di condizioni al bordo al problema di Cauchy
+	non rende affatto più semplice la sua soluzione.
+	Anzi, in prima battuta non è nemmeno chiaro quale tipo di condizioni al bordo
+	possano essere imposte. Per questo gran parte della teoria
+	per le equazioni di Eulero (e sistemi iperbolici
+	di leggi di conservazione in generale) è stata sviluppata sul dominio $\R^n$.
+
+\item La difficoltà nella prescrizione di condizioni al bordo
+	è comune a tutte le PDE iperboliche. Per esempio,
+	già nell'equazione del trasporto lineare scalare
+	\[
+	u_t + cu_x = 0
+	\qquad x \in [a,b]
+	\]
+	è evidente il fatto che le condizioni al bordo (per esempio, di Dirichlet)
+	non possono essere imposte in entrambi gli estremi contemporaneamente,
+	e che la scelta dell'estremo di inflow è dettata dal segno di $c$.
+	In dimensione più alta, bisogna andare a esaminare lo spettro
+	delle matrici $A(\xi,u)$.
+
+\item Allo stato attuale della teoria, non esiste un criterio
+	per stabilire la buona posizione globale di un IBVP
+	per le equazioni di Eulero in 3D.
+	Esiste solamente una teoria locale per soluzioni regolari (teorema 5.6.1
+	\cite{dafermos}), del tutto analoga al caso senza bordo.
+
+\item Una classificazione esaustiva delle condizioni al bordo
+	per le equazioni di Eulero si trova nel capitolo 14 di \cite{benzoni-gavage-serre}.
+	Pacchetti software di riferimento come \texttt{clawpack} permettono
+	di gestire in modo automatico solo tre tipi di condizioni al bordo
+	(documentazione \url{https://www.clawpack.org/bc.html}):
+	\begin{itemize}
+	\item Pareti trasmettenti in uscita (outflow)
+	\item Condizioni al bordo periodiche
+	\item Pareti isolanti (slip walls)
+	\end{itemize}
+	Il testo di Hesthaven suppone quasi sempre che le condizioni al bordo siano
+	periodiche, oppure che il tempo di simulazione sia inferiore a quello richiesto
+	affinché l'informazione contenuta nella condizione iniziale raggiunga il bordo.
+	Nei paragrafi 5.3.1 e 11.5.1 accenna agli altri casi.
+\end{itemize}
+
+\subsection*{Soluzioni di riferimento}
+
+\begin{itemize}
+\item In conclusione, non esiste una teoria sulla buona posizione delle
+	equazioni di Eulero in 3D su cui fare affidamento per
+	lo sviluppo di metodi numerici stabili e accurati.
+	% Possiamo imparare molto dal confronto col caso 1D, ma
+	% in 3D le dinamiche sono incomparabilmente più ricche
+	Per valutare la qualità delle soluzioni numeriche ottenute
+	possiamo al massimo fare un confronto con quelle fornite da altri metodi numerici
+	ritenuti affidabili, oppure con soluzioni di riferimento in forma chiusa.
+\item Sarebbe utile avere delle soluzioni di riferimento per la stima
+	dell'errore dei metodi numerici.
+	Ho trovato diversi esempi in 2D, ma niente in 3D\dots
+	Se fosse possibile aggiungere forze esterne di volume, allora
+	con queste si potrebbe forzare qualunque soluzione desiderata
+	(ma sarebbe un sistema iperbolico di leggi di bilancio,
+	e non più di conservazione).
+\item Alcune configurazioni iniziali interessanti: onde d'urto piane,
+	onde d'urto sferiche, problema di Riemann, instabilità di Kelvin-Helmholtz,
+	double mach reflection, vortice isoentropico, scontro tra shock e vortice, \dots
+\end{itemize}
+
+%\item Problema di Riemann
+%\item Non esistono invarianti di Riemann per le equazioni in $\R^3$
+%https://www.theoretical-physics.net/dev/fluid-dynamics/euler.html
