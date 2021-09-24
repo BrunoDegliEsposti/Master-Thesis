@@ -1,0 +1,45 @@
+\chapter*{Introduction} \label{ch:introduction}
+%\phantomsection
+\addcontentsline{toc}{chapter}{Introduction}
+
+{\color{blue} Qui per ora ho fatto copia-incolla di una parte del progetto
+di ricerca che avevo scritto per la domanda di dottorato.
+Penso che possa essere una base di partenza ragionevole.}\\
+
+Fast, accurate and reliable simulations of transport phenomena are of great
+importance to scientific and engineering applications, but to this day remain
+challenging despite decades of effort in the field of numerical analysis.
+
+The reasons are manifold: first, the interplay between the numerical domain
+of dependence at every point and the analytical domain of dependence is very
+delicate and, if not handled correctly, can easily cause instability
+(hence the need for upwinding, CFL conditions, etc).
+
+Second, weak diffusion terms in the equations (or the lack thereof) allow
+sharp features of the solution to propagate without substantial smoothing
+effects. This a problem for low order schemes, which suffer from excessive
+dissipation, but also for high order schemes, which rely on regularity
+assumptions that may only hold piecewise on the exact solution.
+Moreover, in the inviscid nonlinear case, even smooth initial boundary
+data can develop discontinuities in finite time due to wave-breaking phenomena.
+
+And finally, a convergent scheme can still produce unsatisfactory results
+from a qualitative point of view, because it may not enforce exact
+conservation at the discrete level, or it may produce spurious oscillations
+around sharp features, or it may even converge to the wrong kind of weak
+solution (violation of entropy conditions).
+
+In the master’s thesis we’ve tackled these problems in 2D using
+well-established but modern techniques that combine the finite volume
+method (FVM) with Godunov’s method and weighted essentially
+non-oscillatory (WENO) reconstructions using least-squares polynomial
+interpolation, following the works of Hu and Shu and others.
+We’ve successfully generalized type-I WENO schemes to polygonal
+meshes and have shown their effectiveness on Voronoi tessellations.
+
+This is in line with the modern trend towards more flexibility in the
+discretization of problems’ domains. The main benefits are the
+following: greater freedom in the meshing process, easier handling
+of complex geometries, straightforward local refinement (no hanging
+nodes) and natural treatment of hybrid grids and non-matching
+interfaces without overlapping patches.

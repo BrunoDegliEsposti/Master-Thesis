@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TexmakerSession quickmode="3">
-    <document bookmark2="0" hasfocus="false" bookmark1="0" file="/home/bruno/Documenti/Master-Thesis/Latex/bibliografia.bib" line="52" master="false" bookmark3="0"/>
-    <document bookmark2="0" hasfocus="false" bookmark1="0" file="/home/bruno/Documenti/Master-Thesis/Latex/02-conservation-laws.tex" line="112" master="false" bookmark3="0"/>
-    <document bookmark2="0" hasfocus="false" bookmark1="0" file="/home/bruno/Documenti/Master-Thesis/Latex/06-appendix-tensors.tex" line="0" master="false" bookmark3="0"/>
-    <document bookmark2="0" hasfocus="true" bookmark1="0" file="/home/bruno/Documenti/Master-Thesis/Latex/01-euler-equations.tex" line="290" master="false" bookmark3="0"/>
-    <document bookmark2="0" hasfocus="false" bookmark1="0" file="/home/bruno/Documenti/Master-Thesis/Latex/master-thesis.tex" line="25" master="true" bookmark3="0"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/04-WENO-reconstructions.tex" line="0" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/titlepage.tex" line="32" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/A-appendix-tensors.tex" line="291" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/03-finite-volume-method-old.tex" line="0" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/bibliography.bib" line="173" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/02-conservation-laws.tex" line="71" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/01-euler-equations.tex" line="265" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/03-finite-volume-method.tex" line="10" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="true"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/00-introduction.tex" line="6" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/B-appendix-source-code.tex" line="0" bookmark3="0" master="false" bookmark1="0" bookmark2="0" hasfocus="false"/>
+    <document file="/home/bruno/Documenti/Master-Thesis/Latex/master-thesis.tex" line="15" bookmark3="0" master="true" bookmark1="0" bookmark2="0" hasfocus="false"/>
 </TexmakerSession>

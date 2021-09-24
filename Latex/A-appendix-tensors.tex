@@ -1,4 +1,4 @@
-\chapter{Tensor calculus}  \label{ch:appendix-tensors}
+\chapter{Tensor calculus} \label{ch:appendix-tensors}
 
 A matrix is more than just a 2D array of numbers: a matrix represents
 a linear transformation between vector spaces.
@@ -44,7 +44,7 @@ This is why we speak of \emph{stress tensor} in a continuum instead of
 \subsection*{Definition of tensor product}
 
 Let $U,V$ be finite dimensional real vector spaces with basis
-$\{\vec{u}_i\}_{i = 1,\dots,m}$ and $\{\vec{v}_j\}_{j = 1,\dots,n}$, respectively.
+$\{\vec{u}_i\}_{i = 1 \ldots m}$ and $\{\vec{v}_j\}_{j = 1 \ldots n}$, respectively.
 We define the vectorial space $U \otimes V$ as the space of formal
 linear combinations of the elements $\vec{u}_i \otimes \vec{v}_j$,
 which by definition will then form a basis of $U \otimes V$.
@@ -67,8 +67,9 @@ to the space $V \otimes U$. However, by using the coordinate-free definition
 of tensor product, it is possible to prove that this isomorphism is canonical,
 i.e.\ it can be defined without fixing any base on $U$ and $V$.
 Likewise, it is also possible to prove that the space $(U \otimes V) \otimes W$
-is canonically isomorphic to $U \otimes (V \otimes W)$: this means that the tensor
-product is both commutative and associative.
+is canonically isomorphic to $U \otimes (V \otimes W)$: the tensor
+product is, up to isomorphisms, a commutative and associative operation
+between vector spaces.
 
 \subsection*{Type $(r,s)$ tensors}
 
@@ -81,7 +82,7 @@ given by the order of the factors involved:
 \[
 T^r_s(V) = \underbrace{V \otimes \dots \otimes V}_{\text{$r$ times}}
 \otimes
-\underbrace{V^* \otimes \dots \otimes V^*}_{\text{$s$ times}}
+\underbrace{V^* \otimes \dots \otimes V^*}_{\text{$s$ times}}.
 \]
 An element of the space $T_s^r(V)$ is known as \emph{type $(r,s)$ tensor}
 on the space $V$. By definition, a type $(0,0)$ tensor is a scalar,
@@ -107,15 +108,16 @@ such that
 \otimes
 \vec{v}^{j_1} \otimes \dots \otimes \vec{v}^{j_s}.
 \]
-The indices $i_1, \dots, i_r$ are known as \emph{contravariant indices},
-and are always written as superscripts, whereas the indices $j_1, \dots, j_s$
-are known as \emph{covariant indices}, and are always written as subscripts.
+The indices $i_1, \dots, i_r$ of the coefficients are known as
+\emph{contravariant indices}, and are always written as superscripts,
+whereas the indices $j_1, \dots, j_s$ are known as \emph{covariant indices},
+and are always written as subscripts.
 Hence, the type of a tensor can be deduced by counting the number
 of superscripts and subscripts. Sometimes, uppercase multi-indices are
-used in order to group indices and simplify notation:
+used to group indices and simplify notation:
 \[
 \tns{T} = \sum_{I \in [1,n]^r} \; \sum_{J \in [1,n]^s}
-\tns{T}^I_J \;\; \vec{v}_I \otimes \vec{v}^J
+\tns{T}^I_J \; \vec{v}_I \otimes \vec{v}^J.
 \]
 
 \subsection*{Contraction of tensors}
@@ -124,8 +126,8 @@ The most important operation involving tensors is \emph{contraction}.
 Let $\tns{T}$ be a tensor of type $(r,s)$ with $r,s \geq 1$, let
 $i$ be one of its contravariant indices and let $j$ be one of its
 covariant indices.
-The contraction of $\tns{T}$ with respect to $i$ and $j$ is the tensor
-of type $(r-1,s-1)$ obtained by substituting $i$ and $j$ with
+The contraction of $\tns{T}$ with respect to $i$ and $j$ is the
+type $(r-1,s-1)$ tensor obtained by substituting $i$ and $j$ with
 a common index (say, $k$) and then summing over it:
 \begin{equation} \label{eq:def-contraction}
 \tns{T}^{\dots i \dots}_{\dots j \dots}
@@ -135,8 +137,8 @@ a common index (say, $k$) and then summing over it:
 \sum_{k=1}^n \tns{T}^{\dots k \dots}_{\dots k \dots}
 \end{equation}
 The fact that contraction produces a tensor and not just any multidimensional
-array of numbers is a remarkable property. The most elegant way to prove
-it would be to define contraction in an intrinsic way, using the
+array of numbers is a remarkable fact. The most elegant way to prove
+this property would be to define contraction in an intrinsic way, using the
 natural pairing of a vector space with its dual, and then to show
 that this abstract definition corresponds to \eqref{eq:def-contraction}
 as soon as a basis is fixed on $V$. For the sake of brevity, however,
@@ -148,10 +150,10 @@ of as a single tensor of type $(p+r,q+s)$, whose elements are
 the product of the elements of the two tensors with corresponding indices:
 \[
 \tns{A} \in T^p_q(V), \; \tns{B} \in T^r_s(V) \qquad
-(\tns{AB})^{IK}_{JL} = \tns{A}^I_J \tns{B}^K_L
+(\tns{AB})^{IK}_{JL} = \tns{A}^I_J \tns{B}^K_L.
 \]
 This operation is known as \emph{outer product}, and sometimes
-it is written explicitely using the tensor product symbol $\otimes$.
+is written explicitely using the tensor product symbol $\otimes$.
 If one contravariant index of a tensor is labeled with the same letter
 as one covariant index of the other tensor, however,
 contraction is implied and a tensor of type $(p+r-1,q+s-1)$ is produced.
@@ -166,8 +168,8 @@ the result is again a type $(1,0)$ tensor, so we have shown that a type
 $(1,1)$ tensor can be naturally though of as a linear application from $V$
 to itself. Following this idea, it is possible to prove that the space
 $T^1_1(V)$ is canonically isomorphic to the space of linear operators on $V$,
-and that, once a basis is fixed on $V$, a type $(1,1)$ tensor is just a matrix.
-It is in this sense that contravariant indices and covariant indices
+and that, once a basis is fixed on $V$, a type $(1,1)$ tensor is essentially
+a matrix. It is in this sense that contravariant indices and covariant indices
 of tensors can be understood as generalizations of column indices
 and row indices of matrices, respectively.
 
@@ -213,7 +215,7 @@ basis on $V$ that was used to define the tensorial basis on the spaces $T^r_s(V)
 Let $\tns{g}_{ij}$ be the type $(0,2)$ tensor associated to $\mat{G}$.
 Then, $\tns{g}_{ij}$ is known as \emph{metric tensor}, and $\tns{g}_{ij}$
 can be used to calculate the scalar product between any two vectors
-$\vec{v}$ and $\vec{w}$:
+$\vec{v}$ and~$\vec{w}$:
 \[
 \langle \vec{v}, \vec{w} \rangle = \tns{g}_{ij} \tns{v}^i \tns{w}^j.
 \]
@@ -283,11 +285,11 @@ contraction of a contravariant index of the tensor field with
 the covariant index of $\partial_k$. For example, given a vector
 field $\vec{v}^j(\vec{x})$, its divergence $\diver(\vec{v})$
 is the scalar field $\partial_k \vec{v}^k(\vec{x})$.
-When the tensor field has more than one contravariant index, then
-a subscript can be added to $\diver(\cdot)$ for additional clarity:
+When the tensor field has more than one contravariant index, it is good
+practice to add a subscript to $\diver(\cdot)$ for additional clarity:
 compare $\diver_i(\tns{T}^{ij})$ with $\diver_j(\tns{T}^{ij})$.
 
-% div, divergence theorem with dot product
+% divergence theorem with dot product?
 
 
 

@@ -1,25 +1,51 @@
-\documentclass[a4paper,11pt]{report}
+\documentclass[a4paper,12pt]{report}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[italian,english]{babel}
+% LAYOUT
 \usepackage{geometry}
-	\geometry{a4paper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,heightrounded}
+	\geometry{a4paper,top=2.8cm,headsep=1.2cm,bottom=2.5cm,
+	left=2.5cm,right=2.5cm,heightrounded}
+\usepackage[titletoc]{appendix}
+\usepackage[autostyle,italian=guillemets,english=american]{csquotes}
+\usepackage[backend=biber,style=numeric,hyperref]{biblatex}
+	\addbibresource{bibliography.bib}
+\usepackage{hyperref}
+	\hypersetup{hidelinks}
+\usepackage{microtype}
+% SCIENTIFIC TYPESETTING
 \usepackage{amsmath, amsthm, amssymb, mathtools}
 \usepackage{siunitx}
 \usepackage{resizegather}
 	\addtolength{\jot}{4pt}
 \usepackage{bm, mathrsfs}
+% FIGURES AND TABLES
+\usepackage{pgfplots, pgfplotstable, booktabs, array}
+	\pgfplotsset{compat=1.16}
+	\pgfplotstableset{
+		col sep = comma,
+		every head row/.append style={before row=\toprule, after row=\midrule},
+		every last row/.append style={after row=\bottomrule},
+		every column/.append style={sci, sci zerofill, sci e, sci precision = 2},
+		string replace={NaN}{},
+		empty cells with={-}
+	}
+\usepackage{listingsutf8}
+	\lstset{inputencoding=utf8/latin1}
+	\lstset{numbers=left, frame=tb, rulecolor=\color{black}}
+	\lstset{framexleftmargin=3em, xleftmargin=3em}
+	\lstset{tabsize=4}
+	\lstset{captionpos=b, abovecaptionskip=1ex}
+	\renewcommand{\lstlistingname}{Program}
+\usepackage{matlab-prettifier}
+	\lstset{style=Matlab-editor}
+\usepackage[scaled]{beramono}
+	\lstset{basicstyle=\mlttfamily \small}
+	\lstset{numberstyle=\mlttfamily \small \color{gray}}
 \usepackage{caption, subcaption}
 	\captionsetup{tableposition=top,figureposition=bottom}
 	\captionsetup{justification=centering,font=small,labelfont=bf}
-\usepackage[autostyle,italian=guillemets,english=american]{csquotes}
-\usepackage{quoting}
-	\quotingsetup{font=small}
-\usepackage[backend=biber,style=numeric,hyperref]{biblatex}
-	\addbibresource{bibliografia.bib}
-\usepackage{hyperref}
-	\hypersetup{hidelinks}
-\usepackage{microtype}
+
 
 \renewcommand{\vec}[1]{\bm{#1}}
 \newcommand{\mat}[1]{\bm{#1}}
@@ -68,13 +94,18 @@
 \input{titlepage.tex}
 
 \tableofcontents
+\pagestyle{headings}
 
+\input{00-introduction.tex}
 \input{01-euler-equations.tex}
 \input{02-conservation-laws.tex}
+\input{03-finite-volume-method.tex}
+\input{04-WENO-reconstructions.tex}
 
-\appendix
-
-\input{06-appendix-tensors.tex}
+\begin{appendices}
+\input{A-appendix-tensors.tex}
+\input{B-appendix-source-code.tex}
+\end{appendices}
 
 \printbibliography[heading=bibintoc]
 
