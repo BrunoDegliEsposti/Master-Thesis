@@ -1,0 +1,13 @@
+proprietà di conservazione discreta
+dimostrazione del potere approssimatorio di p(x) con sviluppo di taylor
+differenza schemi U, C, P
+
+schemi SSPRK
+condizione CFL e numero di Courant
+condizioni al bordo di parete (no test inflow/outflow)
+sezione mesh poligonali: parla di come sono state generate le mesh e dei vantaggi rispetto alle triangolazioni
+come si misurano gli errori nelle simulazioni?
+test numerici vortex e waves con soluzioni esatte
+mostra le mesh voronoi che uso
+
+traduzione in inglese di FVM

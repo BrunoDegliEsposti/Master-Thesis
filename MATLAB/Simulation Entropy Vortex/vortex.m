@@ -1,8 +1,8 @@
 function [u] = vortex(x,y,t,cx0,cy0,cvx,cvy,beta)
     %VORTEX Vortice isoentropico
     % Soluzione di riferimento per l'equazione di Eulero 2D.
-    % Il centro Ë inizialmente in (cx0,cy0) e si muove a velocit‡ (cvx,cvy).
-    % Il coefficiente beta Ë associato all'intensit‡ del vortice.
+    % Il centro √® inizialmente in (cx0,cy0) e si muove a velocit√† (cvx,cvy).
+    % Il coefficiente beta √® associato all'intensit√† del vortice.
     % Valori di beta troppo grandi formano il vuoto, quindi vanno evitati.
     u = zeros(length(x),4);
     % Coordinate x e y nel SDR solidale al centro del vortice
@@ -13,7 +13,7 @@ function [u] = vortex(x,y,t,cx0,cy0,cvx,cvy,beta)
     % Pressione
     g = (adiabatic_index-1)/(16*adiabatic_index*pi^2);
     u(:,1) = (1 - g * beta^2 * exp(2*(1-r.^2))) .^ (1/(adiabatic_index-1));
-    % Velocit‡ e quantit‡ di moto
+    % Velocit√† e quantit√† di moto
     vx = cvx - beta*exp(1-r.^2).*yc/(2*pi);
     vy = cvy + beta*exp(1-r.^2).*xc/(2*pi);
     u(:,2) = u(:,1).*vx;

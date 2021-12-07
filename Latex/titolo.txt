@@ -1,6 +1,0 @@
-Numerical solution of the 2D compressible Euler equations
-using WENO reconstructions on polygonal meshes
-
-Soluzione numerica delle equazioni di Eulero
-per fluidi comprimibili in due dimensioni
-mediante ricostruzioni WENO su mesh poligonali

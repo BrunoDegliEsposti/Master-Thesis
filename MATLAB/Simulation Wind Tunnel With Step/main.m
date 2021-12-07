@@ -26,12 +26,14 @@ bc{3} = 'absorbing';
 
 % Scelta dei metodi numerici
 method.nq = 1;
-method.order = 1;
-method.reconstruction_strategy = @reconstruction_LLS1;
+method.order = 2;
+method.reconstruction_strategy = @reconstruction_T1WENO;
+method.WENO_epsilon = 1e-6*max(cells.h)^2;
+method.WENO_power = 4;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK11;
+method.ODE_solver = @SSPRK22;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica

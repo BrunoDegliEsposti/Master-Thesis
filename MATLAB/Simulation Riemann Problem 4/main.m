@@ -22,7 +22,7 @@ u0 = @(x,y) ...
     u_from_rhovp([1.1,    0,      0,      1.1 ]).*(x>=0.5).*(y>=0.5);
 
 % Definizione del dominio discreto e dell'IVBP
-polysoup = polysoup_from_grid(200,200,-1,-1,3,3);
+polysoup = polysoup_from_grid(400,400,-0.5,-0.5,2,2);
 [vertices,edges,cells] = polymesh_from_polysoup(polysoup);
 cells.nu = 4;
 cells.u = cell_integral(u0,cells.nu,vertices,edges,cells)./cells.area;
@@ -32,8 +32,10 @@ bc{1} = 'absorbing';
 % Scelta dei metodi numerici
 method.nq = 1;
 method.order = 2;
-method.reconstruction_strategy = @reconstruction_LLS2;
-method.least_squares_type = 'P';
+method.reconstruction_strategy = @reconstruction_T1WENO;
+%method.least_squares_type = 'P';
+method.WENO_epsilon = 1e-6 * max(cells.h)^2;
+method.WENO_power = 4;
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
@@ -42,7 +44,7 @@ method.courant_number = 1;
 
 % Calcolo della soluzione numerica
 prefix = 'riemann-problem-4';
-tsnapshots = linspace(t0,T,101);
+tsnapshots = linspace(t0,T,26);
 [vertices,edges,cells,niter] = solver(...
     t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 

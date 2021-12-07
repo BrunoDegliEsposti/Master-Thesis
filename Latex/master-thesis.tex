@@ -31,7 +31,7 @@
 		empty cells with={-}
 	}
 \usepackage{listingsutf8}
-	\lstset{inputencoding=utf8/latin1}
+	\lstset{inputencoding=latin1}
 	\lstset{numbers=left, frame=tb, rulecolor=\color{black}}
 	\lstset{framexleftmargin=3em, xleftmargin=3em}
 	\lstset{tabsize=4}
@@ -40,12 +40,11 @@
 \usepackage{matlab-prettifier}
 	\lstset{style=Matlab-editor}
 \usepackage[scaled]{beramono}
-	\lstset{basicstyle=\mlttfamily \small}
-	\lstset{numberstyle=\mlttfamily \small \color{gray}}
+	\lstset{basicstyle=\mlttfamily \scriptsize}
+	\lstset{numberstyle=\mlttfamily \scriptsize \color{gray}}
 \usepackage{caption, subcaption}
 	\captionsetup{tableposition=top,figureposition=bottom}
 	\captionsetup{justification=centering,font=small,labelfont=bf}
-
 
 \renewcommand{\vec}[1]{\bm{#1}}
 \newcommand{\mat}[1]{\bm{#1}}
@@ -61,6 +60,7 @@
 \newcommand{\deq}{\vcentcolon=}
 \newcommand{\eqd}{=\vcentcolon}
 \newcommand{\dx}{\, d\vec{x}}
+\newcommand{\dxy}{\, dx \:\! dy}
 \newcommand{\dt}{\, dt}
 \newcommand{\dsigma}{\, d\vec{\sigma}}
 \newcommand{\grad}{\nabla}
@@ -75,8 +75,11 @@
 \DeclareMathOperator{\TV}{TV}
 \DeclareMathOperator{\tr}{tr}
 
+\newcommand{\bruno}[1]{{\textcolor{orange}{[Bruno: {#1}]}}}
+\newcommand{\code}[1]{\begin{small}\texttt{#1}\end{small}}
+
 \theoremstyle{definition}
-\newtheorem*{defi}{Definition}
+\newtheorem{defi}{Definition}[chapter]
 \newtheorem*{exam}{Example}
 \newtheorem*{prob}{Problem}
 
@@ -93,12 +96,14 @@
 
 \input{titlepage.tex}
 
+\input{dedication.tex}
+
 \tableofcontents
 \pagestyle{headings}
 
 \input{00-introduction.tex}
 \input{01-euler-equations.tex}
-\input{02-conservation-laws.tex}
+%\input{02-conservation-laws.tex}
 \input{03-finite-volume-method.tex}
 \input{04-WENO-reconstructions.tex}
 

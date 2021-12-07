@@ -24,7 +24,7 @@ u_exact = @(x,y,t) vortex(x,y,t,cx0,cy0,cvx,cvy,beta);
 u0 = @(x,y) u_exact(x,y,t0);
 
 % Definizione del dominio discreto e dell'IVBP
-[vertices,edges,cells] = polymesh_load('regular_square_50x50.mat');
+[vertices,edges,cells] = polymesh_load('regular_square_100x100.mat');
 cells.nu = 4;
 cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
 bc = {};
@@ -33,10 +33,10 @@ bc{1} = u_exact;
 % Scelta dei metodi numerici
 method.nq = 1;
 method.order = 2;
-method.reconstruction_strategy = @reconstruction_T1WENO;
-method.WENO_epsilon = 1e-5;
-method.WENO_power = 4;
-%method.least_squares_type = 'P';
+method.reconstruction_strategy = @reconstruction_LLS2;
+%method.WENO_epsilon = 1e-5;
+%method.WENO_power = 4;
+method.least_squares_type = 'P';
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
@@ -45,7 +45,7 @@ method.courant_number = 1;
 
 % Calcolo della soluzione numerica
 prefix = 'vortex-grid';
-tsnapshots = linspace(t0,T,11);
+tsnapshots = linspace(t0,T,101);
 [vertices,edges,cells,niter] = solver(...
     t0,T,prefix,tsnapshots,vertices,edges,cells,method);
 

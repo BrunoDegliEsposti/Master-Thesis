@@ -2,44 +2,105 @@
 %\phantomsection
 \addcontentsline{toc}{chapter}{Introduction}
 
-{\color{blue} Qui per ora ho fatto copia-incolla di una parte del progetto
-di ricerca che avevo scritto per la domanda di dottorato.
-Penso che possa essere una base di partenza ragionevole.}\\
-
 Fast, accurate and reliable simulations of transport phenomena are of great
 importance to scientific and engineering applications, but to this day remain
 challenging despite decades of effort in the field of numerical analysis.
 
 The reasons are manifold: first, the interplay between the numerical domain
 of dependence at every point and the analytical domain of dependence is very
-delicate and, if not handled correctly, can easily cause instability
-(hence the need for upwinding, CFL conditions, etc).
+delicate and, if not handled correctly, can easily lead to the definition
+of unstable numerical methods.
+%(hence the need for upwinding, CFL conditions, etc).
 
 Second, weak diffusion terms in the equations (or the lack thereof) allow
 sharp features of the solution to propagate without substantial smoothing
-effects. This a problem for low order schemes, which suffer from excessive
-dissipation, but also for high order schemes, which rely on regularity
+effects. This a problem for low order numerical schemes, which suffer from
+excessive dissipation, but also for high order schemes, which rely on regularity
 assumptions that may only hold piecewise on the exact solution.
 Moreover, in the inviscid nonlinear case, even smooth initial boundary
 data can develop discontinuities in finite time due to wave-breaking phenomena.
 
-And finally, a convergent scheme can still produce unsatisfactory results
+And finally, a convergent numerical scheme can still produce unsatisfactory results
 from a qualitative point of view, because it may not enforce exact
 conservation at the discrete level, or it may produce spurious oscillations
 around sharp features, or it may even converge to the wrong kind of weak
-solution (violation of entropy conditions).
+solution (for example, one that violates a suitable generalization of the
+second law of thermodynamics).
 
-In the master’s thesis we’ve tackled these problems in 2D using
-well-established but modern techniques that combine the finite volume
-method (FVM) with Godunov’s method and weighted essentially
-non-oscillatory (WENO) reconstructions using least-squares polynomial
-interpolation, following the works of Hu and Shu and others.
-We’ve successfully generalized type-I WENO schemes to polygonal
-meshes and have shown their effectiveness on Voronoi tessellations.
+In this work, we tackle some of these issues in the context of the
+numerical solution of the 2D compressible Euler equations,
+which are among the most important examples of hyperbolic systems of
+conservation laws both from a practical and a historical point of view.
+Our approach builds on well-established but modern techniques that
+combine the finite volume method (FVM) with Godunov’s method and Weighted
+Essentially Non-Oscillatory (WENO) reconstructions based on least-squares
+polynomial approximation, following the works of Hu and Shu and others
+\cite{hu1999weighted} \cite{kaser2005ader}.
 
-This is in line with the modern trend towards more flexibility in the
-discretization of problems’ domains. The main benefits are the
-following: greater freedom in the meshing process, easier handling
-of complex geometries, straightforward local refinement (no hanging
-nodes) and natural treatment of hybrid grids and non-matching
-interfaces without overlapping patches.
+After an introduction to the 2D compressible Euler equations
+and the finite volume method, we define numerical schemes
+of arbitrarily high order for the solution of hyperbolic systems
+of conservation laws by using a least-squares polynomial approximation
+technique. The resulting schemes are quantitatively accurate, but
+produce unacceptable oscillations around discontinuities or other sharp
+features of the solutions, so their use must be limited to the simulation
+of smooth flows.
+
+To fix this, we introduce a family of numerical schemes known as WENO that can
+detect and avoid unwanted oscillations in the numerical solution.
+More precisely, in Chapter \ref{ch:WENO} we successfully generalize
+type-I WENO schemes from triangular meshes to arbitrary polygonal
+meshes and show their effectiveness on Voronoi tessellations for
+the solution of the 2D compressible Euler equations.
+This is in line with a wider, modern trend towards greater flexibility in
+the discretization of problems’ domains.
+
+A significant amount of effort was put into the implementation
+of these numerical methods, which are at times simple to describe by
+words but actually very time-consuming to code.
+The most relevant parts of the source code can be found in Appendix
+\ref{ch:appendix-source-code}. The high-level routines of the finite
+volume solver are written in MATLAB, whereas the low-level routines
+are written in C++ for the sake of performance; the two parts
+are connected through MATLAB's MEX interface.
+
+Properly visualizing a numerical solution to a 2D partial differential equation
+can be a challenging task, but is also one of the best ways to judge its quality
+and gain confidence that the numerical methods have been implemented correctly.
+For this reason, we have saved the results of our simulations in a format
+(\code{.vtk}) that is compatible with Paraview, a popular open-source
+data analysis and visualization application widely used in computational
+fluid dynamics for post-processing tasks.
+
+%This thesis is structured as follows.
+%In Chapter \ref{ch:euler-equations}, the 2D compressible Euler equations
+%are introduced and derived from \dots
+%
+%In Chapter \ref{ch:conservation-laws}, the Euler equations 
+%%special case of hyp.sys.
+%
+%In Chapter \ref{ch:FVM}, the finite volume method is introduced
+%and numerical schemes of arbitrarily high order for the solution
+%of hyperbolic systems of conservation laws are defined
+%using a least squares polynomial approximation technique.
+%
+%In Chapter \ref{ch:WENO}, we successfully generalize type-I WENO schemes
+%from triangular meshes to arbitrary polygonal meshes and show their
+%effectiveness on Voronoi tessellations for the solution of
+%the 2D compressible Euler equations.
+%This generalization is in line with a modern trend towards greater
+%flexibility in the discretization of problems’ domains.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

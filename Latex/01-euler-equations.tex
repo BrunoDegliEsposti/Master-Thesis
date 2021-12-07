@@ -4,62 +4,55 @@
 
 \chapter{Compressible Euler equations} \label{ch:euler-equations}
 
-In fluidodinamica, le \emph{equazioni di Eulero per fluidi compressibili}
-sono un sistema di equazioni alle derivate parziali
-adatto a descrivere il moto di un fluido di densità variabile nelle ipotesi
-semplificative di flusso non viscoso e adiabatico, vale a dire
-in assenza di forze d'attrito interne al fluido o trasmissione di calore.
-Rispetto ad altri modelli fluidodinamici più completi,
-% vedi paragrafo 2.3.2 di "un approccio libero ecc"
-% e la pagina wikipedia sull'inviscid flow.
-come le equazioni di Navier-Stokes, queste ipotesi rendono
-le equazioni di Eulero totalmente prive di termini diffusivi,
-cosicché la loro dinamica è governata interamente da termini del primo ordine
-di tipo convettivo non lineare. Quest'ultimi
-conferiscono alle equazioni di Eulero un carattere puramente iperbolico
-e permettono la formazione e la propagazione di discontinuità durante il moto.
-(qui probabilmente commento sul fatto che la ricerca di metodi numerici in grado di
-preservare al meglio tali discontinuità sia un argomento chiave
-di questo lavoro \dots)
+In fluid dynamics, the \emph{Euler equations for compressible fluids} are
+a system of partial differential equations that describe the motion of a
+variable density fluid under the simplifying assumptions of inviscid and
+adiabatic flow, that is, in the absence of frictional forces
+and thermal conduction between adjacent layers of fluid.
+Compared to other fluid dynamical models, like the Navier-Stokes
+equations, these assumptions completely deprive the Euler equations
+of any diffusive terms, so that their dynamics are fully determined
+by their first-order nonlinear convective terms.
+It is these terms that confer to the system of Euler equations
+a purely hyperbolic character, and allow the formation
+and propagation of discontinuities in the flow.
 
-In letteratura esistono più versioni delle equazioni di Eulero.
-A distinguerle sono diversi aspetti:
-il numero di dimensioni spaziali lungo le quali avviene il moto,
-le particolari grandezze fisiche associate alle incognite dell'equazione,
-le proprietà termodinamiche del fluido
-e il tipo di interazioni con l'ambiente esterno.
-In questo lavoro ci occuperemo nello specifico delle
-equazioni di Eulero per gas perfetti in $\R^3$ in assenza di forze esterne.
-Sotto tali ipotesi, le equazioni di Eulero formano un sistema di
-cinque equazioni scalari che può essere scritto come
-\emph{sistema iperbolico di leggi di conservazione}
+There is not just \emph{one} version of the Euler equations in the
+literature: by varying the choice of unknown physical variables,
+the dimension of the domain, the equation of state of the fluid
+and the interactions with the external environment, we get a whole
+family of similar (but ultimately different) systems of partial
+differential equations, each one worthy of the name \emph{Euler equations}.
+In this work we will focus on the Euler equations for perfect
+gases in $\R^2$ without external volume forces.
+Under these assumptions, the Euler equations form a system of four
+scalar partial differential equations that can be written as a
+\emph{hyperbolic system of conservation laws}
 \begin{equation} \label{eq:sistema-iperbolico-di-leggi-di-conservazione}
-\partial_t \vec{u} + \diver(\tns{F}(\vec{u})) = 0,
+\partial_t \vec{u} + \diver(\tns{F}(\vec{u})) = 0.
 \end{equation}
-la cui particolare forma esprime in modo esplicito
-la conservazione di quantità fisiche rilevanti,
-quali la massa, la quantità di moto o l'energia.
-È senz'altro notevole che la conservazione di tali quantità
-non sia solo condizione necessaria alla scrittura delle equazioni
-di Eulero (perché è noto che massa, quantità di moto
-ed energia si conservano in un sistema isolato),
-ma sia anche condizione sufficiente: queste leggi
-di conservazione vincolano a tal punto il moto del fluido
-da determinarlo univocamente, perché ne esauriscono tutti i gradi
-di libertà.
-Pertanto, quando più avanti esprimeremo le leggi di conservazione
-in forma differenziale, otterremo un sistema \emph{chiuso} di equazioni
-alle derivate parziali.
+Equations of this form express the conservation of fundamental physical
+quantities such as mass, momentum, or energy. It is certainly remarkable
+that the conservation of such quantities is not only a necessary condition
+for the derivation of Euler's equations (as it is well known that
+mass, momentum and energy are conserved in every isolated system), but
+it is also a sufficient condition: in the case of inviscid and adiabatic
+flow, these aforementioned conservation laws constrain the motion of
+the fluid to the point of uniquely determining it, because
+they exhaust all of its available degrees of freedom.
+Therefore, when we will later express the conservation laws in differential
+form, we will obtain a \emph{closed} system of partial differential equations.
 
-Il primo paragrafo di questo capitolo è dedicato a delle nozioni di base
-di meccanica dei continui e di termodinamica.
-Il secondo paragrafo è dedicato all'espressione in forma differenziale
-delle leggi di conservazione della massa, della quantità di moto e
-dell'energia, le quali ci permetteranno di scrivere le equazioni di Eulero
-nella forma \eqref{eq:sistema-iperbolico-di-leggi-di-conservazione}.
-Il terzo paragrafo è in lavorazione \dots
+The rest of this chapter is structured as follows.
+In the first section we recall some basic notions of continuum
+mechanics and thermodynamics. In the second section we express
+in differential form the laws of conservation of mass, momentum
+and energy for a fluid and write down the compressible Euler equations
+as a hyperbolic system of conservation laws.
+In the third section we provide a brief overview of the theory of
+hyperbolic systems of conservation laws.
 
-\section{Elements of continuum mechanics and thermodynamics}
+\section{Continuum mechanics and thermodynamics}
 
 \subsection*{Kinematics of a continuum}
 
@@ -407,20 +400,21 @@ This new equation of state, featuring $p$, $\rho$ and $u$ as state variables,
 will be useful at the end of the next section to close
 Euler's system of equations for the motion of a compressible fluid.
 
-Another important state variable is \emph{entropy}. Suppose that a perfect
-gas undergoes a transformation from an initial state identified by the
-state variables $(p_i,\rho_i)$ to a final state identified by $(p_f,\rho_f)$.
-The corresponding change in entropy is
+Another important state variable is \emph{entropy}, denoted by $S$.
+Suppose that a perfect gas undergoes a transformation from an initial
+state identified by the state variables $(p_i,\rho_i)$ to a final state
+identified by $(p_f,\rho_f)$. The corresponding change in entropy is
 \[
 \Delta S = n C_v \log\left( \frac{p_f \rho_f^{-\gamma}}{p_i \rho_i^{-\gamma}} \right).
 \]
 %For our mathematical purposes, this formula will suffice to define
 %entropy up to a constant that will be fixed on a case-by-case basis.
-This formula is enough to define the entropy of a perfect gas up to a constant;
-this is not the way entropy is usually defined in physics, as it is lacking
-in both generality and motivation, however for our mathematical purposes
-there is no need to make things more complicated (e.g.\ by
-introducing statistical mechanics and the third law of thermodynamics).
+This formula can be used to define the entropy of a perfect gas up to a constant;
+this is not the way entropy is usually defined in physics, though,
+as it is lacking in both generality and motivation,
+however for our mathematical purposes there is no need to make things
+more complicated (e.g.\ by introducing statistical mechanics
+and the third law of thermodynamics).
 The constant in the definition of entropy is fixed as soon as the value
 of $S$ is assigned to a reference state (like air at a
 standard condition for temperature and pressure).
@@ -428,7 +422,7 @@ Entropy is an extensive property of a thermodynamic system and
 obeys the second law of thermodynamics: entropy of an isolated system
 undergoing an arbitrary transformation is a non-decreasing function of time.
 
-\section{Derivation of the compressible Euler equations}
+\section{Derivation of the compressible Euler equations} \label{sec:derivation-euler}
 
 As we have pointed out in the introduction to this chapter,
 the term \emph{Euler equations} is slightly ambiguous: all equations
@@ -449,7 +443,7 @@ various working assumptions, we list them here once and for all:
 	\[
 	\tns{\tau}^{ij}(\vec{x},t) = -p(\vec{x},t) \tns{\delta}^{ij}.
 	\]
-	The choice of the Knonecker tensor $\tns{\delta}^{ij}$ is essentially forced
+	The choice of the Kronecker tensor $\tns{\delta}^{ij}$ is essentially forced
 	by the fact that pressure gives rise to normal and isotropic stresses.
 \item[(H3)] The thermodynamic coordinates of the fluid are constrained
 	at every point and at all times by the equations of state
@@ -477,8 +471,9 @@ positive for all $\vec{x}$ in $\Omega_t$ and all $t \geq t_0$.
 Without this assumption, we would have to allow vacuum states
 and employ ad-hoc techniques to handle them in a satisfactory way.
 In any case, fluid states with negative mass density, like those
-produced by unstable numerical methods (see Section \dots), %TODO
-are always unacceptable, as they have no physical meaning whatsoever.
+produced by unstable numerical methods (see the introduction
+to Chapter \ref{ch:WENO}), are always unacceptable,
+as they have no physical meaning whatsoever.
 
 By the Reynolds transport theorem in Eulerian form, it follows that
 \begin{equation} \label{eq:continuita-forma-integrale}
@@ -686,7 +681,7 @@ in a single system of partial differential equations known as
 \end{equation}
 This is a system of $n+2$ equations in $n+3$ variables, so we need
 to express pressure as a function of $(\rho,\rho\vec{v},e)$ in order to close it.
-This is possible thanks to hypotesis \textbf{(H3)}, according to which
+This is possible thanks to hypothesis \textbf{(H3)}, according to which
 we can apply the state equation for perfect gases
 \eqref{eq:equazione-stato-gas-perfetti-p-rho-u} to every infinitesimal
 portion of fluid:
@@ -696,361 +691,597 @@ p
 = (\gamma-1) \left( e - \frac{1}{2} \rho \norm{\vec{v}}^2 \right)
 = (\gamma-1) \left( e - \frac{\norm{\rho \vec{v}}^2}{2\rho} \right).
 \]
-Operiamo ora un cambio di notazione, così da poter
-scrivere il sistema \eqref{eq:sistema-eulero} in forma vettoriale e
-con la notazione tipica delle equazioni alle derivate parziali.
-La variabile $u$ non indicherà più l'energia interna specifica,
-bensì il vettore delle incognite
+Let $n = 2$. The system \eqref{eq:sistema-eulero} can be equivalently
+expressed in the more readable vectorial notation by introducing
+the vector of unknowns
 \[
-u(x,t) \colon \Omega_t \times [t_0,\infty) \to \R^5
-\qquad u(x,t) = \begin{pmatrix} \rho(x,t) \\ \rho(x,t) v(x,t) \\ e(x,t) \end{pmatrix}
+\vec{u}(\vec{x},t) \colon \Omega_t \times [t_0,\infty) \to \R^4
+\qquad \vec{u}(\vec{x},t)
+= \begin{pmatrix} \rho(\vec{x},t) \\
+\rho(\vec{x},t) \vec{v}(\vec{x},t) \\
+e(\vec{x},t) \end{pmatrix}
 \]
-e la variabile $F$ non indicherà più una generica forza macroscopica,
-bensì la funzione \emph{flusso}
-\[
-F \colon \R^+ \! \times \R^3 \! \times \R \to \R^{5 \times 3}
-\qquad
-F(u) =
+and the \emph{flux} function
+$\tns{F} \colon \mathcal{U} \to \R^{4 \times 2}$, with
+\begin{gather*}
+\mathcal{U} \deq \left\{ (\rho,\rho\vec{v},e) \in \R^4
+	\mid \rho > 0 \text{ and } p(\rho,\rho\vec{v}, e) > 0 \right\} \\
+\tns{F}(\vec{u}) =
+\tns{F}(u_1,u_2,u_3,u_4) =
 \frac{1}{u_1}
 \begin{pmatrix*}[l]
-u_1 u_2            & u_1 u_3            & u_1 u_4            \\
-u_2 u_2 + u_1 p(u) & u_2 u_3            & u_2 u_4            \\
-u_3 u_2            & u_3 u_3 + u_1 p(u) & u_3 u_4            \\
-u_4 u_2            & u_4 u_3            & u_4 u_4 + u_1 p(u) \\
-u_5 u_2 + u_2 p(u) & u_5 u_3 + u_3 p(u) & u_5 u_4 + u_4 p(u)
-\end{pmatrix*}
-\]
-con
-\begin{equation*}
-p(u) = (\gamma-1) \left( u^5 - \frac{u_2^2+u_3^2+u_4^2}{2 u^1} \right)
-\qquad \gamma = \frac{7}{5}.
-\end{equation*}
-A questo punto si verifica facilmente che il sistema \eqref{eq:sistema-eulero}
-è equivalente a
+u_1 u_2            & u_1 u_3            \\
+u_2 u_2 + u_1 p(\vec{u}) & u_2 u_3            \\
+u_3 u_2            & u_3 u_3 + u_1 p(\vec{u}) \\
+u_4 u_2 + u_2 p(\vec{u}) & u_4 u_3 + u_3 p(\vec{u})
+\end{pmatrix*} \\
+p(\vec{u})
+= p(u_1,u_2,u_3,u_4)
+= (\gamma-1) \left( u_4 - \frac{u_2^2+u_3^2}{2 u_1} \right)
+	\qquad \gamma = \frac{7}{5}
+\end{gather*}
+The domain $\mathcal{U}$ is known as the \emph{admissible set} for
+the compressible Euler equations, and contains all the physically
+admissible states for a perfect gas. We can now write the system
+\eqref{eq:sistema-eulero} with $n = 2$ as the
+\emph{hyperbolic system of conservation laws}
 \[
-\partial_t u + \diver(F(u)) = 0.
+\partial_t \vec{u}(\vec{x},t) + \diver(\tns{F}(\vec{u}(\vec{x},t))) = 0,
 \]
-Per convenzione, la divergenza viene calcolata rispetto alle righe
-della matrice $F(u)$.
-Abbiamo quindi ottenuto le equazioni di Eulero sotto forma di
-\emph{sistema di leggi di conservazione}.
-
+where the divergence is taken with respect to the rows of $\tns{F}$.
 %La funzione tensoriale \emph{flusso} $F \colon \R^5 \to \R^5 \otimes \R^3$,
 %che per comodità riportiamo sotto forma di matrice (basta abbassare
 %il secondo indice controvariante) e mettendo in evidenza $u_1^{-1}$:
 
-\section{Proprietà delle equazioni di Eulero}
+\section{Systems of conservation laws} \label{sec:conservation-laws}
+The theory of \emph{hyperbolic systems of conservation laws}
+is the branch of mathematical analysis that investigates
+partial differential equations of the form
+\begin{equation} \label{eq:hscl-vectorial}
+\partial_t \vec{u}(\vec{x},t) + \diver(\tns{F}(\vec{u}(\vec{x},t))) = 0,
+\end{equation}
+or generalizations thereof,
+with $\vec{x} \in \Omega \subseteq \R^n$, $t \geq 0$ and
+$\vec{u} \in \mathcal{U} \subseteq \R^m$.
+$\tns{F}(\vec{u})$ is a (possibly) nonlinear function
+known as \emph{flux}, which fully characterizes the equation and,
+crucially, only depends on $\vec{u}$, and not any of its higher order
+% derivatives $\nabla\vec{u}$, $\nabla^2\vec{u}$, etc.
+derivatives: this means that equation
+\eqref{eq:hscl-vectorial} is a first-order system.
 
-In questo capitolo provvisorio ho pensato di riassumere schematicamente
-i risultati più importanti sulle equazioni di Eulero per gas perfetti
-(da un punto di vista dell'analisi matematica).
-Ho fatto una ricerca in letteratura per capire cosa si sappia
-sulle loro soluzioni (molto poco, mi sono accorto).
-I testi più utili per il caso multidimensionale (quello di interesse)
-si sono rivelati~\cite{serre} e~\cite{benzoni-gavage-serre}.
-Le cose da dire sarebbero molte, ma ancora non so quali saranno
-utili successivamente per la trattazione numerica delle equazioni.
-Inoltre, potrebbe essere meglio non introdurre qui
-la teoria sui sistemi iperbolici di leggi di conservazione,
-bensì in un paragrafo o un capitolo precedente.
-Alcune idee su cosa includere in questo capitolo (forse troppe):
+The theory dates back to the works of Euler, who in the 1750s
+first used the principle of conservation of mass and momentum
+to describe the motion of an ideal fluid.
+Since thermodynamics was still in its infancy at the time,
+Euler and other scholars worked under the assumption of incompressible
+flows; it was only later that the first system of conservation laws was
+obtained, by working under the assumption of barotropic flow
+(i.e.\ that pressure in a gas is a function of its density only).
+By the mid-19th century, the latter assumption was generalized to
+a principle of conservation of energy, and the full compressible Euler
+equations \eqref{eq:sistema-eulero} were obtained.
 
-\subsection*{Teoria quasilineare}
+It is fair to say that, throughout the 19th century, the field
+of hyperbolic systems of conservation laws (which at the time was just
+analytical gas dynamics) and the field of thermodynamics evolved together.
+By the end of the century, the study of conservation laws
+had already found numerous applications in the mathematical modeling
+of combustion, detonation, and aerodynamics, which are still
+relevant to this day.
+In the 1940s, all the existing theory was summarized and consolidated
+in a highly influential book by Courant and Friedrichs
+\cite{courant-friedrichs}; after that, works by Hopf and Lax~\cite{hopf,lax}
+in the 1950s laid the foundations for the present state of the art
+in the theory of hyperbolic systems of conservation laws,
+using modern analytical techniques.
 
-\begin{itemize}
-% 3.1 serre
-\item Definizione di \emph{iperbolicità} di un sistema lineare
-	a coefficienti costanti del primo ordine
-	\[
-	\partial_t u + \sum_{i=1}^n A_i \partial_i u = 0,
-	\qquad A_i \in \R^{m \times m}
-	\]
-	Motivazione della definizione in quanto condizione necessaria e
-	sufficiente affinché il problema di Cauchy
-	sia ben posto in $L^2$ (oppure in $H^s$ spazio di Sobolev).
-	Sia
-	\[
-	A(\xi) = \sum_{i=1}^n \xi_i A_i
-	\quad 	\text{per ogni $\xi \in \R^n$.}
-	\]
-	Un sistema è iperbolico se e solo se gli autovalori di $A(\xi)$
-	sono reali per ogni $\xi \in \R^n$ e la matrice $A(\xi)$
-	è diagonalizzabile in modo uniforme.
-	Interpretazione degli autovalori di $A(\xi)$ come velocità
-	di propagazione delle onde piane nella direzione $\xi$.
-\item I sistemi simmetrizzabili sono iperbolici. Definizione di sistema
-	strettamente iperbolico (autovalori semplici) e costantemente iperbolico
-	(autospazi di dimensione costante).
-	I sistemi strettamente/costantemente iperbolici sono iperbolici.
-% 3.2 serre
-\item Definizione di \emph{iperbolicità} per il sistema quasilineare
-	\[
-	\partial_t u + \sum_{i=1}^n A_i(u) \partial_i u = 0,
-	\qquad A_i \colon \R^n \to \R^{m \times m}
-	\]
-	La diagonalizzabilità di $A(\xi,u)$ è richiesta in modo uniforme
-	anche rispetto a $u$.
-	Stavolta l'iperbolicità non è condizione sufficiente all'esistenza
-	di soluzioni del problema di Cauchy, servono ipotesi più forti
-	(ad esempio, simmetrizzabilità). Le equazioni di Eulero
-	formano un sistema quasilineare in ogni punto in cui
-	la soluzione $u$ è regolare.
-% 3.3 serre
-\item Definizione di campo caratteristico come applicazione da $(\xi,u)$
-	agli autovalori (detti velocità caratteristiche) e autospazi di $A(\xi,u)$.
-	Definizione di campi caratteristici linearmente degeneri e
-	genuinamente non lineari.
-% 13.2.2 benzoni-gavage
-\item Il sistema delle equazioni di Eulero è iperbolico, se $\rho > 0$.
-	Calcolo dei campi caratteristici. Il sistema è strettamente iperbolico
-	in 1D e costantemente iperbolico in 2D/3D.
-	Formula per la velocità di propagazione delle onde
-	(utile per la condizione numerica CFL in seguito).
-% proposizione 1.4 benzoni-gavage o la prima prop. di sideris84
-\item L'informazione si propaga dunque a velocità finita, limitata nella
-	direzione $\xi$ dal massimo autovalore di $A(\xi,u)$.
-	Definizione di dominio di dipendenza.
-	Principio di località (prima proposizione di \cite{sideris84}).
-	Un teorema analogo non può valere per le equazioni di Navier-Stokes
-	a causa del carattere parabolico dei processi di diffusione.
-% 13.2.3 benzoni-gavage
-\item Il sistema delle equazioni di Eulero è simmetrizzabile, se $\rho > 0$.
-	Questo risultato è alla base della teoria di esistenza locale di soluzioni
-	classiche.
-\end{itemize}
+In the following 70 years, groundbreaking results were obtained
+by authors such as Glimm, Kruzhkov, Bressan, just to name a few.
+Nevertheless, the theory of hyperbolic systems of conservation laws is still
+very far from being complete, as many fundamental open problems remain
+unsolved: among them, the problem of global existence of weak
+solutions in the $m,n > 1$ case and the problem of uniqueness of weak solutions.
+%using some sort of generalization of the second principle of thermodynamics.
+In the words of Constantine Dafermos, whose excellent monograph \cite{dafermos}
+was used as a reference to write this chapter,
+\begin{displayquote}
+\textit{The Cauchy problem in the large [\dots]
+%may be considered only in the context of weak solutions. This
+is still terra incognita for systems of more
+than one equation in several space dimensions, as the analysis is at
+present facing seemingly insurmountable obstacles. It may turn out that
+the Cauchy problem is not generally well-posed, either because of
+catastrophic failure of uniqueness, or because distributional solutions
+fail to exist. In the latter case one would have to resort to the class
+of weaker, measure-valued solutions. It is even conceivable that
+hyperbolic systems should be perceived as mere shadows, in the Platonic sense,
+of diffusive systems with minute viscosity or dispersion.}
+\end{displayquote}
+%In this section, we provide a brief overview of the theory of hyperbolic
+%systems of conservation laws, with a focus on the qualitative properties
+%of the solutions, the local well-posedness theory in the smooth~$m,n > 1$ case,
+%and everything else
+In this section we provide a very brief overview of the theory of hyperbolic
+systems of conservation laws, focusing on the facts that
+we consider relevant as a background for the development
+of effective numerical schemes.
 
-\subsection*{Soluzioni classiche del problema di Cauchy}
+\subsection*{Definitions and technical assumptions}
 
-\begin{itemize}
-\item Esistenza e unicità locale di soluzioni $C^1$ a partire da
-	una condizione iniziale $H^s$ con $s > 5/2$.
-	Ho trovato molti riferimenti, ognuno con un enunciato leggermente
-	diverso: Teorema 3.6.1 in \cite{serre},
-	Teorema 2.1 in \cite{chen-wang},
-	Teorema 13.1 in \cite{benzoni-gavage-serre} e
-	Teorema 5.1.1 in \cite{dafermos}.
-	Quest'ultimo mi pare il più completo, perché è l'unico a occuparsi
-	di regolarità rispetto al tempo maggiore di $C^1$ (inclusione 5.1.5)
-	e a dimostrare anche la dipendenza continua dai dati iniziali
-	(Teorema 5.2.1). Tuttavia, per poter applicare questo risultato
-	alle equazioni di Eulero è richiesta una trasformazione affine,
-	dato che il flusso $F$ è definito solo sull'insieme $\{\rho > 0\}$
-	e invece la palla $\overline{\mathscr{B}_\rho}$ è centrata nell'origine.
-	La modifica richiesta è spiegata bene nel commento che segue immediatamente
-	il Teorema 10.1 in \cite{benzoni-gavage-serre}.
-\item Sarebbe utile, al fine di giustificare l'uso di metodi numerici
-	di ordine elevato, un risultato di regolarità $C^\infty$
-	anziché $C^1$ (per dati iniziali $C^\infty$, ovviamente).
-	Non ho trovato nessun riferimento in letteratura,
-	perché le soluzioni classiche sono in genere definite come
-	$C^1$ o localmente lipschitziane.
-	Mi pare però che il risultato di regolarità rispetto al
-	tempo menzionato nel punto precedente possa essere sfruttato
-	per ottenere questo tipo di regolarità (la regolarità spaziale segue
-	senza problemi dai teoremi di embedding di Sobolev).
-\item L'esistenza globale di soluzioni classiche $C^\infty$, ancora aperta
-	per Eulero incomprimibile o Navier-Stokes, qui è sicuramente falsa.
-	Le equazioni di Eulero possono sviluppare singolarità in tempo finito
-	anche in presenza di dati iniziali $C^\infty$.
-	I teoremi precedenti ci dicono che esistono tre possibili motivi
-	per cui una soluzione classica può smettere di esistere:
-	\begin{itemize}
-	\item $\rho \to 0$ in almeno un punto, cioè si viene a creare un vuoto nel fluido.
-	\item $\norm{u}_\infty \to \infty$, cioè almeno una delle variabili del fluido
-		sviluppa un asintoto verticale (fenomeno di blowup).
-	\item $\norm{\nabla u}_\infty \to \infty$, cioè almeno una delle variabili
-		del fluido sviluppa un flesso a tangente verticale (fenomeno di wave-breaking).
-		Fenomeni di compressione che portano i fronti d'onda
-		a diventare più ripidi al passare del tempo.
-		Analogia con l'intersezione di caratteristiche per
-		l'equazione di Burgers non viscosa $u_t + (u^2)_x = 0$.
-	\end{itemize}
-\item Ho trovato pochissimi risultati della forma: \emph{se la condizione iniziale
-	$u_0$ soddisfa la proprietà X, allora la soluzione classica $u(t)$
-	diventa singolare in tempo finito per il motivo Y}
-	(un risultato è \cite{yin}, ma sono 40 pagine di articolo!).
-	Comunque è fuori discussione che esistano dati $C^\infty$
-	niente affatto patologici che sviluppano singolarità in tempo finito:
-	in \cite{sideris85} l'autore dimostra che esistono condizioni iniziali (anche piccole)
-	che in un tempo finito $T$ rendono singolare la quantità di moto in almeno un punto,
-	nell'ipotesi che la soluzione $u(t)$ sia regolare fino a $T$.
-	Purtroppo questa dimostrazione di perdita di regolarità
-	non è costruttiva (il ragionamento è: supponiamo che la soluzione
-	classica esista per un tempo maggiore di $T$,
-	allora si verificherebbe un blowup, assurdo),
-	quindi nulla vieta che si sviluppi prima di $T$ un altro tipo di singolarità,
-	anzi, per come sono fatti i dati iniziali sembra più intuitivo
-	che si formi un'onda di shock piuttosto che un blowup della quantità di moto.
-	
-\item C'è da dire che, rispetto al caso 1D, il processo di formazione delle singolarità
-	non è ancora chiaro. Un'idea per dare esempi costruttivi di formazione
-	di certi tipi di singolarità (per esempio, onde di shock)
-	potrebbe essere quella di estendere esempi 1D al caso 3D in modo
-	costante lungo i piani ortogonali all'asse $x$.
-	In questo modo si potrebbe dedurre che tutte le singolarità che si possono
-	formare in 1D si possono anche formare in 3D.
-	Magari in 1D esistono esempi costruttivi ragionevolmente semplici.
-	Non sono però sicuro al 100\%
-	che l'estensione costante di una soluzione 1D sia una soluzione 3D,
-	dovrei fare due conti\dots
+First of all, we shall make it clear how the divergence operator
+is used in equation \eqref{eq:hscl-vectorial}.
+To do so, we switch to tensor notation and make everything explicit:
+\begin{equation} \label{eq:hscl-tensorial}
+\partial_t \vec{u}^i(\vec{x},t) + \partial_j (\tns{F}^{ij}(\vec{u}(\vec{x},t))) = 0
+\quad \text{for each $i = 1, \dots, m$.}
+\end{equation}
+As a remainder, $\vec{x} \in \Omega \subseteq \R^n$, $t \geq 0$ and
+$\vec{u} \in \mathcal{U} \subseteq \R^m$.
+Once again, we refer to Appendix~A for a brief introduction
+to tensors and their notation.
+Each of the $m$ unknowns $\vec{u}^i(\vec{x},t)$ is known as
+\emph{conserved variable}; %, for reasons which will be explained shortly;
+the whole vector $\vec{u}(\vec{x},t)$ at each point in space and time must belong
+to an open set of admissible values $\mathcal{U}$.
+The flux function $\tns{F}(\vec{u})$, whose domain is $\mathcal{U}$,
+is a smooth tensor field with values in $\R^m \otimes \R^n$,
+and the divergence operator is applied with respect
+to its $j$ index, which is the one associated to the number
+of spatial dimensions $n$ (whereas $i$ is associated to the number $m$ of
+scalar conservation laws).
 
-\item Precisazione: in 3D i fenomeni di dispersione delle onde contrastano
-	i fenomeni di compressione a tal punto da rallentare o addirittura
-	impedire del tutto la formazione di singolarità.
-	Questo fa sì che esistano condizioni di tipo dispersivo sui dati iniziali
-	sufficienti a garantire l'esistenza di soluzioni classiche per tutti i tempi
-	\cite{grassin}.
-	Si può dimostrare che non possono esistere risultati analoghi in 1D
-	(paragrafo 7.8 di \cite{dafermos}).
-	Questa è quindi una differenza qualitativa importante tra la formazione
-	di shock in 3D e in 1D.
-	
-\item Alla luce di tutto questo, è necessario introdurre il concetto di soluzioni deboli.
-\end{itemize}
+By the chain rule, equation \eqref{eq:hscl-tensorial} is equivalent
+for regular solutions to the quasilinear system
+\begin{equation} \label{eq:hscl-quasilinear-tensorial}
+\partial_t \vec{u}^i(\vec{x},t)
++  \partial_k \tns{F}^{ij} (\vec{u}(\vec{x},t))
+\, \partial_j \vec{u}^k (\vec{x},t) = 0
+\quad \text{for each $i = 1, \dots, m$.}
+\end{equation}
+If, for any fixed $j$, we denote the $m \times m$ Jacobian matrix
+$\partial_k \tns{F}^{ij}$ by $d\tns{F}^j$, then the quasilinear system
+can be expressed in the more readable vectorial notation as
+\begin{equation} \label{eq:hscl-quasilinear-vectorial}
+\partial_t \vec{u}(\vec{x},t)
++ \sum_{j=1}^n d\tns{F}^j(\vec{u}(\vec{x},t))
+\, \partial_j \vec{u}(\vec{x},t) = 0.
+\end{equation}
+New we are ready to introduce the fundamental %, albeit technical,
+assumption of \emph{hyperbolicity}:
 
-\subsection*{Soluzioni deboli del problema di Cauchy}
+\begin{defi}[Hyperbolic system]
+The quasilinear system \eqref{eq:hscl-quasilinear-vectorial},
+and by extension system \eqref{eq:hscl-vectorial} in divergence form,
+are \emph{hyperbolic} if, for all versors $\vec{\nu}$ in $\R^n$ and all state
+vectors $\vec{u}$ in $\mathcal{U}$, the matrix
+\[
+d\mat{F}(\vec{\nu},\vec{u}) \deq \sum_{j=1}^n \vec{\nu}^j d\mat{F}^j(\vec{u})
+\]
+known as \emph{Jacobian of the flux in the direction of $\vec{\nu}$},
+is diagonalizable with real eigenvalues
+\[
+\lambda_1(\vec{\nu},\vec{u}) \leq \dots \leq \lambda_m (\vec{\nu},\vec{u}).
+\]
+If the eigenvalues are distinct for all values of $\vec{\nu}$ and $\vec{u}$,
+an assumption known as \emph{strong hyperbolicity},
+or if their multiplicities are at least constant, an assumption
+known as \emph{constant hyperbolicity}, then it is possible to
+prove the local existence of smooth right-eigenvector fields
+\[
+R_1(\vec{\nu},\vec{u}), \dots, R_m (\vec{\nu},\vec{u}).
+\]
+\end{defi}
+\noindent The importance of this definition can be explained in multiple ways.
+First of all, some kind of assumption on the spectrum of
+$d\mat{F}(\vec{\nu},\vec{u})$ is needed in order to restrict our attention
+to a family of partial differential equations that share the same
+qualitative properties. This is because, for example, the quasilinear
+system \eqref{eq:hscl-quasilinear-vectorial} includes the linear scalar
+transport equation
+\[
+u_t + \vec{v} \cdot \nabla_x u = 0
+\]
+and the system of Cauchy-Riemann equations
+\[
+u_t = v_x, \quad v_t = -u_x,
+\]
+whose solutions have essentially nothing in common. In the case
+of Cauchy-Riemann equations, it is possible to prove that the spectrum
+of $d\mat{F}(\vec{\nu},\vec{u})$ is purely imaginary: we say that they
+are equations of \emph{elliptic} type.
+In this section we are only interested in equations with wave-like solutions
+(like the compressible Euler equations), and this takes us to our
+second point: if we look for plane-wave solutions of the form
+\[
+\vec{u}(\vec{x},t) = f(\vec{x} \cdot \vec{\nu} - ct) \vec{v}
+\]
+with a smooth \emph{wave profile} $f \colon \R \to \R$,
+we obtain by \eqref{eq:hscl-vectorial} the necessary condition
+\[
+f'(\vec{x} \cdot \vec{\nu} - ct) (-c\vec{v})
++ f'(\vec{x} \cdot \vec{\nu} - ct)
+	d\tns{F}(\vec{\nu},f(\vec{x} \cdot \vec{\nu} - ct)\vec{v}) \vec{v} = 0.
+\]
+If the Jacobian of the flux $d\tns{F}(\vec{\nu},\vec{u})$ is constant
+with respect to $\vec{u}$, that is, the quasilinear system
+\eqref{eq:hscl-quasilinear-vectorial} is, in fact, linear, then
+by choosing a pair $(\vec{x},t)$ such that $f'(\vec{x} \cdot \vec{\nu} - ct) \neq 0$
+we get that the speed $c$ at which the plane wave propagates must be
+an eigenvalue of $d\tns{F}(\vec{\nu})$, hence $c = \lambda_j(\vec{\nu})$
+for some $j = 1, \dots, m$. If the Jacobian of the flux
+$d\tns{F}(\vec{\nu},\vec{u})$ is not constant with respect to $\vec{u}$,
+by a linearization argument we can still think of the eigenvalues
+$c(\vec{\nu},\vec{x},t)$ of $d\tns{F}(\vec{\nu},\vec{u}(\vec{x},t))$
+as the local wave speeds in $\vec{x}$ at time $t$ and in the direction $\nu$.
+In the linear case, the \emph{maximum speed} at which a plane wave
+can propagate in the $\vec{\nu}$ direction is given by the
+dominant eigenvalue of the Jacobian of the flux in the direction of $\vec{\nu}$.
+In the nonlinear case, the maximum wave speed in the $\vec{\nu}$ direction
+will be solution-dependent, but it can still be defined.
 
-\begin{itemize}
-\item Definizione di soluzione debole in $L^\infty$ del problema di Cauchy
-	% paragrafo 3.5 serre
-\item In 1D, è stata dimostrato che esiste $\delta > 0$ tale che
-	il problema di Cauchy è ben posto
-	(esistenza \textbf{globale}, unicità, dipendenza continua dai dati iniziali)
-	se la condizione iniziale ha variazione totale minore di $\delta$,
-	più ipotesi su campi caratteristici genuinamente non lineari
-	oppure linearmente degeneri
-	(esistenza globale dovuta a Glimm, il resto a Bressan et al.
-	Un breve survey paper di Bressan è \cite{bressan}).
-	Dunque in 1D lo spazio di funzioni giusto in cui lavorare è BV.
-	Il problema per dati iniziali arbitrari è ancora aperto.
-\item L'esistenza di soluzioni deboli in 3D è un problema totalmente aperto.
-	Non è nemmeno chiaro in quale spazio di funzioni sia opportuno lavorare,
-	quindi la scelta di $L^\infty$ nella definizione di soluzione
-	debole non ha motivazioni profonde (mentre in altri contesti, più semplici,
-	è la scelta giusta; comunque qui rimane un'ipotesi fisica importante).
-\item La condizione di Rankine-Hugoniot è necessaria e sufficiente affinché
-	una soluzione regolare che presenta una superficie di discontinuità
-	sia una soluzione debole.
-\item Velocità di propagazione di una discontinuità.
-	Il caso delle equazioni di Eulero.
-% 13.4 bensoni-gavage
-\item Differenza tra una discontinuità dinamica (es.\ onda d'urto)
-	e una discontinuità di contatto (es.\ strati di un vortice).
-	Differenza tra una discontinuità dinamica compressiva e una espansiva
-	(es.\ onda di rarefazione).
-\item Altro problema: le soluzioni deboli, ammesso che esistano,
-	non sono in generale uniche.
-	Idea: escludiamo quelle che violano il secondo principio della termodinamica.
-\end{itemize}
+In the case of the Euler equations, it can be proved
+\cite[p.~104]{toro2013riemann} that the spectrum of $d\mat{F}(\vec{\nu},\vec{u})$ is
+\[
+\{ \vec{v}\cdot\vec{\nu} - c(\vec{u}),
+\vec{v}\cdot\vec{\nu},
+\vec{v}\cdot\vec{\nu} + c(\vec{u}) \},
+\quad \text{with } c(\vec{u}) = \sqrt{\frac{\gamma p(\vec{u})}{\rho}}
+\]
+The first and third eigenvalues are always simple, while the second
+one has algebraic multiplicity $n$ and is always semisimple.
+Therefore, the compressible Euler equations form a constantly hyperbolic
+system of conservation laws. The quantity $c(\vec{u})$
+is the \emph{speed of sound} in a gas in a given state $\vec{u}$.
 
-\subsection*{Soluzioni deboli di entropia del problema di Cauchy}
+Initial value problems with piecewise constant initial data are known
+as \emph{Riemann problems}.
 
-\begin{itemize}
-% paragrago 10.2 benzoni-gavage
-\item Definizione di \emph{entropia matematica} e \emph{flusso di entropia}
-	per un sistema di leggi di conservazione.
-	Definizione di soluzione debole di entropia.
-	Le soluzioni deboli di entropia non sono invertibili rispetto al tempo.
-\item Nel caso dell'equazione di Eulero, l'entropia termodinamica
-	è un'entropia matematica concava (quindi $-S$ è convessa; in
-	matematica e in fisica si usano due convenzioni diverse).
-	% unicità di tale funzione?
-%\item L'esistenza di una funzione entropia strettamente convessa
-%	implica la simmetrizzabilità di un sistema quasilineare.
-\item Se un sistema di leggi di conservazione ammette un'entropia convessa,
-	allora ogni sua soluzione debole	di entropia coincide con la sua
-	soluzione classica per tutto il tempo in cui quest'ultima esiste.
-\item Disuguaglianza necessaria e sufficiente affinché una soluzione regolare
-	che presenta una superficie di discontinuità sia una soluzione debole di entropia.
-% 13.4 bensoni-gavage
-\item Non tutte le discontinuità sono fisicamente ammissibili.
-	Condizione di entropia: il salto di entropia dev'essere positivo.
-	Una discontinuità soddisfa la condizione di entropia se e solo se è compressiva.
-	Definizione di shock come Rankine-Hugoniot più condizione di entropia.
-% pagina 409 benzoni-gavage
-\item Condizione di ammissibilità di Lax per gli shock.
-	Shock sufficientemente piccoli soddisfano automaticamente questa
-	condizione. La condizione di Lax permette di dimostrare
-	risultati di stabilità degli shock (esistenza locale nel tempo
-	di una soluzione regolare a tratti in 3D) % teorema 21.11 benzoni-gavage
-	e risultati di unicità delle soluzioni deboli di entropia in 1D.
-\item L'unicità delle soluzioni deboli entropiche in 3D è un problema aperto,
-	ma ci sono buone ragioni per pensare che
-	la risposta sia negativa alla luce dei risultati ottenuti
-	per le equazioni di Eulero isoentropiche \cite{chiodaroli}.
-	In letteratura sono quindi state proposte nozioni più forti
-	di soluzioni deboli di entropia (per esempio, basate su
-	limiti singolari delle equazioni di Navier-Stokes),
-	ma ancora non esiste un criterio per estrarre una soluzione debole canonica.
-\end{itemize}
+%Unfortunately, initial boundary value problems for hyperbolic systems
+%of conservation laws can develop singularities in finite time even
+%if the initial and boundary conditions are smooth.
+%For the rest of hyper
 
-\subsection*{Problema di Cauchy con condizioni al bordo}
+%\subsection*{The case of 2D compressible Euler equations}
+%
+%In the case of the compressible Euler equations, we require the
+%mass density $\rho(\vec{x},t)$ and the total energy density $e(\vec{x},t)$
+%to be strictly positive, hence in 2D we have
+%$\mathcal{U} = (0,+\infty) \times \R^2 \times (0,+\infty)$.
+%These assumptions on the conserved variables also imply that
+%other physical quantities like temperature and pressure are strictly
+%positive.
+% euler equations in quasilinear form
+% eigenstructure of Euler equations (page 104 Toro)
+% entropy / entropy flux pair, convexity
 
-\begin{itemize}
-\item L'aggiunta di condizioni al bordo al problema di Cauchy
-	non rende affatto più semplice la sua soluzione.
-	Anzi, in prima battuta non è nemmeno chiaro quale tipo di condizioni al bordo
-	possano essere imposte. Per questo gran parte della teoria
-	per le equazioni di Eulero (e sistemi iperbolici
-	di leggi di conservazione in generale) è stata sviluppata sul dominio $\R^n$.
+%\subsection*{Qualitative properties of the solutions}
+% conservation
+% plane waves + information propagates at a finite speed (theorem 4.1.1)
+% breakdown of classical solutions (burgers)
 
-\item La difficoltà nella prescrizione di condizioni al bordo
-	è comune a tutte le PDE iperboliche. Per esempio,
-	già nell'equazione del trasporto lineare scalare
-	\[
-	u_t + cu_x = 0
-	\qquad x \in [a,b]
-	\]
-	è evidente il fatto che le condizioni al bordo (per esempio, di Dirichlet)
-	non possono essere imposte in entrambi gli estremi contemporaneamente,
-	e che la scelta dell'estremo di inflow è dettata dal segno di $c$.
-	In dimensione più alta, bisogna andare a esaminare lo spettro
-	delle matrici $A(\xi,u)$.
+%\subsection*{Weak solutions}
+% definition of weak solution
+% rankine-hugoniot
+% weak solutions are not unique
+% different kinds of discontinuities; definition of shocks
+% no proof of convergence for numerical schemes
+% da qualche parte, definizione di Riemann problem
 
-\item Allo stato attuale della teoria, non esiste un criterio
-	per stabilire la buona posizione globale di un IBVP
-	per le equazioni di Eulero in 3D.
-	Esiste solamente una teoria locale per soluzioni regolari (teorema 5.6.1
-	\cite{dafermos}), del tutto analoga al caso senza bordo.
+%\subsection*{Boundary conditions}
+% eh allora, praticamente
 
-\item Una classificazione esaustiva delle condizioni al bordo
-	per le equazioni di Eulero si trova nel capitolo 14 di \cite{benzoni-gavage-serre}.
-	Pacchetti software di riferimento come \texttt{clawpack} permettono
-	di gestire in modo automatico solo tre tipi di condizioni al bordo
-	(documentazione \url{https://www.clawpack.org/bc.html}):
-	\begin{itemize}
-	\item Pareti trasmettenti in uscita (outflow)
-	\item Condizioni al bordo periodiche
-	\item Pareti isolanti (slip walls)
-	\end{itemize}
-	Il testo di Hesthaven suppone quasi sempre che le condizioni al bordo siano
-	periodiche, oppure che il tempo di simulazione sia inferiore a quello richiesto
-	affinché l'informazione contenuta nella condizione iniziale raggiunga il bordo.
-	Nei paragrafi 5.3.1 e 11.5.1 accenna agli altri casi.
-\end{itemize}
 
-\subsection*{Soluzioni di riferimento}
-
-\begin{itemize}
-\item In conclusione, non esiste una teoria sulla buona posizione delle
-	equazioni di Eulero in 3D su cui fare affidamento per
-	lo sviluppo di metodi numerici stabili e accurati.
-	% Possiamo imparare molto dal confronto col caso 1D, ma
-	% in 3D le dinamiche sono incomparabilmente più ricche
-	Per valutare la qualità delle soluzioni numeriche ottenute
-	possiamo al massimo fare un confronto con quelle fornite da altri metodi numerici
-	ritenuti affidabili, oppure con soluzioni di riferimento in forma chiusa.
-\item Sarebbe utile avere delle soluzioni di riferimento per la stima
-	dell'errore dei metodi numerici.
-	Ho trovato diversi esempi in 2D, ma niente in 3D\dots
-	Se fosse possibile aggiungere forze esterne di volume, allora
-	con queste si potrebbe forzare qualunque soluzione desiderata
-	(ma sarebbe un sistema iperbolico di leggi di bilancio,
-	e non più di conservazione).
-\item Alcune configurazioni iniziali interessanti: onde d'urto piane,
-	onde d'urto sferiche, problema di Riemann, instabilità di Kelvin-Helmholtz,
-	double mach reflection, vortice isoentropico, scontro tra shock e vortice, \dots
-\end{itemize}
+%In questo capitolo provvisorio ho pensato di riassumere schematicamente
+%i risultati più importanti sulle equazioni di Eulero per gas perfetti
+%(da un punto di vista dell'analisi matematica).
+%Ho fatto una ricerca in letteratura per capire cosa si sappia
+%sulle loro soluzioni (molto poco, mi sono accorto).
+%I testi più utili per il caso multidimensionale (quello di interesse)
+%si sono rivelati~\cite{serre} e~\cite{benzoni-gavage-serre}.
+%Le cose da dire sarebbero molte, ma ancora non so quali saranno
+%utili successivamente per la trattazione numerica delle equazioni.
+%Inoltre, potrebbe essere meglio non introdurre qui
+%la teoria sui sistemi iperbolici di leggi di conservazione,
+%bensì in un paragrafo o un capitolo precedente.
+%Alcune idee su cosa includere in questo capitolo (forse troppe):
+%
+%\subsection*{Teoria quasilineare}
+%
+%\begin{itemize}
+%% 3.1 serre
+%\item Definizione di \emph{iperbolicità} di un sistema lineare
+%	a coefficienti costanti del primo ordine
+%	\[
+%	\partial_t u + \sum_{i=1}^n A_i \partial_i u = 0,
+%	\qquad A_i \in \R^{m \times m}
+%	\]
+%	Motivazione della definizione in quanto condizione necessaria e
+%	sufficiente affinché il problema di Cauchy
+%	sia ben posto in $L^2$ (oppure in $H^s$ spazio di Sobolev).
+%	Sia
+%	\[
+%	A(\xi) = \sum_{i=1}^n \xi_i A_i
+%	\quad 	\text{per ogni $\xi \in \R^n$.}
+%	\]
+%	Un sistema è iperbolico se e solo se gli autovalori di $A(\xi)$
+%	sono reali per ogni $\xi \in \R^n$ e la matrice $A(\xi)$
+%	è diagonalizzabile in modo uniforme.
+%	Interpretazione degli autovalori di $A(\xi)$ come velocità
+%	di propagazione delle onde piane nella direzione $\xi$.
+%\item I sistemi simmetrizzabili sono iperbolici. Definizione di sistema
+%	strettamente iperbolico (autovalori semplici) e costantemente iperbolico
+%	(autospazi di dimensione costante).
+%	I sistemi strettamente/costantemente iperbolici sono iperbolici.
+%% 3.2 serre
+%\item Definizione di \emph{iperbolicità} per il sistema quasilineare
+%	\[
+%	\partial_t u + \sum_{i=1}^n A_i(u) \partial_i u = 0,
+%	\qquad A_i \colon \R^n \to \R^{m \times m}
+%	\]
+%	La diagonalizzabilità di $A(\xi,u)$ è richiesta in modo uniforme
+%	anche rispetto a $u$.
+%	Stavolta l'iperbolicità non è condizione sufficiente all'esistenza
+%	di soluzioni del problema di Cauchy, servono ipotesi più forti
+%	(ad esempio, simmetrizzabilità). Le equazioni di Eulero
+%	formano un sistema quasilineare in ogni punto in cui
+%	la soluzione $u$ è regolare.
+%% 3.3 serre
+%\item Definizione di campo caratteristico come applicazione da $(\xi,u)$
+%	agli autovalori (detti velocità caratteristiche) e autospazi di $A(\xi,u)$.
+%	Definizione di campi caratteristici linearmente degeneri e
+%	genuinamente non lineari.
+%% 13.2.2 benzoni-gavage
+%\item Il sistema delle equazioni di Eulero è iperbolico, se $\rho > 0$.
+%	Calcolo dei campi caratteristici. Il sistema è strettamente iperbolico
+%	in 1D e costantemente iperbolico in 2D/3D.
+%	Formula per la velocità di propagazione delle onde
+%	(utile per la condizione numerica CFL in seguito).
+%% proposizione 1.4 benzoni-gavage o la prima prop. di sideris84
+%\item L'informazione si propaga dunque a velocità finita, limitata nella
+%	direzione $\xi$ dal massimo autovalore di $A(\xi,u)$.
+%	Definizione di dominio di dipendenza.
+%	Principio di località (prima proposizione di \cite{sideris84}).
+%	Un teorema analogo non può valere per le equazioni di Navier-Stokes
+%	a causa del carattere parabolico dei processi di diffusione.
+%% 13.2.3 benzoni-gavage
+%\item Il sistema delle equazioni di Eulero è simmetrizzabile, se $\rho > 0$.
+%	Questo risultato è alla base della teoria di esistenza locale di soluzioni
+%	classiche.
+%\end{itemize}
+%
+%\subsection*{Soluzioni classiche del problema di Cauchy}
+%
+%\begin{itemize}
+%\item Esistenza e unicità locale di soluzioni $C^1$ a partire da
+%	una condizione iniziale $H^s$ con $s > 5/2$.
+%	Ho trovato molti riferimenti, ognuno con un enunciato leggermente
+%	diverso: Teorema 3.6.1 in \cite{serre},
+%	Teorema 2.1 in \cite{chen-wang},
+%	Teorema 13.1 in \cite{benzoni-gavage-serre} e
+%	Teorema 5.1.1 in \cite{dafermos}.
+%	Quest'ultimo mi pare il più completo, perché è l'unico a occuparsi
+%	di regolarità rispetto al tempo maggiore di $C^1$ (inclusione 5.1.5)
+%	e a dimostrare anche la dipendenza continua dai dati iniziali
+%	(Teorema 5.2.1). Tuttavia, per poter applicare questo risultato
+%	alle equazioni di Eulero è richiesta una trasformazione affine,
+%	dato che il flusso $F$ è definito solo sull'insieme $\{\rho > 0\}$
+%	e invece la palla $\overline{\mathscr{B}_\rho}$ è centrata nell'origine.
+%	La modifica richiesta è spiegata bene nel commento che segue immediatamente
+%	il Teorema 10.1 in \cite{benzoni-gavage-serre}.
+%\item Sarebbe utile, al fine di giustificare l'uso di metodi numerici
+%	di ordine elevato, un risultato di regolarità $C^\infty$
+%	anziché $C^1$ (per dati iniziali $C^\infty$, ovviamente).
+%	Non ho trovato nessun riferimento in letteratura,
+%	perché le soluzioni classiche sono in genere definite come
+%	$C^1$ o localmente lipschitziane.
+%	Mi pare però che il risultato di regolarità rispetto al
+%	tempo menzionato nel punto precedente possa essere sfruttato
+%	per ottenere questo tipo di regolarità (la regolarità spaziale segue
+%	senza problemi dai teoremi di embedding di Sobolev).
+%\item L'esistenza globale di soluzioni classiche $C^\infty$, ancora aperta
+%	per Eulero incomprimibile o Navier-Stokes, qui è sicuramente falsa.
+%	Le equazioni di Eulero possono sviluppare singolarità in tempo finito
+%	anche in presenza di dati iniziali $C^\infty$.
+%	I teoremi precedenti ci dicono che esistono tre possibili motivi
+%	per cui una soluzione classica può smettere di esistere:
+%	\begin{itemize}
+%	\item $\rho \to 0$ in almeno un punto, cioè si viene a creare un vuoto nel fluido.
+%	\item $\norm{u}_\infty \to \infty$, cioè almeno una delle variabili del fluido
+%		sviluppa un asintoto verticale (fenomeno di blowup).
+%	\item $\norm{\nabla u}_\infty \to \infty$, cioè almeno una delle variabili
+%		del fluido sviluppa un flesso a tangente verticale (fenomeno di wave-breaking).
+%		Fenomeni di compressione che portano i fronti d'onda
+%		a diventare più ripidi al passare del tempo.
+%		Analogia con l'intersezione di caratteristiche per
+%		l'equazione di Burgers non viscosa $u_t + (u^2)_x = 0$.
+%	\end{itemize}
+%\item Ho trovato pochissimi risultati della forma: \emph{se la condizione iniziale
+%	$u_0$ soddisfa la proprietà X, allora la soluzione classica $u(t)$
+%	diventa singolare in tempo finito per il motivo Y}
+%	(un risultato è \cite{yin}, ma sono 40 pagine di articolo!).
+%	Comunque è fuori discussione che esistano dati $C^\infty$
+%	niente affatto patologici che sviluppano singolarità in tempo finito:
+%	in \cite{sideris85} l'autore dimostra che esistono condizioni iniziali (anche piccole)
+%	che in un tempo finito $T$ rendono singolare la quantità di moto in almeno un punto,
+%	nell'ipotesi che la soluzione $u(t)$ sia regolare fino a $T$.
+%	Purtroppo questa dimostrazione di perdita di regolarità
+%	non è costruttiva (il ragionamento è: supponiamo che la soluzione
+%	classica esista per un tempo maggiore di $T$,
+%	allora si verificherebbe un blowup, assurdo),
+%	quindi nulla vieta che si sviluppi prima di $T$ un altro tipo di singolarità,
+%	anzi, per come sono fatti i dati iniziali sembra più intuitivo
+%	che si formi un'onda di shock piuttosto che un blowup della quantità di moto.
+%	
+%\item C'è da dire che, rispetto al caso 1D, il processo di formazione delle singolarità
+%	non è ancora chiaro. Un'idea per dare esempi costruttivi di formazione
+%	di certi tipi di singolarità (per esempio, onde di shock)
+%	potrebbe essere quella di estendere esempi 1D al caso 3D in modo
+%	costante lungo i piani ortogonali all'asse $x$.
+%	In questo modo si potrebbe dedurre che tutte le singolarità che si possono
+%	formare in 1D si possono anche formare in 3D.
+%	Magari in 1D esistono esempi costruttivi ragionevolmente semplici.
+%	Non sono però sicuro al 100\%
+%	che l'estensione costante di una soluzione 1D sia una soluzione 3D,
+%	dovrei fare due conti\dots
+%
+%\item Precisazione: in 3D i fenomeni di dispersione delle onde contrastano
+%	i fenomeni di compressione a tal punto da rallentare o addirittura
+%	impedire del tutto la formazione di singolarità.
+%	Questo fa sì che esistano condizioni di tipo dispersivo sui dati iniziali
+%	sufficienti a garantire l'esistenza di soluzioni classiche per tutti i tempi
+%	\cite{grassin}.
+%	Si può dimostrare che non possono esistere risultati analoghi in 1D
+%	(paragrafo 7.8 di \cite{dafermos}).
+%	Questa è quindi una differenza qualitativa importante tra la formazione
+%	di shock in 3D e in 1D.
+%	
+%\item Alla luce di tutto questo, è necessario introdurre il concetto di soluzioni deboli.
+%\end{itemize}
+%
+%\subsection*{Soluzioni deboli del problema di Cauchy}
+%
+%\begin{itemize}
+%\item Definizione di soluzione debole in $L^\infty$ del problema di Cauchy
+%	% paragrafo 3.5 serre
+%\item In 1D, è stata dimostrato che esiste $\delta > 0$ tale che
+%	il problema di Cauchy è ben posto
+%	(esistenza \textbf{globale}, unicità, dipendenza continua dai dati iniziali)
+%	se la condizione iniziale ha variazione totale minore di $\delta$,
+%	più ipotesi su campi caratteristici genuinamente non lineari
+%	oppure linearmente degeneri
+%	(esistenza globale dovuta a Glimm, il resto a Bressan et al.
+%	Un breve survey paper di Bressan è \cite{bressan}).
+%	Dunque in 1D lo spazio di funzioni giusto in cui lavorare è BV.
+%	Il problema per dati iniziali arbitrari è ancora aperto.
+%\item L'esistenza di soluzioni deboli in 3D è un problema totalmente aperto.
+%	Non è nemmeno chiaro in quale spazio di funzioni sia opportuno lavorare,
+%	quindi la scelta di $L^\infty$ nella definizione di soluzione
+%	debole non ha motivazioni profonde (mentre in altri contesti, più semplici,
+%	è la scelta giusta; comunque qui rimane un'ipotesi fisica importante).
+%\item La condizione di Rankine-Hugoniot è necessaria e sufficiente affinché
+%	una soluzione regolare che presenta una superficie di discontinuità
+%	sia una soluzione debole.
+%\item Velocità di propagazione di una discontinuità.
+%	Il caso delle equazioni di Eulero.
+%% 13.4 bensoni-gavage
+%\item Differenza tra una discontinuità dinamica (es.\ onda d'urto)
+%	e una discontinuità di contatto (es.\ strati di un vortice).
+%	Differenza tra una discontinuità dinamica compressiva e una espansiva
+%	(es.\ onda di rarefazione).
+%\item Altro problema: le soluzioni deboli, ammesso che esistano,
+%	non sono in generale uniche.
+%	Idea: escludiamo quelle che violano il secondo principio della termodinamica.
+%\end{itemize}
+%
+%\subsection*{Soluzioni deboli di entropia del problema di Cauchy}
+%
+%\begin{itemize}
+%% paragrago 10.2 benzoni-gavage
+%\item Definizione di \emph{entropia matematica} e \emph{flusso di entropia}
+%	per un sistema di leggi di conservazione.
+%	Definizione di soluzione debole di entropia.
+%	Le soluzioni deboli di entropia non sono invertibili rispetto al tempo.
+%\item Nel caso dell'equazione di Eulero, l'entropia termodinamica
+%	è un'entropia matematica concava (quindi $-S$ è convessa; in
+%	matematica e in fisica si usano due convenzioni diverse).
+%	% unicità di tale funzione?
+%%\item L'esistenza di una funzione entropia strettamente convessa
+%%	implica la simmetrizzabilità di un sistema quasilineare.
+%\item Se un sistema di leggi di conservazione ammette un'entropia convessa,
+%	allora ogni sua soluzione debole	di entropia coincide con la sua
+%	soluzione classica per tutto il tempo in cui quest'ultima esiste.
+%\item Disuguaglianza necessaria e sufficiente affinché una soluzione regolare
+%	che presenta una superficie di discontinuità sia una soluzione debole di entropia.
+%% 13.4 bensoni-gavage
+%\item Non tutte le discontinuità sono fisicamente ammissibili.
+%	Condizione di entropia: il salto di entropia dev'essere positivo.
+%	Una discontinuità soddisfa la condizione di entropia se e solo se è compressiva.
+%	Definizione di shock come Rankine-Hugoniot più condizione di entropia.
+%% pagina 409 benzoni-gavage
+%\item Condizione di ammissibilità di Lax per gli shock.
+%	Shock sufficientemente piccoli soddisfano automaticamente questa
+%	condizione. La condizione di Lax permette di dimostrare
+%	risultati di stabilità degli shock (esistenza locale nel tempo
+%	di una soluzione regolare a tratti in 3D) % teorema 21.11 benzoni-gavage
+%	e risultati di unicità delle soluzioni deboli di entropia in 1D.
+%\item L'unicità delle soluzioni deboli entropiche in 3D è un problema aperto,
+%	ma ci sono buone ragioni per pensare che
+%	la risposta sia negativa alla luce dei risultati ottenuti
+%	per le equazioni di Eulero isoentropiche \cite{chiodaroli}.
+%	In letteratura sono quindi state proposte nozioni più forti
+%	di soluzioni deboli di entropia (per esempio, basate su
+%	limiti singolari delle equazioni di Navier-Stokes),
+%	ma ancora non esiste un criterio per estrarre una soluzione debole canonica.
+%\end{itemize}
+%
+%\subsection*{Problema di Cauchy con condizioni al bordo}
+%
+%\begin{itemize}
+%\item L'aggiunta di condizioni al bordo al problema di Cauchy
+%	non rende affatto più semplice la sua soluzione.
+%	Anzi, in prima battuta non è nemmeno chiaro quale tipo di condizioni al bordo
+%	possano essere imposte. Per questo gran parte della teoria
+%	per le equazioni di Eulero (e sistemi iperbolici
+%	di leggi di conservazione in generale) è stata sviluppata sul dominio $\R^n$.
+%
+%\item La difficoltà nella prescrizione di condizioni al bordo
+%	è comune a tutte le PDE iperboliche. Per esempio,
+%	già nell'equazione del trasporto lineare scalare
+%	\[
+%	u_t + cu_x = 0
+%	\qquad x \in [a,b]
+%	\]
+%	è evidente il fatto che le condizioni al bordo (per esempio, di Dirichlet)
+%	non possono essere imposte in entrambi gli estremi contemporaneamente,
+%	e che la scelta dell'estremo di inflow è dettata dal segno di $c$.
+%	In dimensione più alta, bisogna andare a esaminare lo spettro
+%	delle matrici $A(\xi,u)$.
+%
+%\item Allo stato attuale della teoria, non esiste un criterio
+%	per stabilire la buona posizione globale di un IBVP
+%	per le equazioni di Eulero in 3D.
+%	Esiste solamente una teoria locale per soluzioni regolari (teorema 5.6.1
+%	\cite{dafermos}), del tutto analoga al caso senza bordo.
+%
+%\item Una classificazione esaustiva delle condizioni al bordo
+%	per le equazioni di Eulero si trova nel capitolo 14 di \cite{benzoni-gavage-serre}.
+%	Pacchetti software di riferimento come \texttt{clawpack} permettono
+%	di gestire in modo automatico solo tre tipi di condizioni al bordo
+%	(documentazione \url{https://www.clawpack.org/bc.html}):
+%	\begin{itemize}
+%	\item Pareti trasmettenti in uscita (outflow)
+%	\item Condizioni al bordo periodiche
+%	\item Pareti isolanti (slip walls)
+%	\end{itemize}
+%	Il testo di Hesthaven suppone quasi sempre che le condizioni al bordo siano
+%	periodiche, oppure che il tempo di simulazione sia inferiore a quello richiesto
+%	affinché l'informazione contenuta nella condizione iniziale raggiunga il bordo.
+%	Nei paragrafi 5.3.1 e 11.5.1 accenna agli altri casi.
+%\end{itemize}
+%
+%\subsection*{Soluzioni di riferimento}
+%
+%\begin{itemize}
+%\item In conclusione, non esiste una teoria sulla buona posizione delle
+%	equazioni di Eulero in 3D su cui fare affidamento per
+%	lo sviluppo di metodi numerici stabili e accurati.
+%	% Possiamo imparare molto dal confronto col caso 1D, ma
+%	% in 3D le dinamiche sono incomparabilmente più ricche
+%	Per valutare la qualità delle soluzioni numeriche ottenute
+%	possiamo al massimo fare un confronto con quelle fornite da altri metodi numerici
+%	ritenuti affidabili, oppure con soluzioni di riferimento in forma chiusa.
+%\item Sarebbe utile avere delle soluzioni di riferimento per la stima
+%	dell'errore dei metodi numerici.
+%	Ho trovato diversi esempi in 2D, ma niente in 3D\dots
+%	Se fosse possibile aggiungere forze esterne di volume, allora
+%	con queste si potrebbe forzare qualunque soluzione desiderata
+%	(ma sarebbe un sistema iperbolico di leggi di bilancio,
+%	e non più di conservazione).
+%\item Alcune configurazioni iniziali interessanti: onde d'urto piane,
+%	onde d'urto sferiche, problema di Riemann, instabilità di Kelvin-Helmholtz,
+%	double mach reflection, vortice isoentropico, scontro tra shock e vortice, \dots
+%\end{itemize}
 
 %\item Problema di Riemann
 %\item Non esistono invarianti di Riemann per le equazioni in $\R^3$

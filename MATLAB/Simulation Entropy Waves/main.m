@@ -26,21 +26,21 @@ u0 = @(x,y) entropy_waves(x,y,t0,rho_freestream,...
     vx_freestream,vy_freestream,p_freestream,amplitude);
 
 % Definizione del dominio discreto e dell'IVBP
-[vertices,edges,cells] = polymesh_load('regular_square_400x400.mat');
+[vertices,edges,cells] = polymesh_load('voronoi_square_10000.mat');
 cells.nu = 4;
 cells.u = cell_integral_mean(u0,cells.nu,vertices,edges,cells);
 bc = {};
 bc{1} = u_exact;
 
 % Scelta dei metodi numerici
-method.nq = 1;
-method.order = 2;
-method.reconstruction_strategy = @reconstruction_LLS2;
+method.nq = 2;
+method.order = 3;
+method.reconstruction_strategy = @reconstruction_LLS3;
 method.least_squares_type = 'P';
 method.bc = bc;
 method.flux = flux;
 method.numerical_flux = @numerical_flux_rusanov;
-method.ODE_solver = @SSPRK22;
+method.ODE_solver = @SSPRK33;
 method.courant_number = 1;
 
 % Calcolo della soluzione numerica

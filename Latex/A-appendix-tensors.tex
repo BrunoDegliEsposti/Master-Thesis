@@ -7,7 +7,7 @@ must change accordingly, so that the underlying transformation remains
 the same: in some sense, the two changes must cancel out.
 
 Likewise, a tensor is more than just an $n$-dimensional array of numbers:
-a tensor represents an element of the tensorial product of two or more
+a tensor represents an element of the tensor product of two or more
 vector spaces with respect to a (tensorial) basis.
 Once again, the key difference is that the entries of a tensor must
 change in a well-defined way every time a different basis is chosen
@@ -23,11 +23,10 @@ but also its representation with respect to a fixed tensorial basis
 (i.e.\ an array of real numbers).
 As a rule of thumb, the first definition is better suited for proofs,
 whereas the second one is better suited for calculations.
-In the following, we will switch back and forth between the two
-definitions; in Chapter 2, however, the word \emph{tensor} always has
-the latter meaning.
+In the following, we freely switch back and forth between the two definitions.
+%in Chapter 2, however, the word \emph{tensor} always has the latter meaning.
 Sometimes, a \emph{tensor field} (that is, a map which assigns
-a tensor to each point of a domain) will also be referred to as a tensor.
+a tensor to each point of a domain) is also referred to as \emph{tensor}.
 This is why we speak of \emph{stress tensor} in a continuum instead of
 \emph{stress tensor field}, for example.
 
@@ -45,7 +44,7 @@ This is why we speak of \emph{stress tensor} in a continuum instead of
 
 Let $U,V$ be finite dimensional real vector spaces with basis
 $\{\vec{u}_i\}_{i = 1 \ldots m}$ and $\{\vec{v}_j\}_{j = 1 \ldots n}$, respectively.
-We define the vectorial space $U \otimes V$ as the space of formal
+We define the vector space $U \otimes V$ as the space of formal
 linear combinations of the elements $\vec{u}_i \otimes \vec{v}_j$,
 which by definition will then form a basis of $U \otimes V$.
 Moreover, we endow the space $U \otimes V$ with a map
@@ -73,8 +72,8 @@ between vector spaces.
 
 \subsection*{Type $(r,s)$ tensors}
 
-Let $V^*$ be the dual space of $V$, and let $\{\vec{v}^j\}$ be the dual basis
-on $V^*$ (that is, the basis of functionals such that
+Let $V^*$ be the dual space of $V$, and let $\{\vec{v}^j\}_{j=1 \dots n}$
+be the dual basis on $V^*$ (that is, the basis of functionals such that
 $\vec{v}^j(\vec{v}_k) = \delta_{jk}$).
 Commutativity and associativity of the tensor product together imply that,
 in the definition of the following space, there is no loss of generality
@@ -153,7 +152,7 @@ the product of the elements of the two tensors with corresponding indices:
 (\tns{AB})^{IK}_{JL} = \tns{A}^I_J \tns{B}^K_L.
 \]
 This operation is known as \emph{outer product}, and sometimes
-is written explicitely using the tensor product symbol $\otimes$.
+is written explicitly using the tensor product symbol $\otimes$.
 If one contravariant index of a tensor is labeled with the same letter
 as one covariant index of the other tensor, however,
 contraction is implied and a tensor of type $(p+r-1,q+s-1)$ is produced.
@@ -161,7 +160,7 @@ This is known as \emph{Einstein summation convention}, and allows us
 to drastically reduce the number of summation symbols required
 to write most tensorial identities. For example, the contraction
 $\sum_{j=1}^n \tns{A}^i_j \tns{v}^j$
-can be written more succintly as $\tns{A}^i_j \tns{v}^j$.
+can be written more succinctly as $\tns{A}^i_j \tns{v}^j$.
 This contraction of a type $(1,1)$ tensor with a type $(1,0)$ tensor
 (which, by definition, is just a vector) is particularly meaningful:
 the result is again a type $(1,0)$ tensor, so we have shown that a type
@@ -197,8 +196,8 @@ satisfies this change of basis formula, then the array is a tensor
 representation is given by the array). This gives us another way of proving
 that contraction, as defined above, is a well-defined operation.
 On the other hand, it's easy to see that contraction with respect
-to a pair of contravariant indices or a pair of covariant indices would be
-ill-defined, because the result wouldn't transform like a type $(r-2,s)$
+to a pair of contravariant indices or a pair of covariant indices is
+ill-defined, because the result does not transform like a type $(r-2,s)$
 tensor or type $(r,s-2)$ tensor, respectively.
 
 \subsection*{Metric tensor}
@@ -220,7 +219,7 @@ $\vec{v}$ and~$\vec{w}$:
 \langle \vec{v}, \vec{w} \rangle = \tns{g}_{ij} \tns{v}^i \tns{w}^j.
 \]
 If the basis on $V$ is orthonormal with respect to the chosen scalar
-product, then the metric tensor is given by Knonecker's delta:
+product, then the metric tensor is given by Kronecker's delta:
 $\tns{g}_{ij} = \delta_{ij}$. The metric tensor can also be used
 to \emph{lower} an index of a tensor. Let $\tns{A}^{Ik}_J$ be
 any type $(r+1,s)$ tensor with at least one contravariant index,
@@ -231,7 +230,7 @@ of type $(r,s+1)$ is produced:
 \tns{B}^I_{J \ell} = \tns{A}^{Ik}_J \tns{g}_{k \ell}.
 \]
 The name of this operation comes from the fact that, in the common case in which
-the metric tensor is equal to Knonecker's delta, the result is obtained by
+the metric tensor is equal to Kronecker's delta, the result is obtained by
 literally lowering the index $k$. However, in the general case, the
 presence of the metric tensor is required to ensure that the result
 satisfies the change of basis formula \eqref{eq:tensor-change-of-basis}
